@@ -1,4 +1,4 @@
-import sequelize from "../lib/sequelize";
+const sequelize = require("../lib/sequelize");
 const { Sequelize, DataTypes, Model } = require("sequelize");
 
 // Generation du model
