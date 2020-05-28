@@ -15,7 +15,7 @@ app.get("/hello", (req, res, next) => {
 
 // Exemple mailer
 // sendMail({
-//     to: "ivan.naluzhnyi@gmail.com",
+//     to: "-----",
 //     text: "test my mail service",
 //     subject: "testing",
 // });

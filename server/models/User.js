@@ -1,6 +1,5 @@
-const sequelize = require("../lib/sequelize");
 const { DataTypes, Model } = require("sequelize");
-const bcrypt = require("bcrypt");
+const { hashPassword } = require("../middlewares/password");
 
 // export
 const Role = {
@@ -8,38 +7,40 @@ const Role = {
     MERCHANT: "MERCHANT",
 };
 
-class User extends Model {}
-User.init(
-    {
-        email: DataTypes.STRING,
-        password: DataTypes.STRING,
-        firstname: DataTypes.STRING,
-        lastname: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        role: {
-            allowNull: false,
-            password: DataTypes.STRING,
-        },
-        confirmed: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false,
-        },
-    },
-    {
-        sequelize,
-        modelName: "User",
-        hooks: {
-            beforeCreate: async (user) => {
-                const salt = await bcrypt.genSalt();
-                const passwordhash = await bcrypt.hash(user.password, salt);
-                user.password = passwordhash;
+class User extends Model {
+    static init(sequelize) {
+        super.init(
+            {
+                email: DataTypes.STRING,
+                password: DataTypes.STRING,
+                firstname: DataTypes.STRING,
+                lastname: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
+                role: {
+                    allowNull: false,
+                    password: DataTypes.STRING,
+                },
+                confirmed: {
+                    type: DataTypes.BOOLEAN,
+                    allowNull: false,
+                    defaultValue: false,
+                },
             },
-        },
+            {
+                sequelize,
+                modelName: "User",
+                hooks: {
+                    beforeCreate: async (user) => {
+                        const passwordhash = await hashPassword(user.password);
+                        user.password = passwordhash;
+                    },
+                },
+            }
+        );
     }
-);
+}
 
 // Schema update
 User.sync()
