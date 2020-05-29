@@ -1,8 +1,9 @@
 const verifyToken = require("../middlewares/verifyToken");
+const securityRoutes = require("./security");
 
 const routerManager = (app) => {
+    app.use("/", securityRoutes);
     app.use(verifyToken);
-    // app.use("/all", ALL);
 };
 
 module.exports = routerManager;

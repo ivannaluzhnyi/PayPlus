@@ -1,5 +1,5 @@
 const { DataTypes, Model } = require("sequelize");
-const { hashPassword } = require("../middlewares/password");
+const { hashPassword } = require("../lib/password");
 
 // export
 const Role = {
@@ -16,11 +16,11 @@ class User extends Model {
                 firstname: DataTypes.STRING,
                 lastname: {
                     type: DataTypes.STRING,
-                    allowNull: false,
+                    allowNull: false,   
                 },
                 role: {
                     allowNull: false,
-                    password: DataTypes.STRING,
+                    type: DataTypes.STRING,
                 },
                 confirmed: {
                     type: DataTypes.BOOLEAN,
@@ -40,15 +40,8 @@ class User extends Model {
             }
         );
     }
-}
 
-// Schema update
-User.sync()
-    .then(() =>
-        console.log(
-            `SEQUELIZE ==> users table has been successfully created, if one doesn't exist`
-        )
-    )
-    .catch((error) => console.log("This error occured", error));
+    static associate(models) {}
+}
 
 module.exports = User;

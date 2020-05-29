@@ -11,6 +11,8 @@ const verifyToken = (req, res, next) => {
     JWTVerifyToken(authHeader)
         .then((payload) => {
             req.user = payload;
+
+            console.log("req====== ==> ", req);
             next();
         })
         .catch(() => res.sendStatus(401));

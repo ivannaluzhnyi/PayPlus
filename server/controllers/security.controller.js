@@ -9,8 +9,7 @@ module.exports = {
                 .catch(() => res.sendStatus(500));
         } else {
             res.send(400).json({
-                username: "Invalid credentials",
-                password: "Invalid credentials",
+                error: "Invalid credentials",
             });
         }
     },

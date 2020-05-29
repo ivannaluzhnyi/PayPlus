@@ -1,15 +1,14 @@
 const express = require("express");
-const sequelize = require("./lib/sequelize");
-// const User = require("./models/User");
 const RouterManager = require("./routes");
 const app = express();
+
+require("./database");
 
 const { sendMail } = require("./lib/mailer");
 
 app.use(express.json());
 
 app.get("/hello", (req, res, next) => {
-    console.log(req.query);
     res.json({ msg: "Hello" });
 });
 
