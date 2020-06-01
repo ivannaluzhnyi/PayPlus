@@ -1,8 +1,9 @@
 const createToken = require("../lib/auth").createToken;
 const { isValidPassword } = require("../lib/password");
-const User = require("../models/User");
-
 const { ROLE } = require("../lib/constants");
+const { isSequelizeError, prettifyErrors } = require("../lib/errorHelpers");
+
+const User = require("../models/User");
 
 module.exports = {
     login: (req, res) => {
@@ -22,11 +23,10 @@ module.exports = {
                             }
                         })
                         .catch(() => res.sendStatus(500));
-                }
-
-                res.status(404).json({
-                    error: `User with email: ${req.body.email} not found`,
-                });
+                } else
+                    res.status(404).json({
+                        error: `User with email: ${req.body.email} not found`,
+                    });
             })
             .catch((e) => {
                 res.status(500).json({ error: e.message });
@@ -34,9 +34,6 @@ module.exports = {
     },
 
     register: (req, res) => {
-        console.log("=============================================");
-        console.log(" req.body => ", req.body);
-
         const user = new User({
             ...req.body,
             role: ROLE.COMPANY,
@@ -46,12 +43,7 @@ module.exports = {
         user.save()
             .then((data) => res.status(201).json(data))
             .catch((err) => {
-                console.log("=========================");
-                console.log("errro => ", err);
-                if (
-                    err.name === "SequelizeValidationError" ||
-                    err.name === "SequelizeUniqueConstraintError"
-                ) {
+                if (isSequelizeError(err.name)) {
                     res.status(400).json(
                         prettifyErrors(Object.values(err.errors))
                     );
@@ -60,12 +52,4 @@ module.exports = {
                 }
             });
     },
-};
-
-const prettifyErrors = (errors) => {
-    return errors.reduce((acc, item) => {
-        acc[item.path] = [...(acc[item.path] || []), item.message];
-
-        return acc;
-    }, {});
 };

@@ -10,7 +10,7 @@ POST http://localhost:5000/login
 Content-Type: application/json
 
 {
-    "email":"qsdqsd@ssf.co",
+    "email":"qsdqsd@ssaf.com",
     "password": "pass"
 }
 
@@ -20,7 +20,7 @@ POST http://localhost:5000/register
 Content-Type: application/json
 
 {
-    "email":"qsdqsd@ssf.com",
+    "email":"qsdqsd@ssaf.com",
     "password": "pass",
     "firstname": "test",
     "lastname": "lastname",
