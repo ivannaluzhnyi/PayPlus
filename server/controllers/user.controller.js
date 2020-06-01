@@ -1,7 +1,15 @@
+const User = require("../models/User");
+
 module.exports = {
     getAllUsers: (req, res) => {
-        console.log("====================================");
-        console.log("getAll users");
-        console.log("====================================");
+        User.findAll()
+            .then((users) => {
+                res.json(users);
+            })
+            .catch((err) => {
+                res.status(500).send({
+                    message: err.message || "Some error occurred.",
+                });
+            });
     },
 };

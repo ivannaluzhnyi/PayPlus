@@ -6,7 +6,7 @@ const User = require("../models/User");
 
 User.init(sequelize);
 
-User.sync({ force: true }).then(() => {
+User.sync({}).then(() => {
     const user = new User({
         email: "admin@admin.com",
         password: "adminPass",

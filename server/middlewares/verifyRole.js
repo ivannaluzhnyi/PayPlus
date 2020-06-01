@@ -8,3 +8,5 @@ const authRole = (role) => {
         next();
     };
 };
+
+module.exports = authRole;

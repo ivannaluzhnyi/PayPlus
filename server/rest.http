@@ -37,3 +37,11 @@ Content-Type: application/json
     "gender":"male",
     "birthday":"2002-05-08"
 }
+
+
+###
+GET http://localhost:5000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IkFETUlOIiwiaWF0IjoxNTkxMDQzNjIyLCJleHAiOjE1OTEwNDcyMjJ9.rnodF4_YgdCV2A7LAmYKYn3j6HrsAhXaYzvRbJRO0A8
+
+###
+GET http://localhost:5000/users
