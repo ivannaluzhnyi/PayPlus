@@ -14,7 +14,9 @@ module.exports = {
                         .then((isPass) => {
                             if (isPass) {
                                 createToken({ id: user.id, role: user.role })
-                                    .then((token) => res.json({ token }))
+                                    .then((token) =>
+                                        res.json({ ...user.sendUser(), token })
+                                    )
                                     .catch(() => res.sendStatus(500));
                             } else {
                                 res.status(400).json({

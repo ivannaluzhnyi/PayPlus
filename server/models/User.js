@@ -20,11 +20,18 @@ class User extends Model {
                     type: DataTypes.STRING,
                     allowNull: false,
                 },
-
                 gender: {
                     type: DataTypes.ENUM(["male", "female", "unknown"]),
                     allowNull: false,
                     defaultValue: "unknown",
+                },
+
+                birthday: {
+                    type: DataTypes.DATEONLY,
+                    allowNull: false,
+                    validate: {
+                        isDate: true,
+                    },
                 },
                 firstname: {
                     type: DataTypes.STRING,
@@ -62,6 +69,19 @@ class User extends Model {
             }
         );
     }
+
+    sendUser = () => ({
+        id: this.id,
+        email: this.email,
+        gender: this.gender,
+        birthday: this.birthday,
+        firstname: this.firstname,
+        role: this.role,
+        confirmed: this.confirmed,
+        lastname: this.lastname,
+        createdAt: this.createdAt,
+        updatedAt: this.updatedAt,
+    });
 
     static associate(models) {}
 }
