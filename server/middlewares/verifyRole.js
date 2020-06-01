@@ -1,8 +1,9 @@
 const authRole = (role) => {
     return (req, res, next) => {
         if (req.user.role !== role) {
-            res.status(401);
-            return res.send("Not allowed");
+            return res.status(401).json({
+                error: "Not allowed",
+            });
         }
 
         next();

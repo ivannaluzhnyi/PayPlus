@@ -8,10 +8,10 @@ const { sendMail } = require("./lib/mailer");
 
 app.use(express.json());
 
-app.get("/hello", (req, res, next) => {
-    res.json({ msg: "Hello" });
+app.get("/", (req, res, next) => {
+    res.json({ message: "🏦 Hello Payment!!! 💰💰💰" });
 });
-
+    
 // Exemple mailer
 // sendMail({
 //     to: "-----",

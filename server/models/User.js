@@ -70,6 +70,7 @@ class User extends Model {
         );
     }
 
+    // without password
     sendUser = () => ({
         id: this.id,
         email: this.email,

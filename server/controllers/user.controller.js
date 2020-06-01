@@ -2,7 +2,7 @@ const User = require("../models/User");
 
 module.exports = {
     getAllUsers: (req, res) => {
-        User.findAll()
+        User.findAll({ attributes: { exclude: ["password"] } })
             .then((users) => {
                 res.json(users);
             })

@@ -1,7 +1,7 @@
 const createToken = require("../lib/auth").createToken;
 const { isValidPassword } = require("../lib/password");
 const { ROLE } = require("../lib/constants");
-const { isSequelizeError, prettifyErrors } = require("../lib/errorHelpers");
+const { isSequelizeError, prettifyErrors } = require("../helpers/error");
 
 const User = require("../models/User");
 
