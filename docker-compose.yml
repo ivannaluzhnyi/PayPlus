@@ -37,6 +37,7 @@ services:
             MAILER_PASS: "mailer2020"
         depends_on:
             - postgres
+            - pgadmin
         command: "npm start"
         ports:
             - 127.0.0.1:5000:5000
