@@ -3,11 +3,9 @@ const bcrypt = require("bcrypt");
 /**
  * @param  {String}  [password]
  * @param  {String}  [original]
- * @return {Boolean}
  */
 const isValidPassword = async (password, original) => {
-    const isValid = await bcrypt.compare(password, original);
-    return isValid;
+    return await bcrypt.compare(password, original);
 };
 
 /**

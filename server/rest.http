@@ -6,4 +6,23 @@ GET http://localhost:5000
 GET http://localhost:5000/hello
 
 ###
-GET http://localhost:5000/login
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "email":"qsdqsd@ssf.co",
+    "password": "pass"
+}
+
+
+###
+POST http://localhost:5000/register
+Content-Type: application/json
+
+{
+    "email":"qsdqsd@ssf.com",
+    "password": "pass",
+    "firstname": "test",
+    "lastname": "lastname",
+    "gender":"male"
+}

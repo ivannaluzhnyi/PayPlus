@@ -6,11 +6,16 @@ const verifyToken = (req, res, next) => {
         res.sendStatus(401);
         return;
     }
+
     authHeader = authHeader.replace("Bearer ", "");
 
     JWTVerifyToken(authHeader)
         .then((payload) => {
             req.user = payload;
+
+            console.log("====================================");
+            console.log("payload ==> ", payload);
+            console.log("====================================");
 
             console.log("req====== ==> ", req);
             next();

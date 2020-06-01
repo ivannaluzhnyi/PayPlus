@@ -1,26 +1,42 @@
 const { DataTypes, Model } = require("sequelize");
 const { hashPassword } = require("../lib/password");
 
-// export
-const Role = {
-    ADMIN: "ADMIN",
-    MERCHANT: "MERCHANT",
-};
+const { ROLE } = require("../lib/constants");
 
 class User extends Model {
     static init(sequelize) {
         super.init(
             {
-                email: DataTypes.STRING,
-                password: DataTypes.STRING,
-                firstname: DataTypes.STRING,
+                email: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                    unique: { args: true, msg: "Email already exists" },
+                    validate: {
+                        isEmail: { msg: "Must be a valid email address" },
+                        notEmpty: true,
+                    },
+                },
+                password: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
+
+                gender: {
+                    type: DataTypes.ENUM(["male", "female", "unknown"]),
+                    allowNull: false,
+                    defaultValue: "unknown",
+                },
+                firstname: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
                 lastname: {
                     type: DataTypes.STRING,
-                    allowNull: false,   
+                    allowNull: false,
                 },
                 role: {
                     allowNull: false,
-                    type: DataTypes.STRING,
+                    type: DataTypes.ENUM([...Object.keys(ROLE)]),
                 },
                 confirmed: {
                     type: DataTypes.BOOLEAN,
@@ -37,6 +53,12 @@ class User extends Model {
                         user.password = passwordhash;
                     },
                 },
+                indexes: [
+                    {
+                        unique: true,
+                        fields: ["email"],
+                    },
+                ],
             }
         );
     }
