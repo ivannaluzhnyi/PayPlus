@@ -1,9 +1,9 @@
 const sequelize = require("../lib/sequelize");
 const { DataTypes, Model } = require("sequelize");
 
-class Article extends Model { }
+class Product extends Model { }
 
-Article.init({
+Product.init({
     name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -26,9 +26,9 @@ Article.init({
 },
     {
         sequelize,
-        modelName: "Article",
+        modelName: "Product",
     });
 
-Article.sync();
+    Product.sync();
 
 module.exports = Article;
