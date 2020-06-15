@@ -17,7 +17,7 @@ router.get("/:id", (req, res) => {
 });
 
 // post 
-router.post("/transaction", (req, res)=> {
+router.post("/", (req, res)=> {
     const transaction = new Transaction(req.body);
         transaction
         .save()
@@ -33,13 +33,13 @@ router.post("/transaction", (req, res)=> {
 
 
 // delete transaction
-router.delete("/transaction/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
     Transaction.findByIdAndDelete(req.params.id)
       .then((data) => (data ? res.sendStatus(204) : res.sendStatus(404)))
       .catch(() => res.sendStatus(500));
 });
 
-router.put("/transaction/:id", (req, res) => {
+router.put("/:id", (req, res) => {
     Transaction.findByIdAndUpdate(req.params.id, req.body, {new: true })
     .then((data) => (data ? res.json(data) : res.sendStatus(404)))
     .catch((err) => {

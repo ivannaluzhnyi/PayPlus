@@ -17,7 +17,7 @@ router.get("/:id", (req, res) => {
 });
 
 // post 
-router.post("/devise", (req, res)=> {
+router.post("/", (req, res)=> {
     const devise = new Devise(req.body);
         devise
         .save()
@@ -33,13 +33,13 @@ router.post("/devise", (req, res)=> {
 
 
 // delete devise
-router.delete("/devise/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
     Devise.findByIdAndDelete(req.params.id)
       .then((data) => (data ? res.sendStatus(204) : res.sendStatus(404)))
       .catch(() => res.sendStatus(500));
 });
 
-router.put("/devise/:id", (req, res) => {
+router.put("/:id", (req, res) => {
     Devise.findByIdAndUpdate(req.params.id, req.body, {new: true })
     .then((data) => (data ? res.json(data) : res.sendStatus(404)))
     .catch((err) => {

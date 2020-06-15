@@ -17,7 +17,7 @@ router.get("/:id", (req, res) => {
 });
 
 // post 
-router.post("/society", (req, res)=> {
+router.post("/", (req, res)=> {
     const society = new Society(req.body);
         society
         .save()
@@ -33,13 +33,13 @@ router.post("/society", (req, res)=> {
 
 
 // delete society
-router.delete("/society/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
     Society.findByIdAndDelete(req.params.id)
       .then((data) => (data ? res.sendStatus(204) : res.sendStatus(404)))
       .catch(() => res.sendStatus(500));
 });
 
-router.put("/society/:id", (req, res) => {
+router.put("/:id", (req, res) => {
     Society.findByIdAndUpdate(req.params.id, req.body, {new: true })
     .then((data) => (data ? res.json(data) : res.sendStatus(404)))
     .catch((err) => {
