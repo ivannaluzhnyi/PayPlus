@@ -8,13 +8,13 @@ Devise.init({
        type: DataTypes.STRING,
     },
     taux :  {
-        type:DataTypes.float
+        type:DataTypes.FLOAT
     },
     taux_inverse: {
-        type:DataTypes.float
+        type:DataTypes.FLOAT
     },  
     Inflation: {
-        type:DataTypes.float
+        type:DataTypes.FLOAT
     }
 },
     {

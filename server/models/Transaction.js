@@ -1,5 +1,6 @@
 const sequelize = require("../lib/sequelize");
 const { DataTypes, Model } = require("sequelize");
+const Operation = require("./Operation")
 
 class Transaction extends Model {
     
@@ -18,6 +19,11 @@ Transaction.init(
 );
 
 // Schema update
+
+Transaction.hasMany(Operation);
+Operation.belongsTo(Transaction);
+
 Transaction.sync();
+
 
 module.exports = Transaction;
