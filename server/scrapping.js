@@ -10,27 +10,26 @@ const scrap = Scrapper(
     requestOptions,
     $ => {
         let results = [];
-        $(".currencylist ol > li  strong")
+        $(".currencylist ol > li")
             .each(function (index, element) {
                 results.push({
-                    name: $(element).text(),
-                    // name: $(element).text(),
-                    // country: $(element > 'span').text(),
-                    // rate: $(element > 'strong').text(),
-                    // currency_symbol: $(element > 'strong' > 'span').text(),
+                    name: $(".currencylist-item-wrapper > a", [element]).text(),
+                    country: $(".currencylist-item-wrapper > span", element).text(),
+                    rate: $("strong", [element]).text(),
+                    currency_symbol: $("strong > span", [element]).text(),
                 });
             });
             console.log(results)
         return results
     },
-    // data => {
-    //     data.forEach(devises => {
-    //         Devises.findOneAndUpdate({ name: devises.name }, devises, {
-    //             upsert: true,
-    //             new: true,
-    //             runValidators: true
-    //         }).then(data => console.log(data));
-    //     });
-    // }
+    data => {
+        data.forEach(devises => {
+            Devises.findOneAndUpdate({ name: devises.name }, devises, {
+                upsert: true,
+                new: true,
+                runValidators: true
+            }).then(data => console.log(data));
+        });
+    }
 );
 scrap.end();

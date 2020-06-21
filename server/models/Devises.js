@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = new mongoose.Schema({
     name:String,
-    rate:Number,
+    rate:String,
     country:String,
     currency_symbol:String
 });
