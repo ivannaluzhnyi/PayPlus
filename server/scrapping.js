@@ -15,7 +15,7 @@ const scrap = Scrapper(
                 results.push({
                     name: $(".currencylist-item-wrapper > a", [element]).text(),
                     country: $(".currencylist-item-wrapper > span", element).text(),
-                    rate: $("strong", [element]).text(),
+                    rate: $("strong", [element])[0].childNodes[0].nodeValue.trim(),
                     currency_symbol: $("strong > span", [element]).text(),
                 });
             });
