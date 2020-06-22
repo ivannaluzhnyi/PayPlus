@@ -18,7 +18,7 @@ app.use(express.json());
 app.get("/", (req, res, next) => {
     res.json({ message: "🏦 Hello Payment!!! 💰💰💰" });
 });
-    
+
 // Exemple mailer
 // sendMail({
 //     to: "-----",
@@ -34,4 +34,4 @@ app.use("/movies", ProductRouter);
 app.use("/movies", SocietyRouter);
 app.use("/movies", transactionRouter);
 
-app.listen(5000, () => console.log("listening on port => 5000"));
+app.listen(3050, () => console.log("listening on port => 5000"));
