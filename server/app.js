@@ -28,10 +28,10 @@ app.get("/", (req, res, next) => {
 
 RouterManager(app);
 
-app.use("/movies", DeviseRouter);
-app.use("/movies", OperationRouter);
-app.use("/movies", ProductRouter);
-app.use("/movies", SocietyRouter);
-app.use("/movies", transactionRouter);
+app.use("/Devise", DeviseRouter);
+app.use("/Operation", OperationRouter);
+app.use("/Product", ProductRouter);
+app.use("/Society", SocietyRouter);
+app.use("/transaction", transactionRouter);
 
 app.listen(5000, () => console.log("listening on port => 5000"));

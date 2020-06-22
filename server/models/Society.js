@@ -1,5 +1,6 @@
 const sequelize = require("../lib/sequelize");
-const { DataTypes, Model } = require("sequelize");
+const { DataTypes, Model, Sequelize } = require("sequelize");
+const Product = require ("./Product");
 
 class Society extends Model { }
 
@@ -32,8 +33,7 @@ Society.init({
         }
     },
     devise: {
-        type: DataTypes.EMUM(['Euro', 'Dollar', 'Yen']),
-        defaultValue: "Euro",
+        type: Sequelize.STRING,
     },
     client_token: {
         type: DataTypes.STRING,
@@ -49,6 +49,9 @@ Society.init({
         sequelize,
         modelName: "Society",
     })
+
+Society.hasMany(Product);
+Product.belongsTo(Society);
 
 Society.sync();
 

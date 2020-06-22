@@ -31,4 +31,4 @@ Product.init({
 
     Product.sync();
 
-module.exports = Article;
+module.exports = Product;
