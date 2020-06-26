@@ -10,7 +10,14 @@ const DEVISE = {
     HRYVNIA: "HRYVNIA",
 };
 
+const USER_STATUS = {
+    CONFIRMED: "CONFIRMED",
+    PENDING: "PENDING",
+    BANNED: "BANNED",
+};
+
 module.exports = {
     ROLE,
     DEVISE,
+    USER_STATUS,
 };

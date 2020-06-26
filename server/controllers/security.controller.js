@@ -1,9 +1,11 @@
+const fs = require("fs");
 const createToken = require("../lib/auth").createToken;
 const { isValidPassword } = require("../lib/password");
-const { ROLE } = require("../lib/constants");
-const { isSequelizeError, prettifyErrors } = require("../helpers/error");
 
 const User = require("../models/User");
+
+const { getFileType } = require("../helpers/functions");
+const { resCatchError } = require("../helpers/error");
 
 module.exports = {
     login: (req, res) => {
@@ -18,8 +20,7 @@ module.exports = {
                                         res.json({ ...user.sendUser(), token })
                                     )
                                     .catch(() => res.sendStatus(500));
-                            } else {
-                                res.status(400).json({
+                            } else {                                res.status(400).json({
                                     error: "Invalid credentials",
                                 });
                             }
@@ -35,23 +36,35 @@ module.exports = {
             });
     },
 
-    register: (req, res) => {
-        const user = new User({
-            ...req.body,
-            role: ROLE.COMPANY,
-            confirmed: false,
-        });
+    register: async (req, res) => {
+        try {
+            const KBIS = req.body.KBIS;
+            const base64Image = KBIS.split(";base64,").pop();
+            const type = getFileType(KBIS);
 
-        user.save()
-            .then((data) => res.status(201).json(data))
-            .catch((err) => {
-                if (isSequelizeError(err.name)) {
-                    res.status(400).json(
-                        prettifyErrors(Object.values(err.errors))
-                    );
-                } else {
-                    res.sendStatus(500);
-                }
+            const user = new User({
+                ...req.body,
+                KBIS: type,
             });
+
+            user.save()
+                .then((data) => {
+                    res.status(201).json(data.sendUser());
+
+                    fs.writeFile(
+                        "uploads/KBIS/" + `kbis-${data.id}.${type}`,
+                        base64Image,
+                        { encoding: "base64" },
+                        function (err) {
+                            console.log("File created");
+                        }
+                    );
+                })
+                .catch((err) => {
+                    return resCatchError(res, err);
+                });
+        } catch (err) {
+            res.status(500).send(err);
+        }
     },
 };

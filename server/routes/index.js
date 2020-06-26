@@ -7,7 +7,7 @@ const securityRoutes = require("./security");
 const userRoutes = require("./user");
 
 const routerManager = (app) => {
-    app.use("/", securityRoutes);
+    app.use("/api/", securityRoutes);
     app.use(verifyToken);
     app.use("/users", verifyRole(ROLE.ADMIN), userRoutes);
 };
