@@ -30,10 +30,6 @@ Transaction.init(sequelize);
 // );
 
 User.sync({}).then(() => {
-    console.log("====================================");
-    console.log("sync =<> User ");
-    console.log("====================================");
-
     User.findOne({ where: { email: "admin@admin.com" } })
         .then((user) => {
             if (user === null) {
@@ -45,13 +41,13 @@ User.sync({}).then(() => {
                     country: "France",
                     address: "36 rue du lol",
                     zip_code: "75016",
+                    city: "Paris",
                     KBIS: "",
                     url_cancel: null,
                     url_confirmation: null,
                     devise: "EURO",
                     client_token: null,
                     client_secret: null,
-                    confirmed: true,
                     role: ROLE.ADMIN,
                     state: "CONFIRMED",
                 });

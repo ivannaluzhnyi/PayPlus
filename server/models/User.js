@@ -25,6 +25,10 @@ class User extends Model {
                     type: DataTypes.STRING,
                     allowNull: false,
                 },
+                city: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
                 address: {
                     type: DataTypes.STRING,
                     allowNull: false,
@@ -45,18 +49,10 @@ class User extends Model {
                 url_cancel: {
                     type: DataTypes.STRING,
                     allowNull: true,
-                    validate: {
-                        isNull: true,
-                        isUrl: { msg: "Must be a valid url" },
-                    },
                 },
                 url_confirmation: {
                     type: DataTypes.STRING,
                     allowNull: true,
-                    validate: {
-                        isNull: true,
-                        isUrl: { msg: "Must be a valid url" },
-                    },
                 },
                 devise: {
                     type: DataTypes.ENUM([...Object.keys(DEVISE)]),
@@ -111,6 +107,7 @@ class User extends Model {
         address: this.address,
         zip_code: this.zip_code,
         city: this.city,
+        phone: this.phone,
         email: this.email,
         KBIS: this.KBIS,
         url_cancel: this.url_cancel,
