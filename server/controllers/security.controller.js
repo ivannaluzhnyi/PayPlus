@@ -1,6 +1,9 @@
 const fs = require("fs");
+const { v4: uuidv4 } = require("uuid");
+
 const createToken = require("../lib/auth").createToken;
 const { isValidPassword } = require("../lib/password");
+const { sendMail } = require("../lib/mailer");
 
 const User = require("../models/User");
 
@@ -16,11 +19,15 @@ module.exports = {
                         .then((isPass) => {
                             if (isPass) {
                                 createToken({ id: user.id, role: user.role })
-                                    .then((token) =>
-                                        res.json({ ...user.sendUser(), token })
+                                    .then((accessToken) =>
+                                        res.json({
+                                            user: { ...user.sendUser() },
+                                            accessToken,
+                                        })
                                     )
                                     .catch(() => res.sendStatus(500));
-                            } else {                                res.status(400).json({
+                            } else {
+                                res.status(400).json({
                                     error: "Invalid credentials",
                                 });
                             }
@@ -36,15 +43,22 @@ module.exports = {
             });
     },
 
+    loginWithToken: async (req, res) => {
+        const user = await User.findByPk(req.user.id);
+        res.status(200).json({ user: user.sendUser() });
+    },
+
     register: async (req, res) => {
         try {
             const KBIS = req.body.KBIS;
             const base64Image = KBIS.split(";base64,").pop();
             const type = getFileType(KBIS);
 
+            const KBISName = `kbis-${uuidv4()}.${type}`;
+
             const user = new User({
                 ...req.body,
-                KBIS: type,
+                KBIS: KBISName,
             });
 
             user.save()
@@ -52,13 +66,19 @@ module.exports = {
                     res.status(201).json(data.sendUser());
 
                     fs.writeFile(
-                        "uploads/KBIS/" + `kbis-${data.id}.${type}`,
+                        "uploads/KBIS/" + `KBISName`,
                         base64Image,
                         { encoding: "base64" },
                         function (err) {
                             console.log("File created");
                         }
                     );
+
+                    sendMail({
+                        to: data.email,
+                        text: `Bonjour ${data.name}. \n\nMerci pour votre inscription sur la plateforme PayPlus+. Votre compte est en attente de validation par un Admin. \n\n Cordialement.`,
+                        subject: "Inscription Pay Plus+ | Validation",
+                    });
                 })
                 .catch((err) => {
                     return resCatchError(res, err);

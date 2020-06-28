@@ -9,7 +9,7 @@ const userRoutes = require("./user");
 const routerManager = (app) => {
     app.use("/api/", securityRoutes);
     app.use(verifyToken);
-    app.use("/users", verifyRole(ROLE.ADMIN), userRoutes);
+    app.use("/api/", verifyRole(ROLE.ADMIN), userRoutes);
 };
 
 module.exports = routerManager;

@@ -29,29 +29,36 @@ Transaction.init(sequelize);
 //     })
 // );
 
-User.sync({ force: true }).then(() => {
+User.sync({}).then(() => {
     console.log("====================================");
     console.log("sync =<> User ");
     console.log("====================================");
-    // const user = new User({
-    //     email: "admin@admin.com",
-    //     password: "adminPass",
-    //     name: "Pay Plus+",
-    //     country: "France",
-    //     adress: "36 rue du lol",
-    //     zip_code: "75016",
-    //     KBIS: "",
-    //     url_cancel: null,
-    //     url_confirmation: null,
-    //     devise: "EURO",
-    //     client_token: null,
-    //     client_secret: null,
-    //     confirmed: true,
-    //     role: ROLE.ADMIN,
-    //     state: "CONFIRMED",
-    // });
 
-    // user.save();
+    User.findOne({ where: { email: "admin@admin.com" } })
+        .then((user) => {
+            if (user === null) {
+                const user = new User({
+                    email: "admin@admin.com",
+                    password: "adminPass",
+                    phone: "0666666666",
+                    name: "Pay Plus+",
+                    country: "France",
+                    address: "36 rue du lol",
+                    zip_code: "75016",
+                    KBIS: "",
+                    url_cancel: null,
+                    url_confirmation: null,
+                    devise: "EURO",
+                    client_token: null,
+                    client_secret: null,
+                    confirmed: true,
+                    role: ROLE.ADMIN,
+                    state: "CONFIRMED",
+                });
+                user.save();
+            }
+        })
+        .catch((e) => {});
 });
 Product.sync();
 Devise.sync();

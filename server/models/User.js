@@ -79,6 +79,10 @@ class User extends Model {
                     type: DataTypes.ENUM([...Object.keys(USER_STATUS)]),
                     defaultValue: USER_STATUS.PENDING,
                 },
+                phone: {
+                    allowNull: false,
+                    type: DataTypes.STRING,
+                },
             },
             {
                 sequelize,
@@ -87,9 +91,6 @@ class User extends Model {
                     beforeCreate: async (user) => {
                         const passwordhash = await hashPassword(user.password);
                         user.password = passwordhash;
-                    },
-                    afterCreate: async (user) => {
-                        user.KBIS = `kbis-${user.id}.${user.KBIS}`;
                     },
                 },
                 indexes: [
@@ -110,6 +111,7 @@ class User extends Model {
         address: this.address,
         zip_code: this.zip_code,
         city: this.city,
+        email: this.email,
         KBIS: this.KBIS,
         url_cancel: this.url_cancel,
         url_confirmation: this.url_confirmation,
