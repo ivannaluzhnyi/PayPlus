@@ -66,7 +66,7 @@ module.exports = {
                     res.status(201).json(data.sendUser());
 
                     fs.writeFile(
-                        "uploads/KBIS/" + `KBISName`,
+                        "uploads/KBIS/" + `${KBISName}`,
                         base64Image,
                         { encoding: "base64" },
                         function (err) {
