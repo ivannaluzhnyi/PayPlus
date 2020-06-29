@@ -14,6 +14,7 @@ const USER_STATUS = {
     CONFIRMED: "CONFIRMED",
     PENDING: "PENDING",
     BANNED: "BANNED",
+    DISABLED: "DISABLED",
 };
 
 module.exports = {

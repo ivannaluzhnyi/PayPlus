@@ -28,6 +28,10 @@ class Operation extends Model {
             }
         );
     }
+
+    static associate(models) {
+        this.belongsTo(models.Transaction, { foreignKey: "transaction_id" });
+    }
 }
 
 module.exports = Operation;

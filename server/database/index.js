@@ -14,22 +14,12 @@ Operation.init(sequelize);
 Product.init(sequelize);
 Transaction.init(sequelize);
 
-// User.bulkCreate(
-//     new User({
-//         email: "admin@admin.com",
-//         password: "adminPass",
-//         firstname: "root",
-//         lastname: "root",
-//         gender: "male",
-//         birthday: "2002-05-08",
-//         confirmed: true,
-//         role: ROLE.ADMIN,
-//         createdAt: new Date(),
-//         updatedAt: new Date(),
-//     })
-// );
+User.associate(sequelize.models);
+Transaction.associate(sequelize.models);
+Product.associate(sequelize.models);
+Operation.associate(sequelize.models);
 
-User.sync({}).then(() => {
+sequelize.sync({ force: true }).then(() => {
     User.findOne({ where: { email: "admin@admin.com" } })
         .then((user) => {
             if (user === null) {
@@ -56,7 +46,3 @@ User.sync({}).then(() => {
         })
         .catch((e) => {});
 });
-Product.sync();
-Devise.sync();
-Operation.sync();
-Transaction.sync();

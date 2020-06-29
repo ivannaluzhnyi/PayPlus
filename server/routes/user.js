@@ -20,6 +20,7 @@ router.put("/update/:id", verifyIdRole, update);
 router.get("/:id", getOne);
 router.get("/kbis/:path", getKBIS);
 router.get("/generate-credentials/:id", verifyIdRole, generateCredentials);
+router.put("/change-password/:id", verifyIdRole, changePassword);
 router.get("/", verifyRole(ROLE.ADMIN), getAllUsers);
 router.put("/change-user-status/:id", verifyRole(ROLE.ADMIN), changeUserStatus);
 router.get(
@@ -27,7 +28,5 @@ router.get(
     verifyRole(ROLE.ADMIN),
     resetPasswordAdmin
 );
-
-router.put("/change-password/:id", verifyIdRole, changePassword);
 
 module.exports = router;

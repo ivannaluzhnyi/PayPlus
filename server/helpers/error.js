@@ -8,7 +8,8 @@ const prettifyErrors = (errors) => {
 
 const isSequelizeError = (name) =>
     name === "SequelizeValidationError" ||
-    name === "SequelizeUniqueConstraintError";
+    name === "SequelizeUniqueConstraintError" ||
+    name === "ValidationError";
 
 const resCatchError = (res, err) =>
     isSequelizeError(err.name)

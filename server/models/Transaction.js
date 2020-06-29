@@ -1,4 +1,3 @@
-const sequelize = require("../lib/sequelize");
 const { DataTypes, Model } = require("sequelize");
 
 class Transaction extends Model {
@@ -15,6 +14,17 @@ class Transaction extends Model {
                 modelName: "Transaction",
             }
         );
+    }
+
+    static associate(models) {
+        this.belongsTo(models.User, { foreignKey: "user_id" });
+        this.belongsToMany(models.Product, {
+            foreignKey: "transaction_id",
+            through: "transaction_products",
+            as: "products",
+        });
+
+        this.hasMany(models.Operation);
     }
 }
 

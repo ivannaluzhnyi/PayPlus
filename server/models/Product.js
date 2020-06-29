@@ -1,4 +1,3 @@
-const sequelize = require("../lib/sequelize");
 const { DataTypes, Model } = require("sequelize");
 
 class Product extends Model {
@@ -22,7 +21,7 @@ class Product extends Model {
                 },
                 states: {
                     type: DataTypes.BOOLEAN,
-                    defaultValue: 0,
+                    defaultValue: false,
                 },
             },
             {
@@ -30,6 +29,14 @@ class Product extends Model {
                 modelName: "Product",
             }
         );
+    }
+
+    static associate(models) {
+        this.belongsToMany(models.Transaction, {
+            foreignKey: "product_id",
+            through: "transaction_products",
+            as: "transactions",
+        });
     }
 }
 

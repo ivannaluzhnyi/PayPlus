@@ -186,7 +186,8 @@ module.exports = {
         }
         if (
             req.body.state === USER_STATUS.PENDING ||
-            req.body.state === USER_STATUS.BANNED
+            req.body.state === USER_STATUS.BANNED ||
+            req.body.state === USER_STATUS.DISABLED
         ) {
             User.update(
                 {

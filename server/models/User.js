@@ -121,7 +121,9 @@ class User extends Model {
         updatedAt: this.updatedAt,
     });
 
-    static associate(models) {}
+    static associate(models) {
+        this.hasMany(models.Transaction);
+    }
 }
 
 module.exports = User;

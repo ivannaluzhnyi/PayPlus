@@ -9,12 +9,13 @@ const User = require("../models/User");
 
 const { getFileType } = require("../helpers/functions");
 const { resCatchError } = require("../helpers/error");
+const { USER_STATUS } = require("../lib/constants");
 
 module.exports = {
     login: (req, res) => {
         User.findOne({ where: { email: req.body.email } })
             .then((user) => {
-                if (user) {
+                if (user && user.state !== USER_STATUS.DISABLED) {
                     isValidPassword(req.body.password, user.password)
                         .then((isPass) => {
                             if (isPass) {
