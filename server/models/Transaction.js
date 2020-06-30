@@ -1,4 +1,5 @@
 const { DataTypes, Model } = require("sequelize");
+const Operation = require("./Operation")
 
 class Transaction extends Model {
     static init(sequelize) {
@@ -27,5 +28,6 @@ class Transaction extends Model {
         this.hasMany(models.Operation);
     }
 }
+
 
 module.exports = Transaction;
