@@ -81,7 +81,7 @@ const Transactions = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {invoices.map(invoice => (
+                {transactions.map(invoice => (
                   <TableRow key={invoice.id}>
                     <TableCell>#{invoice.id.split('-').shift()}</TableCell>
                     <TableCell>
@@ -116,7 +116,7 @@ const Transactions = () => {
         </PerfectScrollbar>
         <TablePagination
           component="div"
-          count={invoices.length}
+          count={transactions.length}
           onChangePage={() => {}}
           onChangeRowsPerPage={() => {}}
           page={0}

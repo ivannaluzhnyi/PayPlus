@@ -22,6 +22,19 @@ services:
             ME_CONFIG_MONGODB_ADMINUSERNAME: root
             ME_CONFIG_MONGODB_ADMINPASSWORD: password
 
+    server-only:
+        image: node:alpine
+        volumes:
+            - "./server:/home/node/app:rw,consistent"
+        working_dir: "/home/node/app"
+        environment:
+            JWT_SECRET: "MyBestSecret"
+            MAILER_USER: "payplus.info2020@gmail.com"
+            MAILER_PASS: "paypluas2020"
+        command: "npm start"
+        ports:
+            - 127.0.0.1:3050:3050
+
     server:
         image: node:alpine
         volumes:
@@ -38,6 +51,7 @@ services:
         depends_on:
             - postgres
             - pgadmin
+            - mongo
         command: "npm start"
         ports:
             - 127.0.0.1:3050:3050

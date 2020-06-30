@@ -82,7 +82,7 @@ const CustomerDetailsView = () => {
           <Divider />
           <Box mt={3}>
             {currentTab === 'details' && <Details customer={customer} />}
-            {currentTab === 'invoices' && <Invoices />}
+            {/* {currentTab === 'invoices' && <Invoices />} */}
             {currentTab === 'logs' && <Logs />}
           </Box>
         </Container>
