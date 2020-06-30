@@ -33,14 +33,14 @@ services:
             MONGODB_DBNAME: "SampleCollections"
             DATABASE_URL: "postgres://user:password@postgres:5432/dbpayment"
             JWT_SECRET: "MyBestSecret"
-            MAILER_USER: "mailer.testing2020@gmail.com"
-            MAILER_PASS: "mailer2020"
+            MAILER_USER: "payplus.info2020@gmail.com"
+            MAILER_PASS: "paypluas2020"
         depends_on:
             - postgres
             - pgadmin
         command: "npm start"
         ports:
-            - 127.0.0.1:5000:5000
+            - 127.0.0.1:3050:3050
 
     client:
         build: "./docker"
@@ -51,7 +51,10 @@ services:
         tty: true
         stdin_open: true
         ports:
-            - 127.0.0.1:3001:3000
+            - 127.0.0.1:3000:3000
+        environment:
+            REACT_APP_BACK_OFFICE_URL: http://localhost:3050/
+
     postgres:
         container_name: postgres
         image: "postgres:12-alpine"

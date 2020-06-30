@@ -27,7 +27,7 @@ function sendMail({ from, to, subject, text }) {
             console.log("err => ", err);
             return console.log("Error occurs");
         }
-        return console.log("Email sent!!!");
+        return console.log("Email sent");
     });
 }
 

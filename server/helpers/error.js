@@ -8,9 +8,16 @@ const prettifyErrors = (errors) => {
 
 const isSequelizeError = (name) =>
     name === "SequelizeValidationError" ||
-    name === "SequelizeUniqueConstraintError";
+    name === "SequelizeUniqueConstraintError" ||
+    name === "ValidationError";
+
+const resCatchError = (res, err) =>
+    isSequelizeError(err.name)
+        ? res.status(400).json(prettifyErrors(Object.values(err.errors)))
+        : res.sendStatus(500);
 
 module.exports = {
     prettifyErrors,
     isSequelizeError,
+    resCatchError,
 };

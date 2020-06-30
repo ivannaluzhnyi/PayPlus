@@ -1,15 +1,18 @@
 const verifyToken = require("../middlewares/verifyToken");
-const verifyRole = require("../middlewares/verifyRole");
-
-const { ROLE } = require("../lib/constants");
 
 const securityRoutes = require("./security");
 const userRoutes = require("./user");
+const transactionRoutes = require("./transaction");
+const productRoutes = require("./product");
+const operationRoutes = require("./operation");
 
 const routerManager = (app) => {
-    app.use("/", securityRoutes);
+    app.use("/api/", securityRoutes);
+    app.use("/api/transactions/", transactionRoutes);
+    app.use("/api/products/", productRoutes);
+    app.use("/api/operations/", operationRoutes);
     app.use(verifyToken);
-    app.use("/users", verifyRole(ROLE.ADMIN), userRoutes);
+    app.use("/api/users", userRoutes);
 };
 
 module.exports = routerManager;

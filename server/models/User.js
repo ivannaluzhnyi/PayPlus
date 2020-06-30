@@ -1,7 +1,8 @@
 const { DataTypes, Model } = require("sequelize");
 const { hashPassword } = require("../lib/password");
 
-const { ROLE } = require("../lib/constants");
+const { ROLE, DEVISE, USER_STATUS } = require("../lib/constants");
+const { getFileType } = require("../helpers/functions");
 
 class User extends Model {
     static init(sequelize) {
@@ -16,39 +17,67 @@ class User extends Model {
                         notEmpty: true,
                     },
                 },
+                name: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
+                country: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
+                city: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
+                address: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
+                zip_code: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
+                KBIS: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
                 password: {
                     type: DataTypes.STRING,
                     allowNull: false,
                 },
-                gender: {
-                    type: DataTypes.ENUM(["male", "female", "unknown"]),
-                    allowNull: false,
-                    defaultValue: "unknown",
-                },
 
-                birthday: {
-                    type: DataTypes.DATEONLY,
-                    allowNull: false,
-                    validate: {
-                        isDate: true,
-                    },
-                },
-                firstname: {
+                url_cancel: {
                     type: DataTypes.STRING,
-                    allowNull: false,
+                    allowNull: true,
                 },
-                lastname: {
+                url_confirmation: {
                     type: DataTypes.STRING,
-                    allowNull: false,
+                    allowNull: true,
+                },
+                devise: {
+                    type: DataTypes.ENUM([...Object.keys(DEVISE)]),
+                    defaultValue: DEVISE.EURO,
+                },
+                client_token: {
+                    type: DataTypes.STRING,
+                    allowNull: true,
+                },
+                client_secret: {
+                    type: DataTypes.STRING,
+                    allowNull: true,
                 },
                 role: {
                     allowNull: false,
                     type: DataTypes.ENUM([...Object.keys(ROLE)]),
+                    defaultValue: ROLE.COMPANY,
                 },
-                confirmed: {
-                    type: DataTypes.BOOLEAN,
+                state: {
+                    type: DataTypes.ENUM([...Object.keys(USER_STATUS)]),
+                    defaultValue: USER_STATUS.PENDING,
+                },
+                phone: {
                     allowNull: false,
-                    defaultValue: false,
+                    type: DataTypes.STRING,
                 },
             },
             {
@@ -73,18 +102,28 @@ class User extends Model {
     // without password
     sendUser = () => ({
         id: this.id,
+        name: this.name,
+        country: this.country,
+        address: this.address,
+        zip_code: this.zip_code,
+        city: this.city,
+        phone: this.phone,
         email: this.email,
-        gender: this.gender,
-        birthday: this.birthday,
-        firstname: this.firstname,
+        KBIS: this.KBIS,
+        url_cancel: this.url_cancel,
+        url_confirmation: this.url_confirmation,
+        devise: this.devise,
+        client_token: this.client_token,
+        client_secret: this.client_secret,
         role: this.role,
-        confirmed: this.confirmed,
-        lastname: this.lastname,
+        state: this.state,
         createdAt: this.createdAt,
         updatedAt: this.updatedAt,
     });
 
-    static associate(models) {}
+    static associate(models) {
+        this.hasMany(models.Transaction);
+    }
 }
 
 module.exports = User;
