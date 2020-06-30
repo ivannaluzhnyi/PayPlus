@@ -1,8 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback
-} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import moment from 'moment';
@@ -28,6 +24,7 @@ import axios from 'src/utils/axios';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
 import Label from 'src/components/Label';
 import GenericMoreButton from 'src/components/GenericMoreButton';
+import useCustomer from 'src/hooks/useCustomer';
 
 const statusColors = {
   paid: 'success',
@@ -39,17 +36,19 @@ const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-function Invoices({ className, ...rest }) {
+const Transactions = () => {
   const classes = useStyles();
   const isMountedRef = useIsMountedRef();
-  const [invoices, setInvoices] = useState(null);
+  const [transactions, setTransactions] = useState(null);
+
+  const { customer } = useCustomer();
 
   const getInvoices = useCallback(() => {
     axios
-      .get('/api/management/customers/1/invoices')
-      .then((response) => {
+      .get(`/api/management/customers/${customer.id}/transactions`)
+      .then(response => {
         if (isMountedRef.current) {
-          setInvoices(response.data.invoices);
+          setTransactions(response.data.invoices);
         }
       });
   }, [isMountedRef]);
@@ -58,20 +57,14 @@ function Invoices({ className, ...rest }) {
     getInvoices();
   }, [getInvoices]);
 
-  if (!invoices) {
+  if (!setTransactions) {
     return null;
   }
 
   return (
-    <div
-      className={clsx(classes.root, className)}
-      {...rest}
-    >
+    <div className={clsx(classes.root)}>
       <Card>
-        <CardHeader
-          action={<GenericMoreButton />}
-          title="Customer invoices"
-        />
+        <CardHeader action={<GenericMoreButton />} title="Customer invoices" />
         <Divider />
         <PerfectScrollbar>
           <Box minWidth={1150}>
@@ -88,12 +81,9 @@ function Invoices({ className, ...rest }) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {invoices.map((invoice) => (
+                {invoices.map(invoice => (
                   <TableRow key={invoice.id}>
-                    <TableCell>
-                      #
-                      {invoice.id.split('-').shift()}
-                    </TableCell>
+                    <TableCell>#{invoice.id.split('-').shift()}</TableCell>
                     <TableCell>
                       {moment(invoice.date).format('DD/MM/YYYY | HH:MM')}
                     </TableCell>
@@ -136,10 +126,6 @@ function Invoices({ className, ...rest }) {
       </Card>
     </div>
   );
-}
-
-Invoices.propTypes = {
-  className: PropTypes.string
 };
 
-export default Invoices;
+export default Transactions;

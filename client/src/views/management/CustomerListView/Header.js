@@ -55,10 +55,10 @@ const Header = () => {
             to="/app/management"
             component={RouterLink}
           >
-            Management
+            Gestion
           </Link>
           <Typography variant="body1" color="textPrimary">
-            Customers
+            Clients
           </Typography>
         </Breadcrumbs>
         <Typography variant="h3" color="textPrimary">
@@ -69,12 +69,13 @@ const Header = () => {
         <Button
           color="secondary"
           variant="contained"
+          disabled
           className={classes.action}
         >
           <SvgIcon fontSize="small" className={classes.actionIcon}>
             <PlusCircleIcon />
           </SvgIcon>
-          New Customer
+          Nouveau client
         </Button>
       </Grid>
     </Grid>

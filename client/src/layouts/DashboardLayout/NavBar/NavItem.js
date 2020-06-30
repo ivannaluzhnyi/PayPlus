@@ -2,16 +2,11 @@ import React, { useState } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import {
-  Button,
-  Collapse,
-  ListItem,
-  makeStyles
-} from '@material-ui/core';
+import { Button, Collapse, ListItem, makeStyles } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   item: {
     display: 'block',
     paddingTop: 0,
@@ -63,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function NavItem({
+const NavItem = ({
   title,
   href,
   depth,
@@ -73,12 +68,12 @@ function NavItem({
   open: openProp,
   info: Info,
   ...rest
-}) {
+}) => {
   const classes = useStyles();
   const [open, setOpen] = useState(openProp);
 
   const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
+    setOpen(prevOpen => !prevOpen);
   };
 
   let paddingLeft = 8;
@@ -97,35 +92,16 @@ function NavItem({
         key={title}
         {...rest}
       >
-        <Button
-          className={classes.button}
-          onClick={handleToggle}
-          style={style}
-        >
-          {Icon && (
-            <Icon
-              className={classes.icon}
-              size="20"
-            />
-          )}
-          <span className={classes.title}>
-            {title}
-          </span>
+        <Button className={classes.button} onClick={handleToggle} style={style}>
+          {Icon && <Icon className={classes.icon} size="20" />}
+          <span className={classes.title}>{title}</span>
           {open ? (
-            <ExpandLessIcon
-              size="small"
-              color="inherit"
-            />
+            <ExpandLessIcon size="small" color="inherit" />
           ) : (
-            <ExpandMoreIcon
-              size="small"
-              color="inherit"
-            />
+            <ExpandMoreIcon size="small" color="inherit" />
           )}
         </Button>
-        <Collapse in={open}>
-          {children}
-        </Collapse>
+        <Collapse in={open}>{children}</Collapse>
       </ListItem>
     );
   }
@@ -145,20 +121,13 @@ function NavItem({
         style={style}
         to={href}
       >
-        {Icon && (
-          <Icon
-            className={classes.icon}
-            size="20"
-          />
-        )}
-        <span className={classes.title}>
-          {title}
-        </span>
+        {Icon && <Icon className={classes.icon} size="20" />}
+        <span className={classes.title}>{title}</span>
         {Info && <Info className={classes.info} />}
       </Button>
     </ListItem>
   );
-}
+};
 
 NavItem.propTypes = {
   children: PropTypes.node,

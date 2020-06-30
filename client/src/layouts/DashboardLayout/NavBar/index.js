@@ -39,9 +39,186 @@ import {
   Users as UsersIcon
 } from 'react-feather';
 import Logo from 'src/components/Logo';
-import NavItem from './NavItem';
 import { ROLE } from 'src/constants';
 import Label from 'src/components/Label';
+import NavItem from './NavItem';
+
+const navConfigByRole = role => {
+  switch (role) {
+    case ROLE.ADMIN:
+      return [
+        {
+          subheader: 'Reports',
+          items: [
+            {
+              title: 'Dashboard',
+              icon: PieChartIcon,
+              href: '/app/reports/dashboard'
+            },
+            {
+              title: 'Dashboard Alternative',
+              icon: BarChartIcon,
+              href: '/app/reports/dashboard-alternative'
+            }
+          ]
+        },
+        {
+          subheader: 'Gestion',
+          items: [
+            {
+              title: 'Clients',
+              icon: UsersIcon,
+              href: '/app/management/customers',
+              items: [
+                {
+                  title: 'List Customers',
+                  href: '/app/management/customers'
+                }
+              ]
+            },
+            {
+              title: 'Products',
+              icon: ShoppingCartIcon,
+              href: '/app/management/products',
+              items: [
+                {
+                  title: 'List Products',
+                  href: '/app/management/products'
+                },
+                {
+                  title: 'Create Product',
+                  href: '/app/management/products/create'
+                }
+              ]
+            },
+            {
+              title: 'Orders',
+              icon: FolderIcon,
+              href: '/app/management/orders',
+              items: [
+                {
+                  title: 'List Orders',
+                  href: '/app/management/orders'
+                },
+                {
+                  title: 'View Order',
+                  href: '/app/management/orders/1'
+                }
+              ]
+            },
+            {
+              title: 'Invoices',
+              icon: ReceiptIcon,
+              href: '/app/management/invoices',
+              items: [
+                {
+                  title: 'List Invoices',
+                  href: '/app/management/invoices'
+                },
+                {
+                  title: 'View Invoice',
+                  href: '/app/management/invoices/1'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          subheader: 'Utilisateur',
+          href: '/app/pages',
+          items: [
+            {
+              title: 'Account',
+              href: '/app/account',
+              icon: UserIcon
+            }
+          ]
+        }
+      ];
+    case ROLE.COMPANY:
+      return [
+        {
+          subheader: 'Reports',
+          items: [
+            {
+              title: 'Dashboard',
+              icon: PieChartIcon,
+              href: '/app/reports/dashboard'
+            },
+            {
+              title: 'Dashboard Alternative',
+              icon: BarChartIcon,
+              href: '/app/reports/dashboard-alternative'
+            }
+          ]
+        },
+        {
+          subheader: 'Gestion',
+          items: [
+            {
+              title: 'Products',
+              icon: ShoppingCartIcon,
+              href: '/app/management/products',
+              items: [
+                {
+                  title: 'List Products',
+                  href: '/app/management/products'
+                },
+                {
+                  title: 'Create Product',
+                  href: '/app/management/products/create'
+                }
+              ]
+            },
+            {
+              title: 'Orders',
+              icon: FolderIcon,
+              href: '/app/management/orders',
+              items: [
+                {
+                  title: 'List Orders',
+                  href: '/app/management/orders'
+                },
+                {
+                  title: 'View Order',
+                  href: '/app/management/orders/1'
+                }
+              ]
+            },
+            {
+              title: 'Invoices',
+              icon: ReceiptIcon,
+              href: '/app/management/invoices',
+              items: [
+                {
+                  title: 'List Invoices',
+                  href: '/app/management/invoices'
+                },
+                {
+                  title: 'View Invoice',
+                  href: '/app/management/invoices/1'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          subheader: 'Utilisateur',
+          href: '/app/pages',
+          items: [
+            {
+              title: 'Account',
+              href: '/app/account',
+              icon: UserIcon
+            }
+          ]
+        }
+      ];
+
+    default:
+      return [];
+  }
+};
 
 const navConfig = [
   {
@@ -339,10 +516,12 @@ const labelColors = {
   BANNIE: 'error'
 };
 
-function NavBar({ openMobile, onMobileClose }) {
+const NavBar = ({ openMobile, onMobileClose }) => {
   const classes = useStyles();
   const location = useLocation();
   const { user } = useSelector(state => state.account);
+
+  console.log('user => ', user);
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -393,7 +572,7 @@ function NavBar({ openMobile, onMobileClose }) {
         </Box>
         <Divider />
         <Box p={2}>
-          {navConfig.map(config => (
+          {navConfigByRole(user.role).map(config => (
             <List
               key={config.subheader}
               subheader={
@@ -413,7 +592,7 @@ function NavBar({ openMobile, onMobileClose }) {
         <Box p={2}>
           <Box p={2} borderRadius="borderRadius" bgcolor="background.dark">
             <Typography variant="h6" color="textPrimary">
-              Need Help?
+              Besoin d'aide ?
             </Typography>
             <Link
               variant="subtitle1"
@@ -421,7 +600,7 @@ function NavBar({ openMobile, onMobileClose }) {
               component={RouterLink}
               to="/docs"
             >
-              Check our docs
+              Consultez nos documents
             </Link>
           </Box>
         </Box>
@@ -454,7 +633,7 @@ function NavBar({ openMobile, onMobileClose }) {
       </Hidden>
     </>
   );
-}
+};
 
 NavBar.propTypes = {
   onMobileClose: PropTypes.func,

@@ -126,39 +126,7 @@ const routesConfig = [
         path: '/app/management',
         component: () => <Redirect to="/app/management/customers" />
       },
-      {
-        exact: true,
-        path: '/app/calendar',
-        component: lazy(() => import('src/views/calendar/CalendarView'))
-      },
-      {
-        exact: true,
-        path: '/app/kanban',
-        component: lazy(() => import('src/views/kanban/KanbanView'))
-      },
-      {
-        exact: true,
-        path: ['/app/chat/new', '/app/chat/:threadKey'],
-        component: lazy(() => import('src/views/chat/ChatView'))
-      },
-      {
-        exact: true,
-        path: '/app/chat',
-        component: () => <Redirect to="/app/chat/new" />
-      },
-      {
-        exact: true,
-        path: [
-          '/app/mail/label/:customLabel/:mailId?',
-          '/app/mail/:systemLabel/:mailId?'
-        ],
-        component: lazy(() => import('src/views/mail/MailView'))
-      },
-      {
-        exact: true,
-        path: '/app/mail',
-        component: () => <Redirect to="/app/mail/all" />
-      },
+
       {
         exact: true,
         path: '/app/projects/overview',
@@ -183,16 +151,6 @@ const routesConfig = [
         exact: true,
         path: '/app/projects',
         component: () => <Redirect to="/app/projects/browse" />
-      },
-      {
-        exact: true,
-        path: '/app/social/feed',
-        component: lazy(() => import('src/views/social/FeedView'))
-      },
-      {
-        exact: true,
-        path: '/app/social/profile',
-        component: lazy(() => import('src/views/social/ProfileView'))
       },
       {
         exact: true,

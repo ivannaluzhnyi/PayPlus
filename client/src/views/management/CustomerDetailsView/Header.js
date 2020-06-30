@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
   Breadcrumbs,
@@ -70,10 +69,10 @@ const Header = () => {
             to="/app/management"
             component={RouterLink}
           >
-            Management
+            Gestion
           </Link>
           <Typography variant="body1" color="textPrimary">
-            Customers
+            Clients
           </Typography>
         </Breadcrumbs>
         <Typography variant="h3" color="textPrimary">
@@ -98,7 +97,7 @@ const Header = () => {
           color="secondary"
           variant="contained"
           component={RouterLink}
-          to="/app/management/customers/1/edit"
+          to={`/app/management/customers/${customer.id}/edit`}
         >
           <SvgIcon fontSize="small" className={classes.actionIcon}>
             <EditIcon />

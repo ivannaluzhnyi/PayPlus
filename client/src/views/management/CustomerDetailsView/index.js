@@ -14,7 +14,7 @@ import useIsMountedRef from 'src/hooks/useIsMountedRef';
 import { CustomerContextProvider } from 'src/context/CustomerContext';
 import Header from './Header';
 import Details from './Details';
-import Invoices from './Invoices';
+import Invoices from './Transactions';
 import Logs from './Logs';
 
 const useStyles = makeStyles(theme => ({
@@ -33,7 +33,6 @@ const CustomerDetailsView = () => {
   const [currentTab, setCurrentTab] = useState('details');
 
   const params = useParams();
-
 
   const tabs = [
     { value: 'details', label: 'Details' },
