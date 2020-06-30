@@ -1,4 +1,5 @@
 import { Model, DataTypes } from "sequelize";
+import { DEVISE, USER_STATUS } from "../lib/constants";
 
 class Merchant extends Model {
     static init(sequelize) {

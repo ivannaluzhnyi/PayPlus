@@ -6,10 +6,14 @@ const transactionRoutes = require("./transaction");
 const productRoutes = require("./product");
 const operationRoutes = require("./operation");
 
+import paymentRoutes from "./payment";
+
 const routerManager = (app) => {
     app.get("/", (req, res, next) => {
         res.json({ message: "🏦 Hello Pay Plus+!!! 💰💰💰" });
     });
+
+    app.use("/payment", paymentRoutes);
 
     app.use("/api/", securityRoutes);
     app.use("/api/transactions/", transactionRoutes);
@@ -19,4 +23,4 @@ const routerManager = (app) => {
     app.use("/api/users", userRoutes);
 };
 
-module.exports = routerManager;
+export default routerManager;

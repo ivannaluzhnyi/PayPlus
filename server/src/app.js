@@ -14,10 +14,12 @@ import("./lib/schedule");
 // views
 app.engine("mustache", mustacheExpress());
 app.set("view engine", "mustache");
-app.set("views", __dirname + "../views");
+app.set("views", __dirname + "/../views");
+app.use(express.static(__dirname + "/../public"));
 
 // dependencies
 app.use(express.json({ limit: "20mb", extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(helmet());
 app.use(morgan("dev"));
