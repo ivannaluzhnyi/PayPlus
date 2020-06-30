@@ -8,11 +8,11 @@ const operationRoutes = require("./operation");
 
 const routerManager = (app) => {
     app.use("/api/", securityRoutes);
-    app.use(verifyToken);
-    app.use("/api/users", userRoutes);
     app.use("/api/transactions/", transactionRoutes);
     app.use("/api/products/", productRoutes);
     app.use("/api/operations/", operationRoutes);
+    app.use(verifyToken);
+    app.use("/api/users", userRoutes);
 };
 
 module.exports = routerManager;
