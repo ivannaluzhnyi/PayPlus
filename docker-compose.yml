@@ -31,7 +31,7 @@ services:
             JWT_SECRET: "MyBestSecret"
             MAILER_USER: "payplus.info2020@gmail.com"
             MAILER_PASS: "paypluas2020"
-        command: "npm start"
+        command: "npm run dev"
         ports:
             - 127.0.0.1:3050:3050
 
@@ -52,7 +52,7 @@ services:
             - postgres
             - pgadmin
             - mongo
-        command: "npm start"
+        command: "npm run dev"
         ports:
             - 127.0.0.1:3050:3050
 
