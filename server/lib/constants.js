@@ -1,6 +1,7 @@
 const ROLE = {
     ADMIN: "ADMIN",
     COMPANY: "COMPANY",
+    COMPANY_USER: "COMPANY_USER",
 };
 
 const DEVISE = {

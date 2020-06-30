@@ -1,5 +1,5 @@
-const Scrapper = require('./lib/Scrapper');
-const Devises = require('./models/Devises')
+const Scrapper = require('../lib/Scrapper');
+const Devises = require('../models/mongo/Devises')
 // const url = 'https://www.boursorama.com/bourse/devises'
 const url = 'https://www.capital.fr/bourse/devises/cours-devises'
 

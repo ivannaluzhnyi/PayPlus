@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const chalk = require("chalk");
+
+const log = console.log;
 
 mongoose
     .connect(
@@ -9,8 +12,7 @@ mongoose
             dbName: process.env.MONGODB_DBNAME,
         }
     )
-    .then(() => console.log("connected to mongoDB"))
+    .then(() => log(chalk.bgGreen("Connected to MongoDB ✅")))
     .catch((e) => console.log(e));
 
 module.exports = mongoose.connection;
-        
