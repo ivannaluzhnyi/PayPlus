@@ -27,7 +27,7 @@ class Merchant extends Model {
                 },
                 KBIS: {
                     type: DataTypes.STRING,
-                    allowNull: false,
+                    allowNull: true,
                 },
                 url_cancel: {
                     type: DataTypes.STRING,

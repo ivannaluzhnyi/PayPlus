@@ -25,7 +25,7 @@ Operation.associate(sequelize.models);
 Credential.associate(sequelize.models);
 Transaction.associate(sequelize.models);
 
-sequelize.sync({}).then(() => {
+sequelize.sync({ force: true }).then(() => {
     User.findOne({ where: { email: "admin@admin.com" } })
         .then((user) => {
             if (user === null) {

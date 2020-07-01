@@ -1,5 +1,4 @@
 import fs from "fs";
-import { v4 as uuidv4 } from "uuid";
 
 import Merchant from "../models/Merchant";
 import User from "../models/User";
@@ -66,8 +65,6 @@ module.exports = {
             const base64Image = KBIS.split(";base64,").pop();
             const type = getFileType(KBIS);
 
-            const KBISName = `kbis-${uuidv4()}.${type}`;
-
             const user = new User({
                 email: req.body.email,
                 last_name: req.body.last_name,
@@ -85,7 +82,6 @@ module.exports = {
                         city: req.body.city,
                         address: req.body.address,
                         zip_code: req.body.zip_code,
-                        KBIS: KBISName,
                     })
                         .then((createdMerchant) => {
                             createdUser
@@ -93,26 +89,34 @@ module.exports = {
                                 .then(() => {
                                     res.status(201).json(createdUser);
 
-                                    const pathWriteFile =
-                                        "uploads/KBIS/" + `${KBISName}`;
-
-                                    fs.writeFile(
-                                        pathWriteFile,
-                                        base64Image,
-                                        { encoding: "base64" },
-                                        function (err) {
-                                            console.log(
-                                                `File KBIS: ${pathWriteFile} created`
-                                            );
-                                        }
-                                    );
-
                                     sendMail({
                                         to: createdUser.email,
                                         text: `Bonjour ${createdUser.first_name} ${createdUser.last_name}. \n\nMerci pour votre inscription sur la plateforme PayPlus+. Votre compte est en attente de validation par un Admin. \n\n Cordialement.`,
                                         subject:
                                             "Inscription Pay Plus+ | Validation",
                                     });
+
+                                    const KBISName = `kbis-merchant-${createdMerchant.id}.${type}`;
+
+                                    createdMerchant
+                                        .update({
+                                            KBIS: KBISName,
+                                        })
+                                        .then(() => {
+                                            const pathWriteFile =
+                                                "uploads/KBIS/" + `${KBISName}`;
+
+                                            fs.writeFile(
+                                                pathWriteFile,
+                                                base64Image,
+                                                { encoding: "base64" },
+                                                function (err) {
+                                                    console.log(
+                                                        `File KBIS: ${pathWriteFile} created`
+                                                    );
+                                                }
+                                            );
+                                        });
                                 });
                         })
                         .catch((err) => {
