@@ -1,13 +1,36 @@
-const { DataTypes, Model } = require("sequelize");
-
+import { DataTypes, Model } from "sequelize";
 class Transaction extends Model {
     static init(sequelize) {
         super.init(
             {
-                deliveryZipCode: DataTypes.STRING,
-                deliveryAddress: DataTypes.STRING,
-                deliveryCity: DataTypes.STRING,
-                orderAmount: DataTypes.DECIMAL,
+                client_first_name: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
+                client_last_name: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
+                delivery_country: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
+                delivery_city: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
+                delivery_address: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
+                delivery_zip_code: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
+                order_amount: {
+                    type: DataTypes.DECIMAL,
+                    allowNull: false,
+                },
             },
             {
                 sequelize,
@@ -28,4 +51,4 @@ class Transaction extends Model {
     }
 }
 
-module.exports = Transaction;
+export default Transaction;

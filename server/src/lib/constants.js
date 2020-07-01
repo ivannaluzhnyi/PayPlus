@@ -1,7 +1,6 @@
 const ROLE = {
     ADMIN: "ADMIN",
-    COMPANY: "COMPANY",
-    COMPANY_USER: "COMPANY_USER",
+    MERCHANT: "MERCHANT",
 };
 
 const DEVISE = {
@@ -11,7 +10,7 @@ const DEVISE = {
     HRYVNIA: "HRYVNIA",
 };
 
-const USER_STATUS = {
+const MERCHANT_STATUS = {
     CONFIRMED: "CONFIRMED",
     PENDING: "PENDING",
     BANNED: "BANNED",
@@ -21,5 +20,5 @@ const USER_STATUS = {
 module.exports = {
     ROLE,
     DEVISE,
-    USER_STATUS,
+    MERCHANT_STATUS,
 };

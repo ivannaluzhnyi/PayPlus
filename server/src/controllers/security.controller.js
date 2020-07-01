@@ -1,21 +1,22 @@
-const fs = require("fs");
-const { v4: uuidv4 } = require("uuid");
+import fs from "fs";
+import { v4 as uuidv4 } from "uuid";
 
-const createToken = require("../lib/auth").createToken;
-const { isValidPassword } = require("../lib/password");
-const { sendMail } = require("../lib/mailer");
+import Merchant from "../models/Merchant";
+import User from "../models/User";
 
-const User = require("../models/User");
+import { createToken } from "../lib/auth";
+import { isValidPassword } from "../lib/password";
+import { sendMail } from "../lib/mailer";
 
-const { getFileType } = require("../helpers/functions");
-const { resCatchError } = require("../helpers/error");
-const { USER_STATUS } = require("../lib/constants");
+import { getFileType } from "../helpers/functions";
+import { resCatchError } from "../helpers/error";
+import { MERCHANT_STATUS, ROLE } from "../lib/constants";
 
 module.exports = {
     login: (req, res) => {
         User.findOne({ where: { email: req.body.email } })
             .then((user) => {
-                if (user && user.state !== USER_STATUS.DISABLED) {
+                if (user && user.state !== MERCHANT_STATUS.DISABLED) {
                     isValidPassword(req.body.password, user.password)
                         .then((isPass) => {
                             if (isPass) {
@@ -57,29 +58,53 @@ module.exports = {
 
             const KBISName = `kbis-${uuidv4()}.${type}`;
 
+            console.log("KBISName => ", KBISName);
+
             const user = new User({
-                ...req.body,
-                KBIS: KBISName,
+                email: req.body.email,
+                last_name: req.body.last_name,
+                first_name: req.body.first_name,
+                password: req.body.password,
+                phone: req.body.phone,
+                role: ROLE.MERCHANT,
             });
 
             user.save()
-                .then((data) => {
-                    res.status(201).json(data.sendUser());
+                .then((createdUser) => {
+                    Merchant.create({
+                        name: req.body.name,
+                        country: req.body.country,
+                        city: req.body.city,
+                        address: req.body.address,
+                        zip_code: req.body.zip_code,
+                        KBIS: KBISName,
+                    })
+                        .then((createdMerchant) => {
+                            createdUser
+                                .addMerchant(createdMerchant)
+                                .then(() => {
+                                    res.status(201).json(createdUser);
 
-                    fs.writeFile(
-                        "uploads/KBIS/" + `${KBISName}`,
-                        base64Image,
-                        { encoding: "base64" },
-                        function (err) {
-                            console.log("File created");
-                        }
-                    );
+                                    fs.writeFile(
+                                        "uploads/KBIS/" + `${KBISName}`,
+                                        base64Image,
+                                        { encoding: "base64" },
+                                        function (err) {
+                                            console.log("File created");
+                                        }
+                                    );
 
-                    sendMail({
-                        to: data.email,
-                        text: `Bonjour ${data.name}. \n\nMerci pour votre inscription sur la plateforme PayPlus+. Votre compte est en attente de validation par un Admin. \n\n Cordialement.`,
-                        subject: "Inscription Pay Plus+ | Validation",
-                    });
+                                    sendMail({
+                                        to: createdUser.email,
+                                        text: `Bonjour ${createdUser.name}. \n\nMerci pour votre inscription sur la plateforme PayPlus+. Votre compte est en attente de validation par un Admin. \n\n Cordialement.`,
+                                        subject:
+                                            "Inscription Pay Plus+ | Validation",
+                                    });
+                                });
+                        })
+                        .catch((err) => {
+                            return resCatchError(res, err);
+                        });
                 })
                 .catch((err) => {
                     return resCatchError(res, err);

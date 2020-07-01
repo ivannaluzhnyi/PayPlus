@@ -8,7 +8,7 @@ const { sendMail } = require("../lib/mailer");
 const { isValidPassword } = require("../lib/password");
 const { hashPassword } = require("../lib/password");
 
-const { USER_STATUS } = require("../lib/constants");
+const { MERCHANT_STATUS } = require("../lib/constants");
 
 module.exports = {
     getAllUsers: (req, res) => {
@@ -158,7 +158,7 @@ module.exports = {
             .catch(() => res.sendStatus(500));
     },
     changeUserStatus: (req, res) => {
-        if (req.body.state === USER_STATUS.CONFIRMED) {
+        if (req.body.state === MERCHANT_STATUS.CONFIRMED) {
             User.findByPk(req.params.id)
                 .then((user) => {
                     if (user) {
@@ -166,7 +166,7 @@ module.exports = {
                             User.update(
                                 {
                                     ...credentials,
-                                    state: USER_STATUS.CONFIRMED,
+                                    state: MERCHANT_STATUS.CONFIRMED,
                                 },
                                 {
                                     returning: true,
@@ -185,9 +185,9 @@ module.exports = {
                 .catch(() => res.sendStatus(500));
         }
         if (
-            req.body.state === USER_STATUS.PENDING ||
-            req.body.state === USER_STATUS.BANNED ||
-            req.body.state === USER_STATUS.DISABLED
+            req.body.state === MERCHANT_STATUS.PENDING ||
+            req.body.state === MERCHANT_STATUS.BANNED ||
+            req.body.state === MERCHANT_STATUS.DISABLED
         ) {
             User.update(
                 {

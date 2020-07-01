@@ -33,6 +33,8 @@ sequelize.sync({ force: true }).then(() => {
                     email: "admin@admin.com",
                     password: "adminPass",
                     phone: null,
+                    last_name: "Adminovich",
+                    first_name: "Admin",
                     role: ROLE.ADMIN,
                 });
                 user.save();

@@ -1,7 +1,7 @@
 const { DataTypes, Model } = require("sequelize");
 const { hashPassword } = require("../lib/password");
 
-const { ROLE, DEVISE, USER_STATUS } = require("../lib/constants");
+const { ROLE } = require("../lib/constants");
 
 class User extends Model {
     static init(sequelize) {
@@ -16,6 +16,14 @@ class User extends Model {
                         notEmpty: true,
                     },
                 },
+                last_name: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
+                first_name: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                },
                 password: {
                     type: DataTypes.STRING,
                     allowNull: false,
@@ -23,7 +31,7 @@ class User extends Model {
                 role: {
                     allowNull: false,
                     type: DataTypes.ENUM([...Object.keys(ROLE)]),
-                    defaultValue: ROLE.COMPANY,
+                    defaultValue: ROLE.MERCHANT,
                 },
                 phone: {
                     allowNull: true,

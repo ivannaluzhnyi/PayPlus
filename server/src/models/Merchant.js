@@ -1,5 +1,5 @@
 import { Model, DataTypes } from "sequelize";
-import { DEVISE, USER_STATUS } from "../lib/constants";
+import { DEVISE, MERCHANT_STATUS } from "../lib/constants";
 
 class Merchant extends Model {
     static init(sequelize) {
@@ -43,8 +43,8 @@ class Merchant extends Model {
                 },
 
                 state: {
-                    type: DataTypes.ENUM([...Object.keys(USER_STATUS)]),
-                    defaultValue: USER_STATUS.PENDING,
+                    type: DataTypes.ENUM([...Object.keys(MERCHANT_STATUS)]),
+                    defaultValue: MERCHANT_STATUS.PENDING,
                 },
             },
             {
