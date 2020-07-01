@@ -74,6 +74,12 @@ const routesConfig = [
         path: '/app/reports',
         component: () => <Redirect to="/app/reports/dashboard" />
       },
+
+      {
+        exact: true,
+        path: '/app/management/users',
+        component: lazy(() => import('src/views/management/UserListView'))
+      },
       {
         exact: true,
         path: '/app/management/customers',

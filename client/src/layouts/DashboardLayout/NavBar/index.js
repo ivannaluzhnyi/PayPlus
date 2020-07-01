@@ -38,6 +38,8 @@ import {
   Share2 as ShareIcon,
   Users as UsersIcon
 } from 'react-feather';
+import StorefrontIcon from '@material-ui/icons/Storefront';
+import LoopIcon from '@material-ui/icons/Loop';
 import Logo from 'src/components/Logo';
 import { ROLE } from 'src/constants';
 import Label from 'src/components/Label';
@@ -66,19 +68,30 @@ const navConfigByRole = role => {
           subheader: 'Gestion',
           items: [
             {
-              title: 'Clients',
+              title: 'Utilisateurs',
               icon: UsersIcon,
+              href: '/app/management/users',
+              items: [
+                {
+                  title: 'List Utilisateurs',
+                  href: '/app/management/users'
+                }
+              ]
+            },
+            {
+              title: 'Marchands',
+              icon: StorefrontIcon,
               href: '/app/management/customers',
               items: [
                 {
-                  title: 'List Customers',
+                  title: 'List Marchands',
                   href: '/app/management/customers'
                 }
               ]
             },
             {
-              title: 'Products',
-              icon: ShoppingCartIcon,
+              title: 'Transactions',
+              icon: LoopIcon,
               href: '/app/management/products',
               items: [
                 {
@@ -521,8 +534,6 @@ const NavBar = ({ openMobile, onMobileClose }) => {
   const location = useLocation();
   const { user } = useSelector(state => state.account);
 
-  console.log('user => ', user);
-
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();
@@ -554,20 +565,11 @@ const NavBar = ({ openMobile, onMobileClose }) => {
               color="textPrimary"
               underline="none"
             >
-              {`${user.name}`}
+              {user.first_name} {user.last_name}
             </Link>
             <Typography variant="body2" color="textSecondary">
               {user.email}
             </Typography>
-
-            {user.role === ROLE.COMPANY && (
-              <Label
-                className={classes.userState}
-                color={labelColors[user.state]}
-              >
-                {user.state}
-              </Label>
-            )}
           </Box>
         </Box>
         <Divider />

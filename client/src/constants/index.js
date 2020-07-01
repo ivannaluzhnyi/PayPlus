@@ -17,7 +17,7 @@ export const DEVISE = {
   HRYVNIA: 'HRYVNIA'
 };
 
-export const USER_STATUS = {
+export const MERCHANT_STATUS = {
   CONFIRMED: 'CONFIRMED',
   PENDING: 'PENDING',
   BANNED: 'BANNED',
@@ -29,4 +29,9 @@ export const labelColorsUserStatus = {
   PENDING: 'warning',
   BANNIE: 'error',
   DISABLED: 'error'
+};
+
+export const labelColorsUserRole = {
+  ADMIN: 'success',
+  MERCHANT: 'secondary'
 };

@@ -14,7 +14,9 @@ import {
   TextField,
   Typography,
   Link,
-  makeStyles
+  Divider,
+  makeStyles,
+  Grid
 } from '@material-ui/core';
 import { register } from 'src/actions/accountActions';
 
@@ -32,6 +34,8 @@ const RegisterForm = ({ onSubmitSuccess }) => {
   return (
     <Formik
       initialValues={{
+        last_name: '',
+        first_name: '',
         name: '',
         address: '',
         zip_code: '',
@@ -44,9 +48,15 @@ const RegisterForm = ({ onSubmitSuccess }) => {
         policy: false
       }}
       validationSchema={Yup.object().shape({
+        first_name: Yup.string()
+          .max(255)
+          .required('Nom est requis'),
+        last_name: Yup.string()
+          .max(255)
+          .required('Nom est requis'),
         name: Yup.string()
           .max(255)
-          .required('First est requis'),
+          .required('Nom est requis'),
         address: Yup.string()
           .max(255)
           .required('Adresse est requis'),
@@ -74,6 +84,7 @@ const RegisterForm = ({ onSubmitSuccess }) => {
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
           await dispatch(register(values));
+
           enqueueSnackbar('Compte été bien créé', {
             variant: 'success'
           });
@@ -99,166 +110,216 @@ const RegisterForm = ({ onSubmitSuccess }) => {
         values
       }) => (
         <form className={clsx(classes.root)} onSubmit={handleSubmit}>
-          <TextField
-            error={Boolean(touched.name && errors.name)}
-            fullWidth
-            helperText={touched.name && errors.name}
-            label="Nom de la société"
-            margin="normal"
-            name="name"
-            onBlur={handleBlur}
-            required
-            onChange={handleChange}
-            type="name"
-            value={values.name}
-            variant="outlined"
-          />
-          <TextField
-            error={Boolean(touched.address && errors.address)}
-            fullWidth
-            helperText={touched.address && errors.address}
-            label="Adresse"
-            margin="normal"
-            name="address"
-            required
-            onBlur={handleBlur}
-            onChange={handleChange}
-            type="address"
-            value={values.address}
-            variant="outlined"
-          />
-          <TextField
-            error={Boolean(touched.zip_code && errors.zip_code)}
-            fullWidth
-            helperText={touched.zip_code && errors.zip_code}
-            label="Code postal"
-            autoComplete="billing postal-code"
-            margin="normal"
-            name="zip_code"
-            required
-            onBlur={handleBlur}
-            onChange={handleChange}
-            type="zipCode"
-            value={values.zip_code}
-            variant="outlined"
-          />
-          <TextField
-            error={Boolean(touched.city && errors.city)}
-            fullWidth
-            helperText={touched.city && errors.city}
-            label="Vile"
-            margin="normal"
-            name="city"
-            required
-            onBlur={handleBlur}
-            onChange={handleChange}
-            type="city"
-            value={values.city}
-            variant="outlined"
-          />
-          <TextField
-            error={Boolean(touched.country && errors.country)}
-            fullWidth
-            helperText={touched.country && errors.country}
-            label="Pays"
-            margin="normal"
-            name="country"
-            required
-            onBlur={handleBlur}
-            onChange={handleChange}
-            type="country"
-            value={values.country}
-            variant="outlined"
-          />
+          <Grid container wrap="nowrap" direction="row">
+            <Grid item>
+              <Box p="15px">
+                <Typography as="h2">Information d'utilisateur</Typography>
+                <Divider component="hr" />
 
-          <TextField
-            error={Boolean(touched.phone && errors.phone)}
-            fullWidth
-            helperText={touched.phone && errors.phone}
-            label="Telephone"
-            margin="normal"
-            name="phone"
-            onBlur={handleBlur}
-            required
-            onChange={handleChange}
-            type="phone"
-            value={values.phone}
-            variant="outlined"
-          />
+                <TextField
+                  error={Boolean(touched.first_name && errors.first_name)}
+                  fullWidth
+                  helperText={touched.first_name && errors.first_name}
+                  label="Prénom"
+                  margin="normal"
+                  name="first_name"
+                  onBlur={handleBlur}
+                  required
+                  onChange={handleChange}
+                  type="text"
+                  value={values.first_name}
+                  variant="outlined"
+                />
 
-          <TextField
-            error={Boolean(touched.email && errors.email)}
-            fullWidth
-            helperText={touched.email && errors.email}
-            label="Email"
-            margin="normal"
-            name="email"
-            onBlur={handleBlur}
-            required
-            onChange={handleChange}
-            type="email"
-            value={values.email}
-            variant="outlined"
-          />
-          <TextField
-            error={Boolean(touched.password && errors.password)}
-            fullWidth
-            helperText={touched.password && errors.password}
-            label="Password"
-            margin="normal"
-            name="password"
-            onBlur={handleBlur}
-            required
-            onChange={handleChange}
-            type="password"
-            value={values.password}
-            variant="outlined"
-          />
+                <TextField
+                  error={Boolean(touched.last_name && errors.last_name)}
+                  fullWidth
+                  helperText={touched.last_name && errors.last_name}
+                  label="Nom"
+                  margin="normal"
+                  name="last_name"
+                  onBlur={handleBlur}
+                  required
+                  onChange={handleChange}
+                  type="name"
+                  value={values.last_name}
+                  variant="outlined"
+                />
 
-          <Button variant="contained" component="label">
-            Upload File
-            <input
-              name="KBIS"
-              type="file"
-              style={{ display: 'none' }}
-              onBlur={handleBlur}
-              onChange={async e => {
-                e.preventDefault();
+                <TextField
+                  error={Boolean(touched.phone && errors.phone)}
+                  fullWidth
+                  helperText={touched.phone && errors.phone}
+                  label="Telephone"
+                  margin="normal"
+                  name="phone"
+                  onBlur={handleBlur}
+                  required
+                  onChange={handleChange}
+                  type="phone"
+                  value={values.phone}
+                  variant="outlined"
+                />
 
-                const file = e.target.files[0];
+                <TextField
+                  error={Boolean(touched.email && errors.email)}
+                  fullWidth
+                  helperText={touched.email && errors.email}
+                  label="Email"
+                  margin="normal"
+                  name="email"
+                  onBlur={handleBlur}
+                  required
+                  onChange={handleChange}
+                  type="email"
+                  value={values.email}
+                  variant="outlined"
+                />
+                <TextField
+                  error={Boolean(touched.password && errors.password)}
+                  fullWidth
+                  helperText={touched.password && errors.password}
+                  label="Password"
+                  margin="normal"
+                  name="password"
+                  onBlur={handleBlur}
+                  required
+                  onChange={handleChange}
+                  type="password"
+                  value={values.password}
+                  variant="outlined"
+                />
+              </Box>
+            </Grid>
 
-                if (file) {
-                  handleChange({
-                    currentTarget: {
-                      name: 'KBIS',
-                      value: await toBase64(file)
-                    }
-                  });
-                }
-              }}
-            />
-          </Button>
+            <Grid item>
+              <Box p="15px">
+                <Typography as="h2">Information du marchand</Typography>
+                <Divider />
 
-          <Typography m={2} variant="h5" color="error">
-            {errors.KBIS && <p style={{ color: 'red' }}>{errors.KBIS}</p>}
-          </Typography>
+                <TextField
+                  error={Boolean(touched.name && errors.name)}
+                  fullWidth
+                  helperText={touched.name && errors.name}
+                  label="Nom de la société"
+                  margin="normal"
+                  name="name"
+                  onBlur={handleBlur}
+                  required
+                  onChange={handleChange}
+                  type="name"
+                  value={values.name}
+                  variant="outlined"
+                />
 
-          <Box alignItems="center" display="flex" mt={2} ml={-1}>
-            <Checkbox
-              checked={values.policy}
-              name="policy"
-              onChange={handleChange}
-            />
-            <Typography variant="body2" color="textSecondary">
-              J'ai lu le
-              <Link component="a" href="#" color="secondary">
-                Conditions Générales
-              </Link>
+                <TextField
+                  error={Boolean(touched.address && errors.address)}
+                  fullWidth
+                  helperText={touched.address && errors.address}
+                  label="Adresse"
+                  margin="normal"
+                  name="address"
+                  required
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  type="address"
+                  value={values.address}
+                  variant="outlined"
+                />
+                <TextField
+                  error={Boolean(touched.zip_code && errors.zip_code)}
+                  fullWidth
+                  helperText={touched.zip_code && errors.zip_code}
+                  label="Code postal"
+                  autoComplete="billing postal-code"
+                  margin="normal"
+                  name="zip_code"
+                  required
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  type="zipCode"
+                  value={values.zip_code}
+                  variant="outlined"
+                />
+                <TextField
+                  error={Boolean(touched.city && errors.city)}
+                  fullWidth
+                  helperText={touched.city && errors.city}
+                  label="Vile"
+                  margin="normal"
+                  name="city"
+                  required
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  type="city"
+                  value={values.city}
+                  variant="outlined"
+                />
+                <TextField
+                  error={Boolean(touched.country && errors.country)}
+                  fullWidth
+                  helperText={touched.country && errors.country}
+                  label="Pays"
+                  margin="normal"
+                  name="country"
+                  required
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  type="country"
+                  value={values.country}
+                  variant="outlined"
+                />
+              </Box>
+            </Grid>
+          </Grid>
+
+          <Box p="15px">
+            <Button variant="contained" component="label">
+              Upload File
+              <input
+                name="KBIS"
+                type="file"
+                style={{ display: 'none' }}
+                onBlur={handleBlur}
+                onChange={async e => {
+                  e.preventDefault();
+
+                  const file = e.target.files[0];
+
+                  if (file) {
+                    handleChange({
+                      currentTarget: {
+                        name: 'KBIS',
+                        value: await toBase64(file)
+                      }
+                    });
+                  }
+                }}
+              />
+            </Button>
+
+            <Typography m={2} variant="h5" color="error">
+              {errors.KBIS && <p style={{ color: 'red' }}>{errors.KBIS}</p>}
             </Typography>
+
+            <Box alignItems="center" display="flex" mt={2} ml={-1}>
+              <Checkbox
+                checked={values.policy}
+                name="policy"
+                onChange={handleChange}
+              />
+              <Typography variant="body2" color="textSecondary">
+                J'ai lu le
+                <Link component="a" href="#" color="secondary">
+                  Conditions Générales
+                </Link>
+              </Typography>
+            </Box>
+            {Boolean(touched.policy && errors.policy) && (
+              <FormHelperText error>{errors.policy}</FormHelperText>
+            )}
           </Box>
-          {Boolean(touched.policy && errors.policy) && (
-            <FormHelperText error>{errors.policy}</FormHelperText>
-          )}
+
           <Box mt={2}>
             <Button
               color="secondary"

@@ -34,19 +34,32 @@ const GeneralSettings = ({ user }) => {
     <Formik
       enableReinitialize
       initialValues={{
-        first_name: user.first_name || '',
-        last_name: user.last_name || '',
-        phone: user.phone || ''
+        name: user.name || '',
+        phone: user.phone || '',
+        address: user.address || '',
+        city: user.city || '',
+        zip_code: user.zip_code || '',
+        country: user.country || ''
       }}
       validationSchema={Yup.object().shape({
         phone: Yup.string()
           .max(255)
           .required('phone is required'),
-
-        first_name: Yup.string()
+        address: Yup.string()
           .max(255)
-          .required('First name is required'),
-        last_name: Yup.string()
+          .required('address is required'),
+        city: Yup.string()
+          .max(255)
+          .required('city is required'),
+
+        country: Yup.string()
+          .max(255)
+          .required('country is required'),
+        zip_code: Yup.string()
+          .max(5)
+          .required('zip_code is required'),
+
+        name: Yup.string()
           .max(255)
           .required('First name is required')
       })}
@@ -86,31 +99,16 @@ const GeneralSettings = ({ user }) => {
               <Grid container spacing={4}>
                 <Grid item md={6} xs={12}>
                   <TextField
-                    error={Boolean(touched.first_name && errors.first_name)}
+                    error={Boolean(touched.name && errors.name)}
                     fullWidth
-                    helperText={touched.first_name && errors.first_name}
-                    label="Prénom"
-                    name="first_name"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    required
-                    type="text"
-                    value={values.first_name}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={Boolean(touched.last_name && errors.last_name)}
-                    fullWidth
-                    helperText={touched.last_name && errors.last_name}
+                    helperText={touched.name && errors.name}
                     label="Nom"
-                    name="last_name"
+                    name="name"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     required
                     type="text"
-                    value={values.last_name}
+                    value={values.name}
                     variant="outlined"
                   />
                 </Grid>
@@ -124,6 +122,65 @@ const GeneralSettings = ({ user }) => {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.phone}
+                    variant="outlined"
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.address && errors.address)}
+                    fullWidth
+                    helperText={touched.address && errors.address}
+                    label="Adresse"
+                    name="address"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.address}
+                    variant="outlined"
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.city && errors.city)}
+                    fullWidth
+                    helperText={touched.city && errors.city}
+                    label="Ville"
+                    name="city"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required
+                    value={values.city}
+                    variant="outlined"
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.zip_code && errors.zip_code)}
+                    fullWidth
+                    helperText={touched.zip_code && errors.zip_code}
+                    label="Code postal"
+                    name="zip_code"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required
+                    value={values.zip_code}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    error={Boolean(touched.country && errors.country)}
+                    fullWidth
+                    helperText={touched.country && errors.country}
+                    label="Country"
+                    name="country"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    required
+                    type="country"
+                    value={values.country}
                     variant="outlined"
                   />
                 </Grid>

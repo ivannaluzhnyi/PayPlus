@@ -1,11 +1,11 @@
-const verifyToken = require("../middlewares/verifyToken");
+import verifyToken from "../middlewares/verifyToken";
 
-const securityRoutes = require("./security");
-const userRoutes = require("./user");
-const transactionRoutes = require("./transaction");
-const productRoutes = require("./product");
-const operationRoutes = require("./operation");
-
+import securityRoutes from "./security";
+import userRoutes from "./user";
+import transactionRoutes from "./transaction";
+import productRoutes from "./product";
+import operationRoutes from "./operation";
+import merchantRoutes from "./merchant";
 import paymentRoutes from "./payment";
 
 const routerManager = (app) => {
@@ -20,7 +20,8 @@ const routerManager = (app) => {
     app.use("/api/products/", productRoutes);
     app.use("/api/operations/", operationRoutes);
     app.use(verifyToken);
-    app.use("/api/users", userRoutes);
+    app.use("/api/users/", userRoutes);
+    app.use("/api/merchants/", merchantRoutes);
 };
 
 export default routerManager;

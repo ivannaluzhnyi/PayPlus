@@ -24,7 +24,6 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     height: '100%',
     minHeight: '100%',
-    flexDirection: 'column',
     paddingBottom: 80,
     paddingTop: 80
   }
@@ -40,7 +39,7 @@ const RegisterView = () => {
 
   return (
     <Page className={classes.root} title="Register">
-      <Container maxWidth="sm">
+      <Container>
         <Box mb={5} display="flex" alignItems="center">
           <RouterLink to="/">
             <Logo />

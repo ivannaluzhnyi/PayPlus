@@ -132,7 +132,7 @@ const Security = ({ user }) => {
                     helperText={
                       touched.passwordConfirm && errors.passwordConfirm
                     }
-                    label="Confirmation"
+                    label="Mot de passe Confirmation"
                     name="passwordConfirm"
                     onBlur={handleBlur}
                     onChange={handleChange}

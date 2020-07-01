@@ -11,6 +11,8 @@ import { useSelector } from 'react-redux';
 import Page from 'src/components/Page';
 import Header from './Header';
 import General from './General';
+import Credentials from './Credentials';
+import PaymentInfo from './PaymentInfo';
 import Security from './Security';
 
 const useStyles = makeStyles(theme => ({
@@ -24,6 +26,8 @@ const useStyles = makeStyles(theme => ({
 
 const tabs = [
   { value: 'general', label: 'General' },
+  { value: 'payment-info', label: 'Infos de paiement' },
+  { value: 'credentials', label: 'Credentials' },
   { value: 'security', label: 'Security' }
 ];
 
@@ -32,13 +36,14 @@ const AccountView = () => {
   const [currentTab, setCurrentTab] = useState('general');
 
   const { user } = useSelector(state => state.account);
+  console.log('user => ', user);
 
   const handleTabsChange = (event, value) => {
     setCurrentTab(value);
   };
 
   return (
-    <Page className={classes.root} title="Paramètres">
+    <Page className={classes.root} title="Settings">
       <Container maxWidth="lg">
         <Header />
         <Box mt={3}>
@@ -58,6 +63,8 @@ const AccountView = () => {
         <Divider />
         <Box mt={3}>
           {currentTab === 'general' && <General user={user} />}
+          {currentTab === 'credentials' && <Credentials user={user} />}
+          {currentTab === 'payment-info' && <PaymentInfo user={user} />}
           {currentTab === 'security' && <Security user={user} />}
         </Box>
       </Container>

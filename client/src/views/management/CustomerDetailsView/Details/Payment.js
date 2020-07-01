@@ -17,7 +17,7 @@ import {
 } from '@material-ui/core';
 import CachedIcon from '@material-ui/icons/Cached';
 import useCustomer from 'src/hooks/useCustomer';
-import { USER_STATUS } from 'src/constants';
+import { MERCHANT_STATUS } from 'src/constants';
 import { Alert } from '@material-ui/lab';
 
 const useStyles = makeStyles(theme => ({
@@ -111,8 +111,8 @@ const Payment = () => {
       <Box p={1} display="flex" flexDirection="column" alignItems="flex-start">
         <Button
           disabled={Boolean(
-            customer.state === USER_STATUS.PENDING ||
-              customer.state === USER_STATUS.BANNED
+            customer.state === MERCHANT_STATUS.PENDING ||
+              customer.state === MERCHANT_STATUS.BANNED
           )}
           onClick={handleGenerateCredentials}
         >

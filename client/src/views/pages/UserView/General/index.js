@@ -9,7 +9,6 @@ const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-// eslint-disable-next-line react/prop-types
 const General = ({ user }) => {
   const classes = useStyles();
 

@@ -10,31 +10,39 @@ import { sendMail } from "../lib/mailer";
 
 import { getFileType } from "../helpers/functions";
 import { resCatchError } from "../helpers/error";
-import { MERCHANT_STATUS, ROLE } from "../lib/constants";
+import { ROLE } from "../lib/constants";
 
 module.exports = {
     login: (req, res) => {
-        User.findOne({ where: { email: req.body.email } })
+        User.findOne({
+            where: { email: req.body.email },
+        })
             .then((user) => {
-                if (user && user.state !== MERCHANT_STATUS.DISABLED) {
+                if (user) {
                     isValidPassword(req.body.password, user.password)
                         .then((isPass) => {
                             if (isPass) {
                                 createToken({ id: user.id, role: user.role })
-                                    .then((accessToken) =>
-                                        res.json({
-                                            user: { ...user.sendUser() },
+                                    .then((accessToken) => {
+                                        const preUser = user.toJSON();
+                                        delete preUser.password;
+                                        res.status(200).json({
+                                            user: preUser,
                                             accessToken,
-                                        })
-                                    )
-                                    .catch(() => res.sendStatus(500));
+                                        });
+                                    })
+                                    .catch((err) => {
+                                        res.sendStatus(500);
+                                    });
                             } else {
                                 res.status(400).json({
                                     error: "Invalid credentials",
                                 });
                             }
                         })
-                        .catch(() => res.sendStatus(500));
+                        .catch((err) => {
+                            res.sendStatus(500);
+                        });
                 } else
                     res.status(404).json({
                         error: `User with email: ${req.body.email} not found`,
@@ -46,8 +54,10 @@ module.exports = {
     },
 
     loginWithToken: async (req, res) => {
-        const user = await User.findByPk(req.user.id);
-        res.status(200).json({ user: user.sendUser() });
+        const user = await User.findByPk(req.user.id, {
+            attributes: { exclude: ["password"] },
+        });
+        res.status(200).json({ user: user.toJSON() });
     },
 
     register: async (req, res) => {
@@ -57,8 +67,6 @@ module.exports = {
             const type = getFileType(KBIS);
 
             const KBISName = `kbis-${uuidv4()}.${type}`;
-
-            console.log("KBISName => ", KBISName);
 
             const user = new User({
                 email: req.body.email,
@@ -85,18 +93,23 @@ module.exports = {
                                 .then(() => {
                                     res.status(201).json(createdUser);
 
+                                    const pathWriteFile =
+                                        "uploads/KBIS/" + `${KBISName}`;
+
                                     fs.writeFile(
-                                        "uploads/KBIS/" + `${KBISName}`,
+                                        pathWriteFile,
                                         base64Image,
                                         { encoding: "base64" },
                                         function (err) {
-                                            console.log("File created");
+                                            console.log(
+                                                `File KBIS: ${pathWriteFile} created`
+                                            );
                                         }
                                     );
 
                                     sendMail({
                                         to: createdUser.email,
-                                        text: `Bonjour ${createdUser.name}. \n\nMerci pour votre inscription sur la plateforme PayPlus+. Votre compte est en attente de validation par un Admin. \n\n Cordialement.`,
+                                        text: `Bonjour ${createdUser.first_name} ${createdUser.last_name}. \n\nMerci pour votre inscription sur la plateforme PayPlus+. Votre compte est en attente de validation par un Admin. \n\n Cordialement.`,
                                         subject:
                                             "Inscription Pay Plus+ | Validation",
                                     });

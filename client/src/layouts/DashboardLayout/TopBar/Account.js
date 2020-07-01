@@ -67,7 +67,7 @@ const Account = () => {
         <Avatar alt="User" className={classes.avatar} src={user.avatar} />
         <Hidden smDown>
           <Typography variant="h6" color="inherit">
-            {`${user.name} | ${user.email}`}
+            {`${user.first_name} ${user.last_name} | ${user.email}`}
           </Typography>
         </Hidden>
       </Box>
@@ -83,9 +83,6 @@ const Account = () => {
         anchorEl={ref.current}
         open={isOpen}
       >
-        <MenuItem component={RouterLink} to="/app/social/profile">
-          Profile
-        </MenuItem>
         <MenuItem component={RouterLink} to="/app/account">
           Account
         </MenuItem>

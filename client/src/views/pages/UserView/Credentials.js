@@ -20,7 +20,7 @@ import {
 import { Formik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import { USER_STATUS } from 'src/constants';
+import { MERCHANT_STATUS } from 'src/constants';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -58,7 +58,7 @@ const Credentials = ({ user }) => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  const canGenerate = user.state === USER_STATUS.CONFIRMED;
+  const canGenerate = user.state === MERCHANT_STATUS.CONFIRMED;
 
   return (
     <Formik

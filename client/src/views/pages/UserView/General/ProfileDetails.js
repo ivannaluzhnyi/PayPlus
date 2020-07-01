@@ -1,14 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import {
+  Avatar,
   Box,
+  Button,
   Card,
+  CardActions,
   CardContent,
   Typography,
-  makeStyles,
-  Avatar
+  makeStyles
 } from '@material-ui/core';
-import getInitials from 'src/utils/getInitials';
+import Label from 'src/components/Label';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -17,10 +20,15 @@ const useStyles = makeStyles(theme => ({
   },
   avatar: {
     height: 100,
-    width: 100,
-    fontSize: '45px'
+    width: 100
   }
 }));
+
+const labelColors = {
+  CONFIRMED: 'success',
+  PENDING: 'warning',
+  BANNIE: 'error'
+};
 
 const ProfileDetails = ({ user }) => {
   const classes = useStyles();
@@ -34,19 +42,17 @@ const ProfileDetails = ({ user }) => {
           flexDirection="column"
           textAlign="center"
         >
-          <Avatar className={classes.avatar} src={user.avatar}>
-            {getInitials(`${user.first_name} ${user.last_name}`)}
-          </Avatar>
           <Typography
             className={classes.name}
             gutterBottom
             variant="h1"
             color="textPrimary"
           >
-            {`${user.first_name} ${user.last_name}`}
+            {`${user.name} `}
           </Typography>
           <Typography color="textPrimary" variant="body1">
-            {user.email}
+            <Label color={labelColors[user.state]}>{user.state}</Label>
+            {` | ${user.email}`}
           </Typography>
           <Typography color="textSecondary" variant="body2">
             {user.timezone}

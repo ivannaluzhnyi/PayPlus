@@ -14,7 +14,7 @@ import {
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import CheckIcon from '@material-ui/icons/Check';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
-import { USER_STATUS } from 'src/constants';
+import { MERCHANT_STATUS } from 'src/constants';
 import { changeStateCustomer } from 'src/actions/customerActions';
 import { useSnackbar } from 'notistack';
 import useCustomer from 'src/hooks/useCustomer';
@@ -40,9 +40,9 @@ const OtherActions = () => {
 
   const handleCustomerAction = () => {
     const stateToSend =
-      customer.state === USER_STATUS.PENDING
-        ? USER_STATUS.CONFIRMED
-        : USER_STATUS.PENDING;
+      customer.state === MERCHANT_STATUS.PENDING
+        ? MERCHANT_STATUS.CONFIRMED
+        : MERCHANT_STATUS.PENDING;
 
     axios
       .put(`/api/users/change-user-status/${customer.id}`, {
@@ -69,13 +69,13 @@ const OtherActions = () => {
       <CardContent>
         <Box display="flex" flexDirection="column" alignItems="flex-start">
           <Button onClick={handleCustomerAction}>
-            {customer.state === USER_STATUS.PENDING && (
+            {customer.state === MERCHANT_STATUS.PENDING && (
               <>
                 <CheckIcon className={classes.actionIcon} />
                 Confirmer le client
               </>
             )}
-            {customer.state === USER_STATUS.CONFIRMED && (
+            {customer.state === MERCHANT_STATUS.CONFIRMED && (
               <>
                 <NotInterestedIcon className={classes.actionIcon} />
                 Désactivé le client

@@ -1,4 +1,4 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
 const createToken = (payload) => {
     return new Promise((resolve, reject) => {
@@ -29,7 +29,4 @@ const verifyToken = async (token) => {
     });
 };
 
-module.exports = {
-    createToken,
-    verifyToken,
-};
+export { createToken, verifyToken };

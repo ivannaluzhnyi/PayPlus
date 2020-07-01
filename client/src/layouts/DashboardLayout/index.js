@@ -5,7 +5,7 @@ import NavBar from './NavBar';
 import TopBar from './TopBar';
 import { useSelector } from 'react-redux';
 
-import { USER_STATUS } from 'src/constants';
+import { MERCHANT_STATUS } from 'src/constants';
 import { Alert } from '@material-ui/lab';
 
 const useStyles = makeStyles(theme => ({
@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 
 const checkCustomerData = user => {
   if (
-    user.state === USER_STATUS.PENDING &&
+    user.state === MERCHANT_STATUS.PENDING &&
     (user.url_cancel === null || user.url_confirmation === null)
   ) {
     return (
