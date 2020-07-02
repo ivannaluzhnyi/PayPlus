@@ -15,7 +15,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 import wait from 'src/utils/wait';
-import useCustomer from 'src/hooks/useCustomer';
+import useMerchant from 'src/hooks/useMerchant';
 
 const useStyles = makeStyles(() => ({
   root: {}
@@ -25,7 +25,7 @@ const CustomerEditForm = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const { customer, saveCustomer } = useCustomer();
+  const { customer, saveMerchant } = useMerchant();
 
   return (
     <Formik
@@ -68,7 +68,7 @@ const CustomerEditForm = () => {
                 enqueueSnackbar('Client mis à jour', {
                   variant: 'success'
                 });
-                saveCustomer(response.data[0]);
+                saveMerchant(response.data[0]);
               } else {
                 enqueueSnackbar('Une erreur se produit ', {
                   variant: 'error'

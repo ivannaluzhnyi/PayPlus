@@ -19,7 +19,7 @@ import {
 } from 'react-feather';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {},
   action: {
     marginBottom: theme.spacing(1),
@@ -64,34 +64,22 @@ function Header({ className, ...rest }) {
           >
             Management
           </Link>
-          <Typography
-            variant="body1"
-            color="textPrimary"
-          >
+          <Typography variant="body1" color="textPrimary">
             Invoices
           </Typography>
         </Breadcrumbs>
-        <Typography
-          variant="h3"
-          color="textPrimary"
-        >
+        <Typography variant="h3" color="textPrimary">
           All Invoices
         </Typography>
         <Box mt={2}>
           <Button className={classes.action}>
-            <SvgIcon
-              fontSize="small"
-              className={classes.actionIcon}
-            >
+            <SvgIcon fontSize="small" className={classes.actionIcon}>
               <UploadIcon />
             </SvgIcon>
             Import
           </Button>
           <Button className={classes.action}>
-            <SvgIcon
-              fontSize="small"
-              className={classes.actionIcon}
-            >
+            <SvgIcon fontSize="small" className={classes.actionIcon}>
               <DownloadIcon />
             </SvgIcon>
             Export
@@ -104,10 +92,7 @@ function Header({ className, ...rest }) {
           variant="contained"
           className={classes.action}
         >
-          <SvgIcon
-            fontSize="small"
-            className={classes.actionIcon}
-          >
+          <SvgIcon fontSize="small" className={classes.actionIcon}>
             <PlusCircleIcon />
           </SvgIcon>
           New Invoice

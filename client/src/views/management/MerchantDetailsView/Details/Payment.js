@@ -16,7 +16,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 import CachedIcon from '@material-ui/icons/Cached';
-import useCustomer from 'src/hooks/useCustomer';
+import useMerchant from 'src/hooks/useMerchant';
 import { MERCHANT_STATUS } from 'src/constants';
 import { Alert } from '@material-ui/lab';
 
@@ -33,14 +33,14 @@ const useStyles = makeStyles(theme => ({
 const Payment = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const { customer, saveCustomer } = useCustomer();
+  const { customer, saveMerchant } = useMerchant();
 
   const handleGenerateCredentials = () => {
     axios
       .get(`/api/users/generate-credentials/${customer.id}`)
       .then(response => {
         if (response.status === 200) {
-          saveCustomer(response.data[0]);
+          saveMerchant(response.data[0]);
           enqueueSnackbar('Credentials été bien régénéré', {
             variant: 'success'
           });

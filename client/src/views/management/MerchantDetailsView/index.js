@@ -11,7 +11,7 @@ import { useParams } from 'react-router';
 import Page from 'src/components/Page';
 import axios from 'src/utils/axios';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import { CustomerContextProvider } from 'src/context/CustomerContext';
+import { MerchantContextProvider } from 'src/context/MerchantContext';
 import Header from './Header';
 import Details from './Details';
 import Invoices from './Transactions';
@@ -26,10 +26,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CustomerDetailsView = () => {
+const MerchantDetailsView = () => {
   const classes = useStyles();
   const isMountedRef = useIsMountedRef();
-  const [customer, setCustomer] = useState(null);
+  const [merchant, setMerchant] = useState(null);
   const [currentTab, setCurrentTab] = useState('details');
 
   const params = useParams();
@@ -44,25 +44,28 @@ const CustomerDetailsView = () => {
     setCurrentTab(value);
   };
 
-  const getCustomer = useCallback(() => {
-    axios.get(`/api/users/${params.customerId}`).then(response => {
+  console.log('merchantId => ', params.merchantId);
+
+  const getMerchant = useCallback(() => {
+    axios.get(`/api/merchants/${params.merchantId}`).then(response => {
+      console.log('response => ', response);
       if (isMountedRef.current) {
-        setCustomer(response.data);
+        setMerchant(response.data);
       }
     });
   }, [isMountedRef]);
 
   useEffect(() => {
-    getCustomer();
-  }, [getCustomer]);
+    getMerchant();
+  }, [getMerchant]);
 
-  if (!customer) {
+  if (!merchant) {
     return null;
   }
 
   return (
-    <CustomerContextProvider value={{ saveCustomer: setCustomer, customer }}>
-      <Page className={classes.root} title="Customer Details">
+    <MerchantContextProvider value={{ saveMerchant: setMerchant, merchant }}>
+      <Page className={classes.root} title="Détails sur les commerçants">
         <Container maxWidth={false}>
           <Header />
           <Box mt={3}>
@@ -81,14 +84,14 @@ const CustomerDetailsView = () => {
           </Box>
           <Divider />
           <Box mt={3}>
-            {currentTab === 'details' && <Details customer={customer} />}
+            {currentTab === 'details' && <Details />}
             {/* {currentTab === 'invoices' && <Invoices />} */}
             {currentTab === 'logs' && <Logs />}
           </Box>
         </Container>
       </Page>
-    </CustomerContextProvider>
+    </MerchantContextProvider>
   );
 };
 
-export default CustomerDetailsView;
+export default MerchantDetailsView;

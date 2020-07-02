@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { Grid, makeStyles } from '@material-ui/core';
-import CustomerInfo from './CustomerInfo';
+import CustomerInfo from './MerchantInfo';
 import Emails from './Emails';
 import Invoices from './Payment';
 import OtherActions from './OtherActions';

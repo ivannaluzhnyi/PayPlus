@@ -17,7 +17,7 @@ import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import { MERCHANT_STATUS } from 'src/constants';
 import { changeStateCustomer } from 'src/actions/customerActions';
 import { useSnackbar } from 'notistack';
-import useCustomer from 'src/hooks/useCustomer';
+import useMerchant from 'src/hooks/useMerchant';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -35,22 +35,22 @@ const useStyles = makeStyles(theme => ({
 
 const OtherActions = () => {
   const classes = useStyles();
-  const { customer, saveCustomer } = useCustomer();
+  const { merchant, saveMerchant } = useMerchant();
   const { enqueueSnackbar } = useSnackbar();
 
   const handleCustomerAction = () => {
     const stateToSend =
-      customer.state === MERCHANT_STATUS.PENDING
+      merchant.state === MERCHANT_STATUS.PENDING
         ? MERCHANT_STATUS.CONFIRMED
         : MERCHANT_STATUS.PENDING;
 
     axios
-      .put(`/api/users/change-user-status/${customer.id}`, {
+      .put(`/api/merchants/change-state/${merchant.id}`, {
         state: stateToSend
       })
       .then(response => {
         if (response.status === 200) {
-          saveCustomer(response.data[0]);
+          saveMerchant(response.data[0]);
           enqueueSnackbar('Statut et credentials été changé!', {
             variant: 'success'
           });
@@ -69,16 +69,16 @@ const OtherActions = () => {
       <CardContent>
         <Box display="flex" flexDirection="column" alignItems="flex-start">
           <Button onClick={handleCustomerAction}>
-            {customer.state === MERCHANT_STATUS.PENDING && (
+            {merchant.state === MERCHANT_STATUS.PENDING && (
               <>
                 <CheckIcon className={classes.actionIcon} />
-                Confirmer le client
+                Confirmer marchand
               </>
             )}
-            {customer.state === MERCHANT_STATUS.CONFIRMED && (
+            {merchant.state === MERCHANT_STATUS.CONFIRMED && (
               <>
                 <NotInterestedIcon className={classes.actionIcon} />
-                Désactivé le client
+                Désactivé marchand
               </>
             )}
           </Button>

@@ -37,7 +37,6 @@ const UserListView = () => {
     return null;
   }
 
-  console.log('users => ', users);
   return (
     <Page className={classes.root} title="Liste des utilisateurs">
       <Container maxWidth={false}>

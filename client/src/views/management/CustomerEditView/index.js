@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import axios from 'src/utils/axios';
 import Page from 'src/components/Page';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import { CustomerContextProvider } from 'src/context/CustomerContext';
+import { MerchantContextProvider } from 'src/context/MerchantContext';
 import CustomerEditForm from './CustomerEditForm';
 import Header from './Header';
 
@@ -43,7 +43,7 @@ const CustomerEditView = () => {
   }
 
   return (
-    <CustomerContextProvider value={{ saveCustomer: setCustomer, customer }}>
+    <MerchantContextProvider value={{ saveMerchant: setCustomer, customer }}>
       <Page className={classes.root} title="Édition client">
         <Container maxWidth="lg">
           <Header />
@@ -52,7 +52,7 @@ const CustomerEditView = () => {
           </Box>
         </Container>
       </Page>
-    </CustomerContextProvider>
+    </MerchantContextProvider>
   );
 };
 

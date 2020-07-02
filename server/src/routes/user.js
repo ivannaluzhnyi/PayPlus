@@ -1,21 +1,23 @@
-const express = require("express");
-const verifyIdRole = require("../middlewares/verifyIdRole");
+import { Router } from "express";
 
-const {
+import verifyIdRole from "../middlewares/verifyIdRole";
+import verifyRole from "../middlewares/verifyRole";
+
+import {
     getAllUsers,
     update,
     getOne,
     generateCredentials,
     resetPasswordAdmin,
     changePassword,
-} = require("../controllers/user.controller");
-const verifyRole = require("../middlewares/verifyRole");
-const { ROLE } = require("../lib/constants");
+} from "../controllers/user.controller";
 
-const router = express.Router();
+import { ROLE } from "../lib/constants";
 
-router.put("/update/:id", verifyIdRole, update);
+const router = Router();
+
 router.get("/:id", getOne);
+router.put("/update/:id", verifyIdRole, update);
 router.get("/generate-credentials/:id", verifyIdRole, generateCredentials);
 router.put("/change-password/:id", verifyIdRole, changePassword);
 router.get("/", verifyRole(ROLE.ADMIN), getAllUsers);
@@ -25,4 +27,4 @@ router.get(
     resetPasswordAdmin
 );
 
-module.exports = router;
+export default router;

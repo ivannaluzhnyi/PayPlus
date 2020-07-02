@@ -180,7 +180,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Results = ({ customers }) => {
+const Results = ({ merchants }) => {
   const classes = useStyles();
   const [currentTab, setCurrentTab] = useState('ALL');
   const [selectedCustomers, setSelectedCustomers] = useState([]);
@@ -222,7 +222,7 @@ const Results = ({ customers }) => {
 
   const handleSelectAllCustomers = event => {
     setSelectedCustomers(
-      event.target.checked ? customers.map(customer => customer.id) : []
+      event.target.checked ? merchants.map(customer => customer.id) : []
     );
   };
 
@@ -245,13 +245,13 @@ const Results = ({ customers }) => {
   };
 
   // Usually query is done on backend with indexing solutions
-  const filteredCustomers = applyFilters(customers, query, filters);
+  const filteredCustomers = applyFilters(merchants, query, filters);
   const sortedCustomers = applySort(filteredCustomers, sort);
   const paginatedCustomers = applyPagination(sortedCustomers, page, limit);
   const enableBulkOperations = selectedCustomers.length > 0;
   const selectedSomeCustomers =
-    selectedCustomers.length > 0 && selectedCustomers.length < customers.length;
-  const selectedAllCustomers = selectedCustomers.length === customers.length;
+    selectedCustomers.length > 0 && selectedCustomers.length < merchants.length;
+  const selectedAllCustomers = selectedCustomers.length === merchants.length;
 
   return (
     <Card className={classes.root}>
@@ -330,9 +330,7 @@ const Results = ({ customers }) => {
                     onChange={handleSelectAllCustomers}
                   />
                 </TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Role</TableCell>
-                <TableCell>Téléphone</TableCell>
+                <TableCell>Nom marchand</TableCell>
                 <TableCell>Adresse</TableCell>
                 <TableCell>Statut</TableCell>
                 <TableCell>Créé</TableCell>
@@ -341,22 +339,22 @@ const Results = ({ customers }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginatedCustomers.map(customer => {
+              {paginatedCustomers.map(merchant => {
                 const isCustomerSelected = selectedCustomers.includes(
-                  customer.id
+                  merchant.id
                 );
 
                 return (
                   <TableRow
                     hover
-                    key={customer.id}
+                    key={merchant.id}
                     selected={isCustomerSelected}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
                         checked={isCustomerSelected}
                         onChange={event =>
-                          handleSelectOneCustomer(event, customer.id)
+                          handleSelectOneCustomer(event, merchant.id)
                         }
                         value={isCustomerSelected}
                       />
@@ -365,46 +363,41 @@ const Results = ({ customers }) => {
                       <Box display="flex" alignItems="center">
                         <Avatar
                           className={classes.avatar}
-                          src={customer.avatar}
+                          src={merchant.avatar}
                         >
-                          {getInitials(customer.name)}
+                          {getInitials(merchant.name)}
                         </Avatar>
                         <div>
                           <Link
                             color="inherit"
                             component={RouterLink}
-                            to={`/app/management/customers/${customer.id}`}
+                            to={`/app/management/merchants/${merchant.id}`}
                             variant="h6"
                           >
-                            {customer.name}
+                            {merchant.name}
                           </Link>
-                          <Typography variant="body2" color="textSecondary">
-                            {customer.email}
-                          </Typography>
                         </div>
                       </Box>
                     </TableCell>
-                    <TableCell>{customer.role}</TableCell>
-                    <TableCell>{customer.phone}</TableCell>
                     <TableCell>
-                      {customer.address} {customer.city} {customer.zip_code}{' '}
-                      {customer.country}{' '}
+                      {merchant.address} {merchant.city} {merchant.zip_code}{' '}
+                      {merchant.country}{' '}
                     </TableCell>
                     <TableCell>
-                      <Label color={labelColorsUserStatus[customer.state]}>
-                        {customer.state}
+                      <Label color={labelColorsUserStatus[merchant.state]}>
+                        {merchant.state}
                       </Label>
                     </TableCell>
                     <TableCell>
-                      {moment(customer.createdAt).format('YYYY-MM-DD HH:mm:ss')}
+                      {moment(merchant.createdAt).format('YYYY-MM-DD HH:mm:ss')}
                     </TableCell>
                     <TableCell>
-                      {moment(customer.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
+                      {moment(merchant.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
                     </TableCell>
                     <TableCell align="right">
                       <IconButton
                         component={RouterLink}
-                        to={`/app/management/customers/${customer.id}/edit`}
+                        to={`/app/management/merchants/${merchant.id}/edit`}
                       >
                         <SvgIcon fontSize="small">
                           <EditIcon />
@@ -412,7 +405,7 @@ const Results = ({ customers }) => {
                       </IconButton>
                       <IconButton
                         component={RouterLink}
-                        to={`/app/management/customers/${customer.id}`}
+                        to={`/app/management/merchants/${merchant.id}`}
                       >
                         <SvgIcon fontSize="small">
                           <ArrowRightIcon />
@@ -440,11 +433,11 @@ const Results = ({ customers }) => {
 };
 
 Results.propTypes = {
-  customers: PropTypes.array
+  merchants: PropTypes.array
 };
 
 Results.defaultProps = {
-  customers: []
+  merchants: []
 };
 
 export default Results;

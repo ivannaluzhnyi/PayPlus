@@ -18,7 +18,7 @@ import { useDispatch } from 'react-redux';
 import axios from 'src/utils/axios';
 
 import { LOAD_KBIS_CUSTOMER } from 'src/actions/customerActions';
-import useCustomer from 'src/hooks/useCustomer';
+import useMerchant from 'src/hooks/useMerchant';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -31,7 +31,7 @@ const Header = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const { customer } = useCustomer();
+  const { customer } = useMerchant();
 
   const handleLoadKBIS = () => {
     axios.get(`/api/users/kbis/${customer.KBIS}`).then(response => {
@@ -97,7 +97,7 @@ const Header = () => {
           color="secondary"
           variant="contained"
           component={RouterLink}
-          to={`/app/management/customers/${customer.id}/edit`}
+          to={`/app/management/merchants/${customer.id}/edit`}
         >
           <SvgIcon fontSize="small" className={classes.actionIcon}>
             <EditIcon />

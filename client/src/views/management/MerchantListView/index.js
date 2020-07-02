@@ -15,34 +15,35 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CustomerListView = () => {
+const MerchantListView = () => {
   const classes = useStyles();
   const isMountedRef = useIsMountedRef();
-  const [customers, setCustomers] = useState(null);
+  const [merchants, setMerchants] = useState(null);
 
-  const getCustomers = useCallback(() => {
-    axios.get('/api/users').then(response => {
+  const getMerchants = useCallback(() => {
+    axios.get('/api/merchants').then(response => {
       if (isMountedRef.current) {
-        setCustomers(response.data.customers);
+        setMerchants(response.data.merchants);
       }
     });
   }, [isMountedRef]);
 
   useEffect(() => {
-    getCustomers();
-  }, [getCustomers]);
+    getMerchants();
+  }, [getMerchants]);
 
-  if (!customers) {
+  if (!merchants) {
     return null;
   }
 
+  console.log('merchants +> ', merchants);
   return (
     <Page className={classes.root} title="Liste des clients">
       <Container maxWidth={false}>
         <Header />
-        {customers && (
+        {merchants && (
           <Box mt={3}>
-            <Results customers={customers} />
+            <Results merchants={merchants} />
           </Box>
         )}
       </Container>
@@ -50,4 +51,4 @@ const CustomerListView = () => {
   );
 };
 
-export default CustomerListView;
+export default MerchantListView;

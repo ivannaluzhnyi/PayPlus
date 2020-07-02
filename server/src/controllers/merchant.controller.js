@@ -1,5 +1,8 @@
 import Merchant from "../models/Merchant";
-import { ROLE } from "../lib/constants";
+import User from "../models/User";
+import Credential from "../models/Credential";
+
+import { ROLE, MERCHANT_STATUS } from "../lib/constants";
 
 function getKBIS(req, res) {
     try {
@@ -15,11 +18,11 @@ function getKBIS(req, res) {
 
 function changeMerchantState(req, res) {
     if (req.body.state === MERCHANT_STATUS.CONFIRMED) {
-        User.findByPk(req.params.id)
+        Merchant.findByPk(req.params.id)
             .then((user) => {
                 if (user) {
                     generateCredentials(user).then((credentials) => {
-                        User.update(
+                        Merchant.update(
                             {
                                 ...credentials,
                                 state: MERCHANT_STATUS.CONFIRMED,
@@ -45,7 +48,7 @@ function changeMerchantState(req, res) {
         req.body.state === MERCHANT_STATUS.BANNED ||
         req.body.state === MERCHANT_STATUS.DISABLED
     ) {
-        User.update(
+        Merchant.update(
             {
                 state: req.body.state,
                 client_token: null,
@@ -68,9 +71,15 @@ function changeMerchantState(req, res) {
 function all(req, res) {
     if (req.user.role === ROLE.ADMIN) {
         Merchant.findAll().then((merchants) => {
-            res.json({ merchants: merchants });
+            res.json({ merchants });
         });
     }
 }
 
-export { getKBIS, changeMerchantState, all };
+function one(req, res) {
+    Merchant.findByPk(req.params.id, { include: [User, Credential] })
+        .then((data) => (data ? res.json(data) : res.sendStatus(404)))
+        .catch(() => res.sendStatus(500));
+}
+
+export { getKBIS, changeMerchantState, all, one };

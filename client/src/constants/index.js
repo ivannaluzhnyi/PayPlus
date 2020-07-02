@@ -7,7 +7,7 @@ export const THEMES = {
 
 export const ROLE = {
   ADMIN: 'ADMIN',
-  COMPANY: 'COMPANY'
+  MERCHANT: 'MERCHANT'
 };
 
 export const DEVISE = {

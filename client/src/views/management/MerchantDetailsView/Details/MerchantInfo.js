@@ -16,7 +16,7 @@ import {
 import LockOpenIcon from '@material-ui/icons/LockOpenOutlined';
 import PersonIcon from '@material-ui/icons/PersonOutline';
 import Label from 'src/components/Label';
-import useCustomer from 'src/hooks/useCustomer';
+import useMerchant from 'src/hooks/useMerchant';
 
 const labelColors = {
   CONFIRMED: 'success',
@@ -34,9 +34,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CustomerInfo = () => {
+const MerchantInfo = () => {
   const classes = useStyles();
-  const { customer } = useCustomer();
+  const { merchant } = useMerchant();
 
   return (
     <Card className={clsx(classes.root)}>
@@ -48,7 +48,7 @@ const CustomerInfo = () => {
             <TableCell className={classes.fontWeightMedium}>Nom</TableCell>
             <TableCell>
               <Typography variant="body2" color="textSecondary">
-                {customer.name}
+                {merchant.name}
               </Typography>
             </TableCell>
           </TableRow>
@@ -56,8 +56,8 @@ const CustomerInfo = () => {
           <TableRow>
             <TableCell className={classes.fontWeightMedium}>Statut</TableCell>
             <TableCell>
-              <Label color={labelColors[customer.state]}>
-                {customer.state}
+              <Label color={labelColors[merchant.state]}>
+                {merchant.state}
               </Label>
             </TableCell>
           </TableRow>
@@ -65,7 +65,7 @@ const CustomerInfo = () => {
             <TableCell className={classes.fontWeightMedium}>Email</TableCell>
             <TableCell>
               <Typography variant="body2" color="textSecondary">
-                {customer.email}
+                {merchant.email}
               </Typography>
             </TableCell>
           </TableRow>
@@ -75,7 +75,7 @@ const CustomerInfo = () => {
             </TableCell>
             <TableCell>
               <Typography variant="body2" color="textSecondary">
-                {customer.phone}
+                {merchant.phone}
               </Typography>
             </TableCell>
           </TableRow>
@@ -83,7 +83,7 @@ const CustomerInfo = () => {
             <TableCell className={classes.fontWeightMedium}>Adress</TableCell>
             <TableCell>
               <Typography variant="body2" color="textSecondary">
-                {customer.address} {customer.city} {customer.zip_code}
+                {merchant.address} {merchant.city} {merchant.zip_code}
               </Typography>
             </TableCell>
           </TableRow>
@@ -91,7 +91,7 @@ const CustomerInfo = () => {
             <TableCell className={classes.fontWeightMedium}>Country</TableCell>
             <TableCell>
               <Typography variant="body2" color="textSecondary">
-                {customer.country}
+                {merchant.country}
               </Typography>
             </TableCell>
           </TableRow>
@@ -107,4 +107,4 @@ const CustomerInfo = () => {
   );
 };
 
-export default CustomerInfo;
+export default MerchantInfo;

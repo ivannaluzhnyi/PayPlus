@@ -58,11 +58,11 @@ const Header = () => {
             Gestion
           </Link>
           <Typography variant="body1" color="textPrimary">
-            Clients
+            Marchands
           </Typography>
         </Breadcrumbs>
         <Typography variant="h3" color="textPrimary">
-          Tous les clients
+          Tous les marchands
         </Typography>
       </Grid>
       <Grid item>
@@ -75,7 +75,7 @@ const Header = () => {
           <SvgIcon fontSize="small" className={classes.actionIcon}>
             <PlusCircleIcon />
           </SvgIcon>
-          Nouveau client
+          Nouveau Marchand
         </Button>
       </Grid>
     </Grid>

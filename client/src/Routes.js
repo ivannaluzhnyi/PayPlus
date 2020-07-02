@@ -82,19 +82,19 @@ const routesConfig = [
       },
       {
         exact: true,
-        path: '/app/management/customers',
-        component: lazy(() => import('src/views/management/CustomerListView'))
+        path: '/app/management/merchants',
+        component: lazy(() => import('src/views/management/MerchantListView'))
       },
       {
         exact: true,
-        path: '/app/management/customers/:customerId',
+        path: '/app/management/merchants/:merchantId',
         component: lazy(() =>
-          import('src/views/management/CustomerDetailsView')
+          import('src/views/management/MerchantDetailsView')
         )
       },
       {
         exact: true,
-        path: '/app/management/customers/:customerId/edit',
+        path: '/app/management/merchants/:merchantId/edit',
         component: lazy(() => import('src/views/management/CustomerEditView'))
       },
       {
@@ -130,7 +130,7 @@ const routesConfig = [
       {
         exact: true,
         path: '/app/management',
-        component: () => <Redirect to="/app/management/customers" />
+        component: () => <Redirect to="/app/management/merchants" />
       },
 
       {

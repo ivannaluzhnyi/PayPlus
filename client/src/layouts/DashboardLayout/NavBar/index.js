@@ -81,11 +81,11 @@ const navConfigByRole = role => {
             {
               title: 'Marchands',
               icon: StorefrontIcon,
-              href: '/app/management/customers',
+              href: '/app/management/merchants',
               items: [
                 {
                   title: 'List Marchands',
-                  href: '/app/management/customers'
+                  href: '/app/management/merchants'
                 }
               ]
             },
@@ -148,7 +148,7 @@ const navConfigByRole = role => {
           ]
         }
       ];
-    case ROLE.COMPANY:
+    case ROLE.MERCHANT:
       return [
         {
           subheader: 'Reports',
@@ -169,8 +169,19 @@ const navConfigByRole = role => {
           subheader: 'Gestion',
           items: [
             {
-              title: 'Products',
-              icon: ShoppingCartIcon,
+              title: 'Marchands',
+              icon: StorefrontIcon,
+              href: '/app/management/merchants',
+              items: [
+                {
+                  title: 'List Marchands',
+                  href: '/app/management/merchants'
+                }
+              ]
+            },
+            {
+              title: 'Transactions',
+              icon: LoopIcon,
               href: '/app/management/products',
               items: [
                 {
@@ -180,21 +191,6 @@ const navConfigByRole = role => {
                 {
                   title: 'Create Product',
                   href: '/app/management/products/create'
-                }
-              ]
-            },
-            {
-              title: 'Orders',
-              icon: FolderIcon,
-              href: '/app/management/orders',
-              items: [
-                {
-                  title: 'List Orders',
-                  href: '/app/management/orders'
-                },
-                {
-                  title: 'View Order',
-                  href: '/app/management/orders/1'
                 }
               ]
             },
@@ -255,19 +251,19 @@ const navConfig = [
       {
         title: 'Customers',
         icon: UsersIcon,
-        href: '/app/management/customers',
+        href: '/app/management/merchants',
         items: [
           {
             title: 'List Customers',
-            href: '/app/management/customers'
+            href: '/app/management/merchants'
           },
           {
             title: 'View Customer',
-            href: '/app/management/customers/1'
+            href: '/app/management/merchants/1'
           },
           {
             title: 'Edit Customer',
-            href: '/app/management/customers/1/edit'
+            href: '/app/management/merchants/1/edit'
           }
         ]
       },

@@ -24,7 +24,7 @@ import axios from 'src/utils/axios';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
 import Label from 'src/components/Label';
 import GenericMoreButton from 'src/components/GenericMoreButton';
-import useCustomer from 'src/hooks/useCustomer';
+import useMerchant from 'src/hooks/useMerchant';
 
 const statusColors = {
   paid: 'success',
@@ -41,7 +41,7 @@ const Transactions = () => {
   const isMountedRef = useIsMountedRef();
   const [transactions, setTransactions] = useState(null);
 
-  const { customer } = useCustomer();
+  const { customer } = useMerchant();
 
   const getInvoices = useCallback(() => {
     axios

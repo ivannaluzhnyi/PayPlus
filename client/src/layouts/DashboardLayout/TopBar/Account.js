@@ -67,7 +67,7 @@ const Account = () => {
         <Avatar alt="User" className={classes.avatar} src={user.avatar} />
         <Hidden smDown>
           <Typography variant="h6" color="inherit">
-            {`${user.first_name} ${user.last_name} | ${user.email}`}
+            {`${user.first_name} ${user.last_name} `}
           </Typography>
         </Hidden>
       </Box>

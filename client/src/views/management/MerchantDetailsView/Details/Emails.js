@@ -19,9 +19,9 @@ import {
 import MaiIcon from '@material-ui/icons/MailOutline';
 import axios from 'src/utils/axios';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import useCustomer from 'src/hooks/useCustomer';
+import useMerchant from 'src/hooks/useMerchant';
 import { useSnackbar } from 'notistack';
-import { CustomerContextProvider } from 'src/context/CustomerContext';
+import { MerchantContextProvider } from 'src/context/MerchantContext';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -47,7 +47,7 @@ const Emails = () => {
   const [emailOption, setEmailOption] = useState(emailOptions[0]);
   const [emails, setEmails] = useState(null);
 
-  const { customer } = useCustomer();
+  const { customer } = useMerchant();
 
   const handleSendEmail = () => {
     if (emailOption.value === 'RESET_PASSWORD') {

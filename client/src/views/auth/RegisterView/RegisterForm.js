@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
+import axios from 'src/utils/axios';
 import { useSnackbar } from 'notistack';
 
 import {
@@ -18,9 +19,9 @@ import {
   makeStyles,
   Grid
 } from '@material-ui/core';
-import { register } from 'src/actions/accountActions';
+import { REGISTER_SUCCESS, REGISTER_FAILURE } from 'src/actions/accountActions';
 
-import { toBase64 } from 'src/utils/helpers';
+import { toBase64, convertReponseErrors } from 'src/utils/helpers';
 
 const useStyles = makeStyles(() => ({
   root: {}
@@ -83,19 +84,47 @@ const RegisterForm = ({ onSubmitSuccess }) => {
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
-          await dispatch(register(values));
+          axios
+            .post('/api/register', values)
+            .then(response => {
+              if (response.status === 201) {
+                dispatch({
+                  type: REGISTER_SUCCESS,
+                  payload: {
+                    user: response.data
+                  }
+                });
 
-          enqueueSnackbar('Compte été bien créé', {
-            variant: 'success'
-          });
-          onSubmitSuccess();
+                enqueueSnackbar('Compte été bien créé', {
+                  variant: 'success'
+                });
+                onSubmitSuccess();
+              } else {
+                dispatch({ type: REGISTER_FAILURE });
+                enqueueSnackbar('Une erreur se produir', {
+                  variant: 'error'
+                });
+              }
+            })
+            .catch(err => {
+              dispatch({ type: REGISTER_FAILURE });
+              if (err.response) {
+                setStatus({ success: false });
+                setErrors({ ...convertReponseErrors(err.response.data) });
+                setSubmitting(false);
+
+                enqueueSnackbar('Une erreur se produir', {
+                  variant: 'error'
+                });
+              }
+            });
         } catch (error) {
           setStatus({ success: false });
           setErrors({ submit: error.message });
           setSubmitting(false);
 
           enqueueSnackbar('Une erreur se produir', {
-            variant: 'errors'
+            variant: 'error'
           });
         }
       }}

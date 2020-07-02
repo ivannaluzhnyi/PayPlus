@@ -19,7 +19,7 @@ import {
 } from '@material-ui/core';
 import ReceiptIcon from '@material-ui/icons/ReceiptOutlined';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {},
   actionIcon: {
     marginRight: theme.spacing(1)
@@ -32,16 +32,13 @@ function OrderInfo({ order, className, ...rest }) {
   const classes = useStyles();
   const [status, setStatus] = useState(statusOptions[0]);
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     event.persist();
     setStatus(event.target.value);
   };
 
   return (
-    <Card
-      className={clsx(classes.root, className)}
-      {...rest}
-    >
+    <Card className={clsx(classes.root, className)} {...rest}>
       <CardHeader title="Order info" />
       <Divider />
       <Table>
@@ -49,10 +46,7 @@ function OrderInfo({ order, className, ...rest }) {
           <TableRow>
             <TableCell>Customer</TableCell>
             <TableCell>
-              <Link
-                component={RouterLink}
-                to="/app/management/customers/1"
-              >
+              <Link component={RouterLink} to="/app/management/merchants/1">
                 {order.customer.name}
               </Link>
               <div>{order.customer.address}</div>
@@ -61,13 +55,8 @@ function OrderInfo({ order, className, ...rest }) {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>
-              ID
-            </TableCell>
-            <TableCell>
-              #
-              {order.id.split('-').shift()}
-            </TableCell>
+            <TableCell>ID</TableCell>
+            <TableCell>#{order.id.split('-').shift()}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>Ref</TableCell>
@@ -102,11 +91,8 @@ function OrderInfo({ order, className, ...rest }) {
                 value={status}
                 variant="outlined"
               >
-                {statusOptions.map((option) => (
-                  <option
-                    key={option}
-                    value={option}
-                  >
+                {statusOptions.map(option => (
+                  <option key={option} value={option}>
                     {option}
                   </option>
                 ))}

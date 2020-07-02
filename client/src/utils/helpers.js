@@ -6,4 +6,14 @@ const toBase64 = async file =>
     reader.onerror = error => reject(error);
   });
 
-export { toBase64 };
+const convertReponseErrors = dataErrors => {
+  const prepare = {};
+  Object.keys(dataErrors).forEach(key => {
+    const err = dataErrors[key];
+    prepare[key] = err.join('; ');
+  });
+
+  return prepare;
+};
+
+export { toBase64, convertReponseErrors };

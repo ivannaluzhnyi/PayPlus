@@ -1,7 +1,4 @@
-import React, {
-  useState,
-  useEffect
-} from 'react';
+import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import {
   Box,
@@ -12,7 +9,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
@@ -27,11 +24,11 @@ const useStyles = makeStyles((theme) => ({
   },
   action: {
     backgroundColor: theme.palette.common.white,
-    color: theme.palette.common.black,
+    color: theme.palette.common.black
   }
 }));
 
-function CookiesNotification() {
+const CookiesNotification = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
@@ -55,40 +52,32 @@ function CookiesNotification() {
   return (
     <Portal>
       <div className={classes.root}>
-        <Typography
-          variant="body1"
-          color="inherit"
-        >
-          We use Cookies to ensure that we give you the best experience on our
-          website. Read our
-          {' '}
+        <Typography variant="body1" color="inherit">
+          Nous utilisons des cookies pour nous assurer que nous vous offrons la
+          meilleure expérience possible sur notre site web. Lisez notre{' '}
           <Link
             component="a"
             color="inherit"
             underline="always"
-            href="https://devias.io/privacy-policy"
+            href="#"
             target="_blank"
           >
             Privacy Policy
           </Link>
           .
         </Typography>
-        <Box
-          mt={2}
-          display="flex"
-          justifyContent="flex-end"
-        >
+        <Box mt={2} display="flex" justifyContent="flex-end">
           <Button
             onClick={handleClose}
             variant="contained"
             className={classes.action}
           >
-            I Agree
+            Je suis d'accord
           </Button>
         </Box>
       </div>
     </Portal>
   );
-}
+};
 
 export default CookiesNotification;
