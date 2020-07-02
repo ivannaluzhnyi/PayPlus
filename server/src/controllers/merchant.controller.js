@@ -1,4 +1,5 @@
 import Merchant from "../models/Merchant";
+import { ROLE } from "../lib/constants";
 
 function getKBIS(req, res) {
     try {
@@ -64,4 +65,12 @@ function changeMerchantState(req, res) {
     }
 }
 
-export { getKBIS, changeMerchantState };
+function all(req, res) {
+    if (req.user.role === ROLE.ADMIN) {
+        Merchant.findAll().then((merchants) => {
+            res.json({ merchants: merchants });
+        });
+    }
+}
+
+export { getKBIS, changeMerchantState, all };
