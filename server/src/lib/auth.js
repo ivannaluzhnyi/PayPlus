@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken";
 
-const createToken = (payload) => {
+const createToken = (payload, secret) => {
     return new Promise((resolve, reject) => {
         jwt.sign(
             payload,
-            process.env.JWT_SECRET,
+            secret || process.env.JWT_SECRET,
             {
                 algorithm: "HS256",
                 expiresIn: 3600,

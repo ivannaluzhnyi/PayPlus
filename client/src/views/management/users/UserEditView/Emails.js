@@ -1,7 +1,6 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import clsx from 'clsx';
-import moment from 'moment';
+import PropTypes from 'prop-types';
 import {
   Box,
   Button,
@@ -9,19 +8,13 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
   TextField,
   makeStyles
 } from '@material-ui/core';
 import MaiIcon from '@material-ui/icons/MailOutline';
 import axios from 'src/utils/axios';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import useMerchant from 'src/hooks/useMerchant';
 import { useSnackbar } from 'notistack';
-import { MerchantContextProvider } from 'src/context/MerchantContext';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -40,30 +33,26 @@ const emailOptions = [
   }
 ];
 
-const Emails = () => {
+const Emails = ({ user }) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const isMountedRef = useIsMountedRef();
   const [emailOption, setEmailOption] = useState(emailOptions[0]);
   const [emails, setEmails] = useState(null);
 
-  const { customer } = useMerchant();
-
   const handleSendEmail = () => {
     if (emailOption.value === 'RESET_PASSWORD') {
-      axios
-        .get(`/api/users/reset-password-admin/${customer.id}`)
-        .then(response => {
-          if (response.status === 200) {
-            enqueueSnackbar('Mot de pass modifé', {
-              variant: 'success'
-            });
-          } else {
-            enqueueSnackbar('Une errur se produit.', {
-              variant: 'error'
-            });
-          }
-        });
+      axios.get(`/api/users/reset-password-admin/${user.id}`).then(response => {
+        if (response.status === 200) {
+          enqueueSnackbar('Mot de pass modifé et envoyé ', {
+            variant: 'success'
+          });
+        } else {
+          enqueueSnackbar('Une errur se produit.', {
+            variant: 'error'
+          });
+        }
+      });
     }
   };
 
@@ -126,6 +115,10 @@ const Emails = () => {
       </CardContent>
     </Card>
   );
+};
+
+Emails.propTypes = {
+  user: PropTypes.object.isRequired
 };
 
 export default Emails;

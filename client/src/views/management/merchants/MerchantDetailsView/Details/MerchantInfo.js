@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import {
   Box,
   Button,
@@ -13,15 +14,16 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core';
-import LockOpenIcon from '@material-ui/icons/LockOpenOutlined';
 import PersonIcon from '@material-ui/icons/PersonOutline';
 import Label from 'src/components/Label';
 import useMerchant from 'src/hooks/useMerchant';
+import { ROLE } from 'src/constants';
 
 const labelColors = {
   CONFIRMED: 'success',
   PENDING: 'warning',
-  BANNIE: 'error'
+  BANNIE: 'error',
+  DISABLED: 'error'
 };
 
 const useStyles = makeStyles(theme => ({
@@ -34,13 +36,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const MerchantInfo = () => {
+const MerchantInfo = ({ user }) => {
   const classes = useStyles();
   const { merchant } = useMerchant();
 
   return (
     <Card className={clsx(classes.root)}>
-      <CardHeader title="Informations sur les clients" />
+      <CardHeader title="Informations sur le marchand" />
       <Divider />
       <Table>
         <TableBody>
@@ -62,28 +64,20 @@ const MerchantInfo = () => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell className={classes.fontWeightMedium}>Email</TableCell>
+            <TableCell className={classes.fontWeightMedium}>Adress</TableCell>
             <TableCell>
               <Typography variant="body2" color="textSecondary">
-                {merchant.email}
+                {merchant.address}
               </Typography>
             </TableCell>
           </TableRow>
           <TableRow>
             <TableCell className={classes.fontWeightMedium}>
-              Téléphone
+              Ville/Code postal
             </TableCell>
             <TableCell>
               <Typography variant="body2" color="textSecondary">
-                {merchant.phone}
-              </Typography>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className={classes.fontWeightMedium}>Adress</TableCell>
-            <TableCell>
-              <Typography variant="body2" color="textSecondary">
-                {merchant.address} {merchant.city} {merchant.zip_code}
+                {merchant.city} {merchant.zip_code}
               </Typography>
             </TableCell>
           </TableRow>
@@ -97,14 +91,26 @@ const MerchantInfo = () => {
           </TableRow>
         </TableBody>
       </Table>
-      <Box p={1} display="flex" flexDirection="column" alignItems="flex-start">
-        <Button>
-          <PersonIcon className={classes.actionIcon} />
-          Login as Customer
-        </Button>
-      </Box>
+
+      {user.role === ROLE.ADMIN && (
+        <Box
+          p={1}
+          display="flex"
+          flexDirection="column"
+          alignItems="flex-start"
+        >
+          <Button disabled>
+            <PersonIcon className={classes.actionIcon} />
+            Login as Customer
+          </Button>
+        </Box>
+      )}
     </Card>
   );
+};
+
+MerchantInfo.propTypes = {
+  user: PropTypes.object.isRequired
 };
 
 export default MerchantInfo;

@@ -7,6 +7,7 @@ import {
     getAllUsers,
     update,
     getOne,
+    getOneWithMerchants,
     generateCredentials,
     resetPasswordAdmin,
     changePassword,
@@ -17,6 +18,7 @@ import { ROLE } from "../lib/constants";
 const router = Router();
 
 router.get("/:id", getOne);
+router.get("/merchants/:id", getOneWithMerchants);
 router.put("/update/:id", verifyIdRole, update);
 router.get("/generate-credentials/:id", verifyIdRole, generateCredentials);
 router.put("/change-password/:id", verifyIdRole, changePassword);

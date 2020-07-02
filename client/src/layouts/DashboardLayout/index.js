@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
+import { MERCHANT_STATUS } from 'src/constants';
 import NavBar from './NavBar';
 import TopBar from './TopBar';
-import { useSelector } from 'react-redux';
 
-import { MERCHANT_STATUS } from 'src/constants';
-import { Alert } from '@material-ui/lab';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,26 +35,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const checkCustomerData = user => {
-  if (
-    user.state === MERCHANT_STATUS.PENDING &&
-    (user.url_cancel === null || user.url_confirmation === null)
-  ) {
-    return (
-      <Alert severity="warning">
-        Veuillez compléter toutes les informations pour valider votre compte.
-      </Alert>
-    );
-  }
-
-  return null;
-};
-
 const DashboardLayout = ({ children }) => {
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
-
-  const { user } = useSelector(state => state.account);
 
   return (
     <div className={classes.root}>
@@ -67,10 +48,7 @@ const DashboardLayout = ({ children }) => {
       />
       <div className={classes.wrapper}>
         <div className={classes.contentContainer}>
-          <div className={classes.content}>
-            {checkCustomerData(user)}
-            {children}
-          </div>
+          <div className={classes.content}>{children}</div>
         </div>
       </div>
     </div>

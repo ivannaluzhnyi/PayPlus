@@ -1,14 +1,21 @@
-const createToken = require("./auth").createToken;
-const { v4: uuidv4 } = require("uuid");
+import { v4 as uuidv4 } from "uuid";
+import { createToken } from "./auth";
 
-const generateCredentials = async (user) =>
-    createToken({ id: user.id, role: user.role })
-        .then((accessToken) => ({
-            client_token: accessToken,
-            client_secret: uuidv4(),
-        }))
-        .catch(() => res.sendStatus(500));
+const generateCredentials = (merchant) =>
+    new Promise((resolve, reject) => {
+        const client_secret = uuidv4();
 
-module.exports = {
-    generateCredentials,
-};
+        createToken(
+            { merchant: merchant.id, state: merchant.state },
+            client_secret
+        )
+            .then((accessToken) =>
+                resolve({
+                    client_token: accessToken,
+                    client_secret,
+                })
+            )
+            .catch(() => reject(null));
+    });
+
+export { generateCredentials };

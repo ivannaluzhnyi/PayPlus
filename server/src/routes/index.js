@@ -6,6 +6,7 @@ import transactionRoutes from "./transaction";
 import productRoutes from "./product";
 import operationRoutes from "./operation";
 import merchantRoutes from "./merchant";
+import credentialRoutes from "./credentials";
 import paymentRoutes from "./payment";
 
 const routerManager = (app) => {
@@ -22,6 +23,7 @@ const routerManager = (app) => {
     app.use(verifyToken);
     app.use("/api/users/", userRoutes);
     app.use("/api/merchants/", merchantRoutes);
+    app.use("/api/credentials/", credentialRoutes);
 };
 
 export default routerManager;

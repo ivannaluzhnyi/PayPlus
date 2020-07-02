@@ -78,24 +78,41 @@ const routesConfig = [
       {
         exact: true,
         path: '/app/management/users',
-        component: lazy(() => import('src/views/management/UserListView'))
+        component: lazy(() => import('src/views/management/users/UserListView'))
+      },
+
+      {
+        exact: true,
+        path: '/app/management/users/:userId',
+        component: lazy(() =>
+          import('src/views/management/users/UserDetailsView')
+        )
+      },
+      {
+        exact: true,
+        path: '/app/management/users/:userId/edit',
+        component: lazy(() => import('src/views/management/users/UserEditView'))
       },
       {
         exact: true,
         path: '/app/management/merchants',
-        component: lazy(() => import('src/views/management/MerchantListView'))
+        component: lazy(() =>
+          import('src/views/management/merchants/MerchantListView')
+        )
       },
       {
         exact: true,
         path: '/app/management/merchants/:merchantId',
         component: lazy(() =>
-          import('src/views/management/MerchantDetailsView')
+          import('src/views/management/merchants/MerchantDetailsView')
         )
       },
       {
         exact: true,
         path: '/app/management/merchants/:merchantId/edit',
-        component: lazy(() => import('src/views/management/CustomerEditView'))
+        component: lazy(() =>
+          import('src/views/management/merchants/MerchantEditView')
+        )
       },
       {
         exact: true,

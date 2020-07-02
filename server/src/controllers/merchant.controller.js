@@ -1,8 +1,12 @@
+import fs from "fs";
+
 import Merchant from "../models/Merchant";
 import User from "../models/User";
 import Credential from "../models/Credential";
 
 import { ROLE, MERCHANT_STATUS } from "../lib/constants";
+import { generateCredentials } from "../lib/credentials";
+import { resCatchError } from "../helpers/error";
 
 function getKBIS(req, res) {
     try {
@@ -12,6 +16,7 @@ function getKBIS(req, res) {
         if (contents) res.json({ base64: contents });
         else res.sendStatus(400);
     } catch (error) {
+        console.error(error);
         res.sendStatus(400);
     }
 }
@@ -19,29 +24,33 @@ function getKBIS(req, res) {
 function changeMerchantState(req, res) {
     if (req.body.state === MERCHANT_STATUS.CONFIRMED) {
         Merchant.findByPk(req.params.id)
-            .then((user) => {
-                if (user) {
-                    generateCredentials(user).then((credentials) => {
-                        Merchant.update(
-                            {
-                                ...credentials,
-                                state: MERCHANT_STATUS.CONFIRMED,
-                            },
-                            {
-                                returning: true,
-                                where: { id: user.id },
-                            }
-                        )
-                            .then(([nbUpdate, data]) =>
-                                nbUpdate === 1
-                                    ? res.json(data)
-                                    : res.sendStatus(404)
-                            )
-                            .catch((err) => resCatchError(res, err));
-                    });
+            .then((currentMerchant) => {
+                if (currentMerchant) {
+                    currentMerchant
+                        .update({
+                            state: MERCHANT_STATUS.CONFIRMED,
+                        })
+                        .then((newMerchant) => {
+                            generateCredentials({
+                                ...currentMerchant.toJSON(),
+                            }).then((credentials) => {
+                                Credential.create({
+                                    merchant_id: currentMerchant.id,
+                                    ...credentials,
+                                });
+                            });
+
+                            res.json([newMerchant.toJSON()]);
+                        })
+                        .catch((err) => {
+                            resCatchError(res, err);
+                        });
                 } else res.sendStatus(404);
             })
-            .catch(() => res.sendStatus(500));
+            .catch((err) => {
+                console.error(err);
+                res.sendStatus(500);
+            });
     }
     if (
         req.body.state === MERCHANT_STATUS.PENDING ||
@@ -58,28 +67,73 @@ function changeMerchantState(req, res) {
             },
             {
                 returning: true,
-                where: { id: user.id },
+                where: { id: req.params.id },
             }
         )
-            .then(([nbUpdate, data]) =>
-                nbUpdate === 1 ? res.json(data) : res.sendStatus(404)
-            )
-            .catch((err) => resCatchError(res, err));
+            .then(([nbUpdate, data]) => {
+                if (nbUpdate === 1) {
+                    Credential.destroy({
+                        where: {
+                            merchant_id: data[0].id,
+                        },
+                    });
+                }
+
+                nbUpdate === 1 ? res.json(data) : res.sendStatus(404);
+            })
+            .catch((err) => {
+                resCatchError(res, err);
+            });
     }
 }
 
 function all(req, res) {
-    if (req.user.role === ROLE.ADMIN) {
-        Merchant.findAll().then((merchants) => {
-            res.json({ merchants });
-        });
+    switch (req.user.role) {
+        case ROLE.ADMIN:
+            Merchant.findAll().then((merchants) => {
+                res.json({ merchants });
+            });
+            break;
+
+        case ROLE.MERCHANT:
+            User.findByPk(req.user.id, {
+                include: [{ model: Merchant, as: "merchants" }],
+            }).then((user) => {
+                const { merchants } = user;
+                res.json({ merchants });
+            });
+            break;
+
+        default:
+            break;
     }
 }
 
 function one(req, res) {
-    Merchant.findByPk(req.params.id, { include: [User, Credential] })
-        .then((data) => (data ? res.json(data) : res.sendStatus(404)))
-        .catch(() => res.sendStatus(500));
+    Merchant.findByPk(req.params.id, {
+        include: [{ model: User, as: "users" }],
+    })
+        .then((data) => {
+            return data ? res.json(data) : res.sendStatus(404);
+        })
+        .catch((err) => {
+            res.sendStatus(500);
+        });
 }
 
-export { getKBIS, changeMerchantState, all, one };
+function addNewUser(req, res) {}
+
+function update(req, res) {
+    Merchant.update(req.body, {
+        returning: true,
+        where: { id: req.params.id },
+    })
+        .then(([nbUpdate, data]) => {
+            return nbUpdate === 1 ? res.json(data) : res.sendStatus(404);
+        })
+        .catch((err) => {
+            resCatchError(res, err);
+        });
+}
+
+export { getKBIS, changeMerchantState, all, one, update };

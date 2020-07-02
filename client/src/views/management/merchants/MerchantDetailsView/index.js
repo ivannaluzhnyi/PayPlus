@@ -11,11 +11,16 @@ import { useParams } from 'react-router';
 import Page from 'src/components/Page';
 import axios from 'src/utils/axios';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
+import { useSelector } from 'react-redux';
 import { MerchantContextProvider } from 'src/context/MerchantContext';
+import { ROLE, MERCHANT_STATUS } from 'src/constants';
+import { Alert } from '@material-ui/lab';
 import Header from './Header';
 import Details from './Details';
-import Invoices from './Transactions';
-import Logs from './Logs';
+// import Transactions from './Transactions';
+import Credentials from './Credentials';
+// import Logs from './Logs';
+import Users from './Users';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,6 +31,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const checkMerchantData = marchent => {
+  if (marchent.state === MERCHANT_STATUS.PENDING) {
+    if (marchent.url_cancel === null || marchent.url_confirmation === null)
+      // eslint-disable-next-line nonblock-statement-body-position
+      return (
+        <Alert severity="warning">
+          Veuillez compéter toutes les informations pour que votre site marchand
+          puisse être validé.
+        </Alert>
+      );
+    return (
+      <Alert severity="info">
+        Votre site marchand est en attente de validation par un admin.
+      </Alert>
+    );
+  }
+
+  return null;
+};
+
 const MerchantDetailsView = () => {
   const classes = useStyles();
   const isMountedRef = useIsMountedRef();
@@ -34,21 +59,20 @@ const MerchantDetailsView = () => {
 
   const params = useParams();
 
+  const { user } = useSelector(state => state.account);
+
   const tabs = [
     { value: 'details', label: 'Details' },
-    { value: 'invoices', label: 'Invoices' },
-    { value: 'logs', label: 'Logs' }
+    { value: 'credentials', label: 'Credentials' },
+    { value: 'users', label: 'Utilisateurs' }
   ];
 
   const handleTabsChange = (event, value) => {
     setCurrentTab(value);
   };
 
-  console.log('merchantId => ', params.merchantId);
-
   const getMerchant = useCallback(() => {
     axios.get(`/api/merchants/${params.merchantId}`).then(response => {
-      console.log('response => ', response);
       if (isMountedRef.current) {
         setMerchant(response.data);
       }
@@ -82,11 +106,12 @@ const MerchantDetailsView = () => {
               ))}
             </Tabs>
           </Box>
+          {user.role === ROLE.MERCHANT && checkMerchantData(merchant)}
           <Divider />
           <Box mt={3}>
-            {currentTab === 'details' && <Details />}
-            {/* {currentTab === 'invoices' && <Invoices />} */}
-            {currentTab === 'logs' && <Logs />}
+            {currentTab === 'details' && <Details user={user} />}
+            {currentTab === 'credentials' && <Credentials />}
+            {currentTab === 'users' && <Users />}
           </Box>
         </Container>
       </Page>

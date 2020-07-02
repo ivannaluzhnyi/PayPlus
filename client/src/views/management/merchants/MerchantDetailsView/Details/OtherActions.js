@@ -15,7 +15,6 @@ import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import CheckIcon from '@material-ui/icons/Check';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import { MERCHANT_STATUS } from 'src/constants';
-import { changeStateCustomer } from 'src/actions/customerActions';
 import { useSnackbar } from 'notistack';
 import useMerchant from 'src/hooks/useMerchant';
 
@@ -40,9 +39,10 @@ const OtherActions = () => {
 
   const handleCustomerAction = () => {
     const stateToSend =
-      merchant.state === MERCHANT_STATUS.PENDING
+      merchant.state === MERCHANT_STATUS.PENDING ||
+      merchant.state === MERCHANT_STATUS.DISABLED
         ? MERCHANT_STATUS.CONFIRMED
-        : MERCHANT_STATUS.PENDING;
+        : MERCHANT_STATUS.DISABLED;
 
     axios
       .put(`/api/merchants/change-state/${merchant.id}`, {
@@ -69,7 +69,8 @@ const OtherActions = () => {
       <CardContent>
         <Box display="flex" flexDirection="column" alignItems="flex-start">
           <Button onClick={handleCustomerAction}>
-            {merchant.state === MERCHANT_STATUS.PENDING && (
+            {(merchant.state === MERCHANT_STATUS.PENDING ||
+              merchant.state === MERCHANT_STATUS.DISABLED) && (
               <>
                 <CheckIcon className={classes.actionIcon} />
                 Confirmer marchand
@@ -89,9 +90,9 @@ const OtherActions = () => {
             sachez que ce qui a été supprimé ne pourra jamais être récupéré
           </Typography>
         </Box>
-        <Button className={classes.deleteAction}>
+        <Button disabled className={classes.deleteAction}>
           <DeleteIcon className={classes.actionIcon} />
-          Supprimer un compte
+          Supprimer marchend
         </Button>
       </CardContent>
     </Card>

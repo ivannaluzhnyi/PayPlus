@@ -1,31 +1,28 @@
-/* eslint-disable max-len */
+/* eslint-disable indent */
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import { Link as RouterLink } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import moment from 'moment';
 import {
-  Avatar,
-  Box,
-  Button,
+  makeStyles,
   Card,
-  Checkbox,
-  Divider,
-  IconButton,
-  InputAdornment,
-  Link,
-  SvgIcon,
-  Tab,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TablePagination,
-  TableRow,
-  Tabs,
+  Box,
   TextField,
+  InputAdornment,
+  SvgIcon,
+  Checkbox,
+  Button,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Avatar,
   Typography,
-  makeStyles
+  Link,
+  IconButton,
+  TablePagination
 } from '@material-ui/core';
 import {
   Edit as EditIcon,
@@ -33,27 +30,9 @@ import {
   Search as SearchIcon
 } from 'react-feather';
 import getInitials from 'src/utils/getInitials';
+import { labelColorsUserRole } from 'src/constants';
 import Label from 'src/components/Label';
-import { labelColorsUserStatus } from 'src/constants';
-
-const tabs = [
-  {
-    value: 'ALL',
-    label: 'Tous'
-  },
-  {
-    value: 'CONFIRMED',
-    label: 'CONFIRMÉ'
-  },
-  {
-    value: 'PENDING',
-    label: 'EN ATTENTE'
-  },
-  {
-    value: 'BANNED',
-    label: 'BANNIE'
-  }
-];
+import { useSelector } from 'react-redux';
 
 const sortOptions = [
   {
@@ -74,25 +53,23 @@ const sortOptions = [
   }
 ];
 
-function applyFilters(customers, query, filters) {
-  return customers.filter(customer => {
+function applyFilters(users, query, filters) {
+  return users.filter(user => {
     let matches = true;
 
     if (query) {
       const properties = [
         'email',
-        'name',
+        'first_name',
+        'last_name',
         'phone',
-        'address',
-        'country',
-        'city',
         'createdAt',
         'updatedAt'
       ];
       let containsQuery = false;
 
       properties.forEach(property => {
-        if (customer[property].toLowerCase().includes(query.toLowerCase())) {
+        if (user[property].toLowerCase().includes(query.toLowerCase())) {
           containsQuery = true;
         }
       });
@@ -105,7 +82,7 @@ function applyFilters(customers, query, filters) {
     Object.keys(filters).forEach(key => {
       const value = filters[key];
 
-      if (value && customer[key] !== value) {
+      if (value && user[key] !== value) {
         matches = false;
       }
     });
@@ -114,8 +91,8 @@ function applyFilters(customers, query, filters) {
   });
 }
 
-function applyPagination(customers, page, limit) {
-  return customers.slice(page * limit, page * limit + limit);
+function applyPagination(users, page, limit) {
+  return users.slice(page * limit, page * limit + limit);
 }
 
 function descendingComparator(a, b, orderBy) {
@@ -180,35 +157,21 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Results = ({ merchants }) => {
+const Results = ({ users }) => {
   const classes = useStyles();
-  const [currentTab, setCurrentTab] = useState('ALL');
-  const [selectedCustomers, setSelectedCustomers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(10);
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState(sortOptions[0].value);
+
+  const currentUser = useSelector(state => state.account.user);
+
   const [filters, setFilters] = useState({
     isProspect: null,
     isReturning: null,
-    acceptsMarketing: null,
-    state: undefined
+    acceptsMarketing: null
   });
-
-  const handleTabsChange = (event, value) => {
-    const updatedFilters = {
-      ...filters,
-      isProspect: null,
-      isReturning: null,
-      acceptsMarketing: null
-    };
-
-    updatedFilters.state = value === 'ALL' ? undefined : value;
-
-    setFilters(updatedFilters);
-    setSelectedCustomers([]);
-    setCurrentTab(value);
-  };
 
   const handleQueryChange = event => {
     event.persist();
@@ -220,18 +183,16 @@ const Results = ({ merchants }) => {
     setSort(event.target.value);
   };
 
-  const handleSelectAllCustomers = event => {
-    setSelectedCustomers(
-      event.target.checked ? merchants.map(customer => customer.id) : []
-    );
+  const handleSelectAllUsers = event => {
+    setSelectedUsers(event.target.checked ? users.map(user => user.id) : []);
   };
 
-  const handleSelectOneCustomer = (event, customerId) => {
-    if (!selectedCustomers.includes(customerId)) {
-      setSelectedCustomers(prevSelected => [...prevSelected, customerId]);
+  const handleSelectOneUsers = (event, userId) => {
+    if (!selectedUsers.includes(userId)) {
+      setSelectedUsers(prevSelected => [...prevSelected, userId]);
     } else {
-      setSelectedCustomers(prevSelected =>
-        prevSelected.filter(id => id !== customerId)
+      setSelectedUsers(prevSelected =>
+        prevSelected.filter(id => id !== userId)
       );
     }
   };
@@ -244,29 +205,16 @@ const Results = ({ merchants }) => {
     setLimit(event.target.value);
   };
 
-  // Usually query is done on backend with indexing solutions
-  const filteredCustomers = applyFilters(merchants, query, filters);
-  const sortedCustomers = applySort(filteredCustomers, sort);
-  const paginatedCustomers = applyPagination(sortedCustomers, page, limit);
-  const enableBulkOperations = selectedCustomers.length > 0;
-  const selectedSomeCustomers =
-    selectedCustomers.length > 0 && selectedCustomers.length < merchants.length;
-  const selectedAllCustomers = selectedCustomers.length === merchants.length;
+  const filteredUsers = applyFilters(users, query, filters);
+  const sortedUsers = applySort(filteredUsers, sort);
+  const paginatedUsers = applyPagination(sortedUsers, page, limit);
+  const enableBulkOperations = selectedUsers.length > 0;
+  const selectedSomeUsers =
+    selectedUsers.length > 0 && selectedUsers.length < users.length;
+  const selectedAllUsers = selectedUsers.length === users.length;
 
   return (
     <Card className={classes.root}>
-      <Tabs
-        onChange={handleTabsChange}
-        scrollButtons="auto"
-        textColor="secondary"
-        value={currentTab}
-        variant="scrollable"
-      >
-        {tabs.map(tab => (
-          <Tab key={tab.value} value={tab.value} label={tab.label} />
-        ))}
-      </Tabs>
-      <Divider />
       <Box p={2} minHeight={56} display="flex" alignItems="center">
         <TextField
           className={classes.queryField}
@@ -280,7 +228,7 @@ const Results = ({ merchants }) => {
             )
           }}
           onChange={handleQueryChange}
-          placeholder="Rechercher des clients"
+          placeholder="Rechercher des utilisateurs"
           value={query}
           variant="outlined"
         />
@@ -305,9 +253,9 @@ const Results = ({ merchants }) => {
         <div className={classes.bulkOperations}>
           <div className={classes.bulkActions}>
             <Checkbox
-              checked={selectedAllCustomers}
-              indeterminate={selectedSomeCustomers}
-              onChange={handleSelectAllCustomers}
+              checked={selectedAllUsers}
+              indeterminate={selectedSomeUsers}
+              onChange={handleSelectAllUsers}
             />
             <Button variant="outlined" className={classes.bulkAction}>
               Delete
@@ -325,79 +273,76 @@ const Results = ({ merchants }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedAllCustomers}
-                    indeterminate={selectedSomeCustomers}
-                    onChange={handleSelectAllCustomers}
+                    checked={selectedAllUsers}
+                    indeterminate={selectedSomeUsers}
+                    onChange={handleSelectAllUsers}
                   />
                 </TableCell>
-                <TableCell>Nom marchand</TableCell>
-                <TableCell>Adresse</TableCell>
-                <TableCell>Statut</TableCell>
+                <TableCell>Nom</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Role</TableCell>
+                <TableCell>Téléphone</TableCell>
                 <TableCell>Créé</TableCell>
                 <TableCell>Modifié</TableCell>
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginatedCustomers.map(merchant => {
-                const isCustomerSelected = selectedCustomers.includes(
-                  merchant.id
-                );
+              {paginatedUsers.map(user => {
+                const isUserSelected = selectedUsers.includes(user.id);
+                const isCurrent = currentUser.id === user.id;
 
                 return (
-                  <TableRow
-                    hover
-                    key={merchant.id}
-                    selected={isCustomerSelected}
-                  >
+                  <TableRow hover key={user.id} selected={isUserSelected}>
                     <TableCell padding="checkbox">
                       <Checkbox
-                        checked={isCustomerSelected}
-                        onChange={event =>
-                          handleSelectOneCustomer(event, merchant.id)
-                        }
-                        value={isCustomerSelected}
+                        checked={isUserSelected}
+                        onChange={event => handleSelectOneUsers(event, user.id)}
+                        value={isUserSelected}
                       />
                     </TableCell>
                     <TableCell>
                       <Box display="flex" alignItems="center">
-                        <Avatar
-                          className={classes.avatar}
-                          src={merchant.avatar}
-                        >
-                          {getInitials(merchant.name)}
+                        <Avatar className={classes.avatar} src={user.avatar}>
+                          {getInitials(`${user.first_name} ${user.last_name}`)}
                         </Avatar>
                         <div>
                           <Link
                             color="inherit"
                             component={RouterLink}
-                            to={`/app/management/merchants/${merchant.id}`}
+                            to={`/app/management/users/${user.id}`}
                             variant="h6"
                           >
-                            {merchant.name}
+                            {user.first_name} {user.last_name}
                           </Link>
                         </div>
                       </Box>
                     </TableCell>
+                    <TableCell>{user.email}</TableCell>
                     <TableCell>
-                      {merchant.address} {merchant.city} {merchant.zip_code}{' '}
-                      {merchant.country}{' '}
-                    </TableCell>
-                    <TableCell>
-                      <Label color={labelColorsUserStatus[merchant.state]}>
-                        {merchant.state}
+                      <Label color={labelColorsUserRole[user.role]}>
+                        {user.role}
                       </Label>
                     </TableCell>
+                    <TableCell>{user.phone}</TableCell>
+
                     <TableCell>
-                      {moment(merchant.createdAt).format('YYYY-MM-DD HH:mm:ss')}
+                      {moment(user.createdAt).format('YYYY-MM-DD HH:mm:ss')}
                     </TableCell>
                     <TableCell>
-                      {moment(merchant.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
+                      {moment(user.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
                     </TableCell>
                     <TableCell align="right">
                       <IconButton
                         component={RouterLink}
-                        to={`/app/management/merchants/${merchant.id}/edit`}
+                        to={
+                          isCurrent
+                            ? '/app/account'
+                            : {
+                                pathname: `/app/management/users/${user.id}/edit`,
+                                state: { user }
+                              }
+                        }
                       >
                         <SvgIcon fontSize="small">
                           <EditIcon />
@@ -405,7 +350,11 @@ const Results = ({ merchants }) => {
                       </IconButton>
                       <IconButton
                         component={RouterLink}
-                        to={`/app/management/merchants/${merchant.id}`}
+                        to={
+                          isCurrent
+                            ? '/app/account'
+                            : `/app/management/users/${user.id}`
+                        }
                       >
                         <SvgIcon fontSize="small">
                           <ArrowRightIcon />
@@ -421,7 +370,7 @@ const Results = ({ merchants }) => {
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={filteredCustomers.length}
+        count={filteredUsers.length}
         onChangePage={handlePageChange}
         onChangeRowsPerPage={handleLimitChange}
         page={page}
@@ -433,11 +382,11 @@ const Results = ({ merchants }) => {
 };
 
 Results.propTypes = {
-  merchants: PropTypes.array
+  users: PropTypes.array
 };
 
 Results.defaultProps = {
-  merchants: []
+  users: []
 };
 
 export default Results;

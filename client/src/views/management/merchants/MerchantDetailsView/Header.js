@@ -14,11 +14,12 @@ import BeenhereIcon from '@material-ui/icons/Beenhere';
 
 import { Edit as EditIcon } from 'react-feather';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'src/utils/axios';
 
 import { LOAD_KBIS_CUSTOMER } from 'src/actions/customerActions';
 import useMerchant from 'src/hooks/useMerchant';
+import { ROLE } from 'src/constants';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -30,11 +31,12 @@ const useStyles = makeStyles(theme => ({
 const Header = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { user } = useSelector(state => state.account);
 
-  const { customer } = useMerchant();
+  const { merchant } = useMerchant();
 
   const handleLoadKBIS = () => {
-    axios.get(`/api/users/kbis/${customer.KBIS}`).then(response => {
+    axios.get(`/api/merchants/kbis/${merchant.KBIS}`).then(response => {
       if (response.status === 200) {
         dispatch({ type: LOAD_KBIS_CUSTOMER });
         const newTab = window.open();
@@ -72,11 +74,11 @@ const Header = () => {
             Gestion
           </Link>
           <Typography variant="body1" color="textPrimary">
-            Clients
+            Marchends
           </Typography>
         </Breadcrumbs>
         <Typography variant="h3" color="textPrimary">
-          {customer.fullName}
+          {merchant.name}
         </Typography>
       </Grid>
 
@@ -90,14 +92,17 @@ const Header = () => {
           <SvgIcon fontSize="small" className={classes.actionIcon}>
             <BeenhereIcon />
           </SvgIcon>
-          Verifier KBIS
+          {user.role === ROLE.ADMIN ? 'Verifier' : 'Voir'} KBIS
         </Button>
 
         <Button
           color="secondary"
           variant="contained"
           component={RouterLink}
-          to={`/app/management/merchants/${customer.id}/edit`}
+          to={{
+            pathname: `/app/management/merchants/${merchant.id}/edit`,
+            state: { merchant }
+          }}
         >
           <SvgIcon fontSize="small" className={classes.actionIcon}>
             <EditIcon />

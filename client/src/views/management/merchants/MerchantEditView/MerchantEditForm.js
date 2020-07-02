@@ -4,7 +4,6 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { useSnackbar } from 'notistack';
 import axios from 'src/utils/axios';
-import { useDispatch } from 'react-redux';
 import {
   Box,
   Button,
@@ -14,58 +13,46 @@ import {
   TextField,
   makeStyles
 } from '@material-ui/core';
-import wait from 'src/utils/wait';
 import useMerchant from 'src/hooks/useMerchant';
 
 const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-const CustomerEditForm = () => {
+const MerchantEditForm = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const dispatch = useDispatch();
-  const { customer, saveMerchant } = useMerchant();
+  const { merchant, saveMerchant } = useMerchant();
 
   return (
     <Formik
       initialValues={{
-        name: customer.name || '',
-        email: customer.email || '',
-        address: customer.address || '',
-        country: customer.country || '',
-        city: customer.city || '',
-        phone: customer.phone || '',
-        zip_code: customer.zip_code || ''
+        name: merchant.name || '',
+        address: merchant.address || '',
+        country: merchant.country || '',
+        city: merchant.city || '',
+        zip_code: merchant.zip_code || ''
       }}
       validationSchema={Yup.object().shape({
         address: Yup.string().max(255),
         country: Yup.string().max(255),
         name: Yup.string().max(255),
-        email: Yup.string()
-          .email('Must be a valid email')
-          .max(255)
-          .required('Email is required'),
         city: Yup.string()
           .max(255)
           .required('city is required'),
-        phone: Yup.string().max(15),
         zip_code: Yup.string().max(255)
       })}
-      onSubmit={async (
-        values,
-        { resetForm, setErrors, setStatus, setSubmitting }
-      ) => {
+      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
           axios
-            .put(`/api/users/update/${customer.id}`, {
+            .put(`/api/merchants/update/${merchant.id}`, {
               ...values
             })
             .then(response => {
               if (response.status === 200) {
                 setStatus({ success: true });
-                setSubmitting(false);
-                enqueueSnackbar('Client mis à jour', {
+                setSubmitting(true);
+                enqueueSnackbar('Marchand mis à jour', {
                   variant: 'success'
                 });
                 saveMerchant(response.data[0]);
@@ -112,32 +99,6 @@ const CustomerEditForm = () => {
                   />
                 </Grid>
 
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={Boolean(touched.email && errors.email)}
-                    fullWidth
-                    helperText={touched.email && errors.email}
-                    label="Email"
-                    name="email"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.email}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <TextField
-                    error={Boolean(touched.phone && errors.phone)}
-                    fullWidth
-                    helperText={touched.phone && errors.phone}
-                    label="Téléphone"
-                    name="phone"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.phone}
-                    variant="outlined"
-                  />
-                </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
                     error={Boolean(touched.address && errors.address)}
@@ -201,7 +162,7 @@ const CustomerEditForm = () => {
                   type="submit"
                   disabled={isSubmitting}
                 >
-                  Mise à jour du client
+                  Mise à jour du marchand
                 </Button>
               </Box>
             </CardContent>
@@ -212,4 +173,4 @@ const CustomerEditForm = () => {
   );
 };
 
-export default CustomerEditForm;
+export default MerchantEditForm;

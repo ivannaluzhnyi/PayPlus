@@ -20,10 +20,10 @@ const Header = () => {
         <Link color="inherit" to="/app" component={RouterLink}>
           Dashboard
         </Link>
-        <Typography color="textPrimary">Account</Typography>
+        <Typography color="textPrimary">Utilisateurs</Typography>
       </Breadcrumbs>
       <Typography variant="h3" color="textPrimary">
-        Settings
+        Paramètres
       </Typography>
     </div>
   );

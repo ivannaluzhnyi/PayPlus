@@ -1,5 +1,6 @@
-const fs = require("fs");
 const generator = require("generate-password");
+
+import Merchant from "../models/Merchant";
 
 const { generateCredentials } = require("../lib/credentials");
 const User = require("../models/User");
@@ -7,8 +8,6 @@ const { resCatchError } = require("../helpers/error");
 const { sendMail } = require("../lib/mailer");
 const { isValidPassword } = require("../lib/password");
 const { hashPassword } = require("../lib/password");
-
-const { MERCHANT_STATUS } = require("../lib/constants");
 
 module.exports = {
     getAllUsers: (req, res) => {
@@ -34,8 +33,20 @@ module.exports = {
             .catch((err) => resCatchError(res, err));
     },
 
+    getOneWithMerchants: (req, res) => {
+        User.findByPk(req.params.id, {
+            include: [{ model: Merchant, as: "merchants" }],
+            attributes: { exclude: ["password"] },
+        })
+            .then((data) => (data ? res.json(data) : res.sendStatus(404)))
+            .catch((err) => {
+                console.error(err);
+                res.sendStatus(500);
+            });
+    },
+
     getOne: (req, res) => {
-        User.findByPk(req.params.id)
+        User.findByPk(req.params.id, { attributes: { exclude: ["password"] } })
             .then((data) => (data ? res.json(data) : res.sendStatus(404)))
             .catch(() => res.sendStatus(500));
     },
@@ -88,7 +99,7 @@ module.exports = {
                             .then(([nbUpdate, data]) => {
                                 sendMail({
                                     to: user.email,
-                                    text: `Bonjour ${user.name}. \n\nVoici votre nouveau mot de passe: ${password} \n\n Cordialement.`,
+                                    text: `Bonjour ${user.first_name} ${user.last_name}. \n\nVoici votre nouveau mot de passe: ${password} \n\n Cordialement.`,
                                     subject: "Pay Plus+ | Reset Password",
                                 });
 
