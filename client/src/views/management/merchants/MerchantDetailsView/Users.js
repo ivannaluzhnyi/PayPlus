@@ -56,14 +56,23 @@ const Users = () => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const [addUserOpen, serAddUser] = useState(false);
+  const [pageUsers, setUsers] = useState([]);
 
   const {
-    merchant: { users, state }
+    merchant: { users, state, id }
   } = useMerchant();
+
+  useEffect(() => {
+    setUsers(setUsers);
+  }, [users]);
 
   if (!users) {
     return null;
   }
+
+  const handleSetUser = user => {
+    setUsers([{ ...user }, ...pageUsers]);
+  };
 
   const handleClickOpen = () => {
     serAddUser(true);
@@ -112,9 +121,10 @@ const Users = () => {
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             try {
               axios
-                .post('/api/register', values)
+                .post(`/api/merchants/${id}/new-user`, values)
                 .then(response => {
                   if (response.status === 201) {
+                    handleSetUser(response.data);
                     enqueueSnackbar('Compte été bien créé', {
                       variant: 'success'
                     });
@@ -127,7 +137,7 @@ const Users = () => {
                 .catch(err => {
                   if (err.response) {
                     setStatus({ success: false });
-                    setErrors({ ...convertReponseErrors(err.response.data) });
+
                     setSubmitting(false);
 
                     enqueueSnackbar('Une erreur se produir', {

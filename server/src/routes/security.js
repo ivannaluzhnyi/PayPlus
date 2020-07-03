@@ -1,13 +1,14 @@
-const express = require("express");
-const {
+import { Router } from "express";
+
+import {
     login,
     register,
     loginWithToken,
-} = require("../controllers/security.controller");
+} from "../controllers/security.controller";
 
-const verifyToken = require("../middlewares/verifyToken");
+import verifyToken from "../middlewares/verifyToken";
 
-const router = express.Router();
+const router = Router();
 
 router.get("/login/me", verifyToken, loginWithToken);
 router.post("/login", login);

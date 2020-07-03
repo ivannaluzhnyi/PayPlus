@@ -338,7 +338,7 @@ const RegisterForm = ({ onSubmitSuccess }) => {
                 onChange={handleChange}
               />
               <Typography variant="body2" color="textSecondary">
-                J'ai lu le
+                J'ai lu les{' '}
                 <Link component="a" href="#" color="secondary">
                   Conditions Générales
                 </Link>

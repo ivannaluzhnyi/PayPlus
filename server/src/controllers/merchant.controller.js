@@ -1,4 +1,5 @@
 import fs from "fs";
+import generator from "generate-password";
 
 import Merchant from "../models/Merchant";
 import User from "../models/User";
@@ -7,6 +8,7 @@ import Credential from "../models/Credential";
 import { ROLE, MERCHANT_STATUS } from "../lib/constants";
 import { generateCredentials } from "../lib/credentials";
 import { resCatchError } from "../helpers/error";
+import { sendMail } from "../lib/mailer";
 
 function getKBIS(req, res) {
     try {
@@ -121,7 +123,34 @@ function one(req, res) {
         });
 }
 
-function addNewUser(req, res) {}
+function addNewUser(req, res) {
+    Merchant.findByPk(req.params.id)
+        .then((currentMerchant) => {
+            const password = generator.generate({
+                length: 10,
+                numbers: true,
+            });
+            User.create({
+                ...req.body,
+                password,
+                role: ROLE.MERCHANT,
+            }).then((createdUser) => {
+                currentMerchant.addUser(createdUser).then(() => {
+                    sendMail({
+                        to: createdUser.email,
+                        text: `Bonjour ${createdUser.first_name} ${createdUser.last_name}. \n\nVoici votre mot de passe pour se connecter à la platforme: ${password} \n\n Cordialement.`,
+                        subject: "Pay Plus+ | Création de compte",
+                    });
+                });
+                return createdUser
+                    ? res.json(createdUser)
+                    : res.sendStatus(404);
+            });
+        })
+        .catch((err) => {
+            res.sendStatus(500);
+        });
+}
 
 function update(req, res) {
     Merchant.update(req.body, {
@@ -136,4 +165,4 @@ function update(req, res) {
         });
 }
 
-export { getKBIS, changeMerchantState, all, one, update };
+export { getKBIS, changeMerchantState, all, one, update, addNewUser };

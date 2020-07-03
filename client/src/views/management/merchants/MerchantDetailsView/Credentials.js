@@ -56,10 +56,24 @@ const Credentials = () => {
     getCredentials();
   }, [getCredentials]);
 
+  const handleAddCredential = credential => {
+    setCredentials([{ ...credential }, ...credentials]);
+  };
+
+  const handleManageCredentials = () => {
+    const newCredentials = [];
+
+    credentials.forEach(cr => {
+      if (!selectedCredentials.includes(cr.id)) newCredentials.push(cr);
+    });
+
+    setCredentials(newCredentials);
+  };
+
   const handleGenerateCredentials = () => {
     axios.get(`/api/credentials/generate/${merchant.id}`).then(response => {
       if (response.status === 200) {
-        setCredentials(response.data);
+        handleAddCredential(response.data);
         enqueueSnackbar('Credentials été bien généré', {
           variant: 'success'
         });
@@ -69,6 +83,23 @@ const Credentials = () => {
         });
       }
     });
+  };
+
+  const handleRemoveCredentials = () => {
+    axios
+      .delete('/api/credentials/delete', { data: { ids: selectedCredentials } })
+      .then(response => {
+        if (response.status === 200) {
+          handleManageCredentials();
+          enqueueSnackbar('Credentials été bien supprimé', {
+            variant: 'success'
+          });
+        } else {
+          enqueueSnackbar('Une errur se produit.', {
+            variant: 'error'
+          });
+        }
+      });
   };
 
   const handleSelectAllCredentials = event => {
@@ -124,7 +155,11 @@ const Credentials = () => {
               indeterminate={selectedSomeCredentials}
               onChange={handleSelectAllCredentials}
             />
-            <Button variant="outlined" className={classes.bulkAction}>
+            <Button
+              onClick={handleRemoveCredentials}
+              variant="outlined"
+              className={classes.bulkAction}
+            >
               Delete
             </Button>
           </div>

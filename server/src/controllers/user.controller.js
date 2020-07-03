@@ -2,7 +2,6 @@ const generator = require("generate-password");
 
 import Merchant from "../models/Merchant";
 
-const { generateCredentials } = require("../lib/credentials");
 const User = require("../models/User");
 const { resCatchError } = require("../helpers/error");
 const { sendMail } = require("../lib/mailer");
@@ -48,32 +47,6 @@ module.exports = {
     getOne: (req, res) => {
         User.findByPk(req.params.id, { attributes: { exclude: ["password"] } })
             .then((data) => (data ? res.json(data) : res.sendStatus(404)))
-            .catch(() => res.sendStatus(500));
-    },
-
-    generateCredentials: (req, res) => {
-        User.findByPk(req.params.id)
-            .then((user) => {
-                if (user) {
-                    generateCredentials(user).then((credential) => {
-                        User.update(
-                            {
-                                ...credential,
-                            },
-                            {
-                                returning: true,
-                                where: { id: user.id },
-                            }
-                        )
-                            .then(([nbUpdate, data]) =>
-                                nbUpdate === 1
-                                    ? res.json(data)
-                                    : res.sendStatus(404)
-                            )
-                            .catch((err) => resCatchError(res, err));
-                    });
-                } else res.sendStatus(404);
-            })
             .catch(() => res.sendStatus(500));
     },
 
