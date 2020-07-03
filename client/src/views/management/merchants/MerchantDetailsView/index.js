@@ -17,9 +17,7 @@ import { ROLE, MERCHANT_STATUS } from 'src/constants';
 import { Alert } from '@material-ui/lab';
 import Header from './Header';
 import Details from './Details';
-// import Transactions from './Transactions';
 import Credentials from './Credentials';
-// import Logs from './Logs';
 import Users from './Users';
 
 const useStyles = makeStyles(theme => ({

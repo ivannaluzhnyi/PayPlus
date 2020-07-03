@@ -63,16 +63,12 @@ const Users = () => {
   } = useMerchant();
 
   useEffect(() => {
-    setUsers(setUsers);
-  }, [users]);
+    setUsers(users);
+  }, []);
 
   if (!users) {
     return null;
   }
-
-  const handleSetUser = user => {
-    setUsers([{ ...user }, ...pageUsers]);
-  };
 
   const handleClickOpen = () => {
     serAddUser(true);
@@ -81,6 +77,11 @@ const Users = () => {
   const handleClose = () => {
     serAddUser(false);
   };
+
+  const handleSetUser = user => {
+    setUsers([{ ...user }, ...pageUsers]);
+  };
+
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
   const Disalog = (
@@ -123,11 +124,12 @@ const Users = () => {
               axios
                 .post(`/api/merchants/${id}/new-user`, values)
                 .then(response => {
-                  if (response.status === 201) {
+                  if (response.status === 200) {
                     handleSetUser(response.data);
                     enqueueSnackbar('Compte été bien créé', {
                       variant: 'success'
                     });
+                    handleClose();
                   } else {
                     enqueueSnackbar('Une erreur se produir', {
                       variant: 'error'
@@ -137,9 +139,8 @@ const Users = () => {
                 .catch(err => {
                   if (err.response) {
                     setStatus({ success: false });
-
+                    setErrors({ ...convertReponseErrors(err.response.data) });
                     setSubmitting(false);
-
                     enqueueSnackbar('Une erreur se produir', {
                       variant: 'error'
                     });
@@ -229,12 +230,7 @@ const Users = () => {
               </Box>
 
               <Box mt={2} display="flex" flexDirection="row-reverse">
-                <Button
-                  disabled={isSubmitting}
-                  onClick={handleClose}
-                  color="secondary"
-                  type="submit"
-                >
+                <Button disabled={isSubmitting} color="secondary" type="submit">
                   Valider & ajouter
                 </Button>
                 <Button onClick={handleClose} color="primary">
@@ -277,7 +273,7 @@ const Users = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {users.map(user => (
+                {pageUsers.map(user => (
                   <TableRow key={user.id}>
                     <TableCell>
                       <Box display="flex" alignItems="center">

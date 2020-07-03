@@ -111,6 +111,14 @@ function all(req, res) {
     }
 }
 
+function notifications(req, res) {
+    Merchant.findAll({ where: { state: MERCHANT_STATUS.PENDING } }).then(
+        (merchants) => {
+            res.json({ merchants });
+        }
+    );
+}
+
 function one(req, res) {
     Merchant.findByPk(req.params.id, {
         include: [{ model: User, as: "users" }],
@@ -134,18 +142,22 @@ function addNewUser(req, res) {
                 ...req.body,
                 password,
                 role: ROLE.MERCHANT,
-            }).then((createdUser) => {
-                currentMerchant.addUser(createdUser).then(() => {
-                    sendMail({
-                        to: createdUser.email,
-                        text: `Bonjour ${createdUser.first_name} ${createdUser.last_name}. \n\nVoici votre mot de passe pour se connecter à la platforme: ${password} \n\n Cordialement.`,
-                        subject: "Pay Plus+ | Création de compte",
+            })
+                .then((createdUser) => {
+                    currentMerchant.addUser(createdUser).then(() => {
+                        sendMail({
+                            to: createdUser.email,
+                            text: `Bonjour ${createdUser.first_name} ${createdUser.last_name}. \n\nVoici votre mot de passe pour se connecter à la platforme: ${password} \n\n Cordialement.`,
+                            subject: "Pay Plus+ | Création de compte",
+                        });
                     });
+                    return createdUser
+                        ? res.json(createdUser)
+                        : res.sendStatus(404);
+                })
+                .catch((err) => {
+                    resCatchError(res, err);
                 });
-                return createdUser
-                    ? res.json(createdUser)
-                    : res.sendStatus(404);
-            });
         })
         .catch((err) => {
             res.sendStatus(500);
@@ -165,4 +177,12 @@ function update(req, res) {
         });
 }
 
-export { getKBIS, changeMerchantState, all, one, update, addNewUser };
+export {
+    getKBIS,
+    changeMerchantState,
+    all,
+    one,
+    update,
+    addNewUser,
+    notifications,
+};

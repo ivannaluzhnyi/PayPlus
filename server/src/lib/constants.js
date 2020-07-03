@@ -17,8 +17,21 @@ const MERCHANT_STATUS = {
     DISABLED: "DISABLED",
 };
 
+const OPERATIONS_STATE = {
+    CREATED: "CREATED",
+    PENDING: "PENDING",
+    DONE: "DONE",
+};
+
+const OPERATIONS_TYPE = {
+    CAPTURE: "CAPTURE",
+    REFUNDED: "REFUNDED",
+};
+
 module.exports = {
     ROLE,
     DEVISE,
     MERCHANT_STATUS,
+    OPERATIONS_TYPE,
+    OPERATIONS_TYPE,
 };

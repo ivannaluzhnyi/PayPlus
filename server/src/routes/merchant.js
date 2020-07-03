@@ -7,6 +7,7 @@ import {
     one,
     update,
     addNewUser,
+    notifications,
 } from "../controllers/merchant.controller";
 
 import { ROLE } from "../lib/constants";
@@ -14,6 +15,7 @@ import { ROLE } from "../lib/constants";
 const router = Router();
 
 router.get("/", all);
+router.get("/notifications", verifyRole(ROLE.ADMIN), notifications);
 router.get("/:id", one);
 router.put("/update/:id", update);
 router.get("/kbis/:path", getKBIS);

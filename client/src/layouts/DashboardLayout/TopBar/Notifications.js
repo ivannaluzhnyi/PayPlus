@@ -1,28 +1,29 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
-  Avatar,
   Box,
-  Button,
   IconButton,
   List,
   ListItem,
-  ListItemAvatar,
-  ListItemText,
   Popover,
   SvgIcon,
   Tooltip,
   Typography,
-  makeStyles
+  makeStyles,
+  Badge,
+  ListItemText
 } from '@material-ui/core';
+import axios from 'src/utils/axios';
 import {
   Bell as BellIcon,
   Package as PackageIcon,
   MessageCircle as MessageIcon,
   Truck as TruckIcon
 } from 'react-feather';
-import { getNotifications } from 'src/actions/notificationsActions';
+import useIsMountedRef from 'src/hooks/useIsMountedRef';
+import Label from 'src/components/Label';
+import { labelColorsUserStatus } from 'src/constants';
 
 const iconsMap = {
   order_placed: PackageIcon,
@@ -40,12 +41,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Notifications() {
+const Notifications = () => {
   const classes = useStyles();
-  const notifications = useSelector(state => state.notifications.notifications);
+  const isMountedRef = useIsMountedRef();
   const ref = useRef(null);
   const dispatch = useDispatch();
   const [isOpen, setOpen] = useState(false);
+  const [merchants, setMerchants] = useState([]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -55,19 +57,30 @@ function Notifications() {
     setOpen(false);
   };
 
+  const getMerchantsNotif = useCallback(() => {
+    axios.get('/api/merchants/notifications').then(response => {
+      if (isMountedRef.current) {
+        setMerchants(response.data.merchants);
+      }
+    });
+  }, [isMountedRef]);
+
   useEffect(() => {
-    // dispatch(getNotifications());
+    getMerchantsNotif();
   }, [dispatch]);
 
   return (
     <>
-      <Tooltip title="Notifications">
-        <IconButton color="inherit" ref={ref} onClick={handleOpen}>
-          <SvgIcon>
-            <BellIcon />
-          </SvgIcon>
-        </IconButton>
-      </Tooltip>
+      <Badge badgeContent={merchants.length || 0} color="error">
+        <Tooltip title="Notifications">
+          <IconButton color="inherit" ref={ref} onClick={handleOpen}>
+            <SvgIcon>
+              <BellIcon />
+            </SvgIcon>
+          </IconButton>
+        </Tooltip>
+      </Badge>
+
       <Popover
         anchorOrigin={{
           vertical: 'bottom',
@@ -80,58 +93,47 @@ function Notifications() {
       >
         <Box p={2}>
           <Typography variant="h5" color="textPrimary">
-            Notifications
+            Marchands à valider
           </Typography>
         </Box>
-        {notifications.length === 0 ? (
+        {merchants.length === 0 ? (
           <Box p={2}>
             <Typography variant="h6" color="textPrimary">
-              There are no notifications
+              Il n'y a pas de notifications
             </Typography>
           </Box>
         ) : (
           <>
             <List className={classes.list} disablePadding>
-              {notifications.map(notification => {
-                const Icon = iconsMap[notification.type];
-
+              {merchants.map(merchant => {
                 return (
                   <ListItem
                     className={classes.listItem}
                     component={RouterLink}
                     divider
-                    key={notification.id}
-                    to="#"
+                    key={merchant.id}
+                    to={`/app/management/merchants/${merchant.id}`}
                   >
-                    <ListItemAvatar>
-                      <Avatar className={classes.icon}>
-                        <SvgIcon fontSize="small">
-                          <Icon />
-                        </SvgIcon>
-                      </Avatar>
-                    </ListItemAvatar>
                     <ListItemText
-                      primary={notification.title}
+                      primary={merchant.name}
                       primaryTypographyProps={{
                         variant: 'subtitle2',
                         color: 'textPrimary'
                       }}
-                      secondary={notification.description}
                     />
+
+                    <Label color={labelColorsUserStatus[merchant.state]}>
+                      {merchant.state}
+                    </Label>
                   </ListItem>
                 );
               })}
             </List>
-            <Box p={1} display="flex" justifyContent="center">
-              <Button component={RouterLink} size="small" to="#">
-                Mark all as read
-              </Button>
-            </Box>
           </>
         )}
       </Popover>
     </>
   );
-}
+};
 
 export default Notifications;

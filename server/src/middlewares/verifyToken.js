@@ -9,6 +9,7 @@ const verifyToken = (req, res, next) => {
 
     authHeader = authHeader.replace("Bearer ", "");
 
+
     JWTVerifyToken(authHeader)
         .then((payload) => {
             req.user = payload;

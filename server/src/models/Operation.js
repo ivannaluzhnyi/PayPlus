@@ -5,12 +5,7 @@ class Operation extends Model {
         super.init(
             {
                 states: {
-                    type: DataTypes.ENUM([
-                        "done",
-                        "refunded",
-                        "deleted",
-                        "Waiting",
-                    ]),
+                    type: DataTypes.ENUM(["done", "refunded", "Waiting"]),
                     defaultValue: "Waiting",
                 },
                 Amount: {

@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -13,7 +14,8 @@ import {
 } from '@material-ui/core';
 import { Menu as MenuIcon } from 'react-feather';
 import Logo from 'src/components/Logo';
-import { THEMES } from 'src/constants';
+import { THEMES, ROLE } from 'src/constants';
+import { useSelector } from 'react-redux';
 import Account from './Account';
 import Notifications from './Notifications';
 import Search from './Search';
@@ -39,11 +41,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function TopBar({ className, onMobileNavOpen, ...rest }) {
+const TopBar = ({ onMobileNavOpen }) => {
   const classes = useStyles();
+  const { user } = useSelector(state => state.account);
 
   return (
-    <AppBar className={clsx(classes.root, className)} {...rest}>
+    <AppBar className={clsx(classes.root)}>
       <Toolbar className={classes.toolbar}>
         <Hidden lgUp>
           <IconButton
@@ -63,7 +66,9 @@ function TopBar({ className, onMobileNavOpen, ...rest }) {
         </Hidden>
         <Box ml={2} flexGrow={1} />
         <Search />
-        <Notifications />
+
+        {user.role === ROLE.ADMIN && <Notifications />}
+
         <Settings />
         <Box ml={2}>
           <Account />
@@ -71,10 +76,9 @@ function TopBar({ className, onMobileNavOpen, ...rest }) {
       </Toolbar>
     </AppBar>
   );
-}
+};
 
 TopBar.propTypes = {
-  className: PropTypes.string,
   onMobileNavOpen: PropTypes.func
 };
 

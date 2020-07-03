@@ -36,7 +36,6 @@ const MerchantListView = () => {
     return null;
   }
 
-  console.log('merchants +> ', merchants);
   return (
     <Page className={classes.root} title="Liste des clients">
       <Container maxWidth={false}>

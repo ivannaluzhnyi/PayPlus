@@ -44,7 +44,7 @@ const MerchantEditView = () => {
   }, [isMountedRef]);
 
   useEffect(() => {
-    if (location.state.merchant) {
+    if (location.state && location.state.merchant) {
       setMerchant(location.state.merchant);
     } else {
       getMerchant();
