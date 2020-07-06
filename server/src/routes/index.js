@@ -13,14 +13,13 @@ const routerManager = (app) => {
     app.get("/", (req, res, next) => {
         res.json({ message: "🏦 Hello Pay Plus+!!! 💰💰💰" });
     });
-
     app.use("/payment", paymentRoutes);
 
     app.use("/api/", securityRoutes);
+    app.use(verifyToken);
     app.use("/api/transactions/", transactionRoutes);
     app.use("/api/products/", productRoutes);
     app.use("/api/operations/", operationRoutes);
-    app.use(verifyToken);
     app.use("/api/users/", userRoutes);
     app.use("/api/merchants/", merchantRoutes);
     app.use("/api/credentials/", credentialRoutes);

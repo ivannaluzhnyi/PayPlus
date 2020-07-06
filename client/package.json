@@ -9,7 +9,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test:e2e": "cypress run",
+    "test:e2e:ci": "concurrently --kill-others --success=first 'yarn start --progress=false --no-info' 'yarn test:e2e'"
   },
   "browserslist": {
     "production": [
@@ -40,8 +42,8 @@
     "axios-mock-adapter": "^1.17.0",
     "change-case": "^4.1.1",
     "chart.js": "^2.9.3",
-    "copy-to-clipboard": "^3.3.1",
     "clsx": "^1.1.0",
+    "copy-to-clipboard": "^3.3.1",
     "draft-js": "^0.11.5",
     "formik": "^2.1.4",
     "global": "^4.4.0",
@@ -83,9 +85,14 @@
     "yup": "^0.28.3"
   },
   "devDependencies": {
+    "@testing-library/cypress": "^6.0.0",
+    "concurrently": "^5.2.0",
+    "cypress": "^4.9.0",
+    "cypress-testing-library": "^4.0.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-cypress": "^2.11.1",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-mdx": "^1.6.8",

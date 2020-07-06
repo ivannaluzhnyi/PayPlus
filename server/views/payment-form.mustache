@@ -20,7 +20,7 @@
                     <div class="card">
                         <div class="row paypal">
                             <div class="left">
-                                <input id="pp" type="radio" name="payment" />
+                                <input id="pp" type="radio" />
                                 <div class="radio"></div>
                                 <label for="pp">Paypal</label>
                             </div>
@@ -36,7 +36,6 @@
                                 <input
                                     id="cd"
                                     type="radio"
-                                    name="payment"
                                     checked
                                 />
                                 <div class="radio"></div>
@@ -146,6 +145,17 @@
                 <div class="button">
                     <button type="submit">
                         <i class="ion-locked"></i> Confirmer et payer
+                    </button>
+                </div>
+
+                 
+            </form>
+
+            <form action="/payment?cancel" method='POST'>
+                <input type="hidden" name="cancel" value="true"/>
+                <div class="button cancel-btn">
+                    <button type="submit">
+                     Annuler
                     </button>
                 </div>
             </form>
