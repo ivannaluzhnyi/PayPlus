@@ -27,7 +27,12 @@ function post(req, res) {
 
     transaction
         .save()
-        .then((data) => res.status(201).json(data))
+        .then((data) =>
+            res.status(201).json({
+                ...data.toJSON(),
+                payment_url: `${process.env.BASE_URL}/payment`,
+            })
+        )
         .catch((err) => resCatchError(res, err));
 }
 

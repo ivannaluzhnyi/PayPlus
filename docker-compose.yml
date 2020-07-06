@@ -48,6 +48,7 @@ services:
             JWT_SECRET: "MyBestSecret"
             MAILER_USER: "payplus.info2020@gmail.com"
             MAILER_PASS: "paypluas2020"
+            BASE_URL: "http://localhost:3050"
         depends_on:
             - postgres
             - pgadmin

@@ -31,6 +31,10 @@ class Transaction extends Model {
                     type: DataTypes.DECIMAL,
                     allowNull: false,
                 },
+                products: {
+                    allowNull: false,
+                    type: DataTypes.JSON,
+                },
             },
             {
                 sequelize,
@@ -41,12 +45,6 @@ class Transaction extends Model {
 
     static associate(models) {
         this.belongsTo(models.Merchant, { foreignKey: "merchant_id" });
-        this.belongsToMany(models.Product, {
-            foreignKey: "transaction_id",
-            through: "transaction_products",
-            as: "products",
-        });
-
         this.hasMany(models.Operation);
     }
 }

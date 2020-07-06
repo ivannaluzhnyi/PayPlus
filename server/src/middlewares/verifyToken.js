@@ -1,5 +1,6 @@
 import Credential from "../models/Credential";
 import Merchant from "../models/Merchant";
+import { ROLE } from "../lib/constants";
 
 const JWTVerifyToken = require("../lib/auth").verifyToken;
 
@@ -28,6 +29,7 @@ const verifyToken = (req, res, next) => {
         })
             .then((dbCredentials) => {
                 req.merchant = dbCredentials.Merchant;
+                req.user = { role: ROLE.MERCHANT };
                 next();
             })
             .catch(() => res.sendStatus(401));
@@ -43,4 +45,4 @@ const verifyToken = (req, res, next) => {
     }
 };
 
-module.exports = verifyToken;
+export default verifyToken;

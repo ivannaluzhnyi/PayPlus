@@ -10,16 +10,17 @@ import Operation from "../models/Operation";
 import Credential from "../models/Credential";
 import Transaction from "../models/Transaction";
 
+// Product.associate(sequelize.models);
+// Product.init(sequelize);
+
 User.init(sequelize);
 Devise.init(sequelize);
-Product.init(sequelize);
 Merchant.init(sequelize);
 Operation.init(sequelize);
 Credential.init(sequelize);
 Transaction.init(sequelize);
 
 User.associate(sequelize.models);
-Product.associate(sequelize.models);
 Merchant.associate(sequelize.models);
 Operation.associate(sequelize.models);
 Credential.associate(sequelize.models);

@@ -1,20 +1,23 @@
-const { DataTypes, Model } = require("sequelize");
+import { DataTypes, Model } from "sequelize";
+import { OPERATIONS_STATE, OPERATIONS_TYPE } from "../lib/constants";
 
 class Operation extends Model {
     static init(sequelize) {
         super.init(
             {
-                states: {
-                    type: DataTypes.ENUM(["done", "refunded", "Waiting"]),
-                    defaultValue: "Waiting",
+                state: {
+                    allowNull: false,
+                    type: DataTypes.ENUM([...Object.keys(OPERATIONS_STATE)]),
+                    defaultValue: OPERATIONS_STATE.CREATED,
                 },
-                Amount: {
+                type: {
+                    allowNull: false,
+                    type: DataTypes.ENUM([...Object.keys(OPERATIONS_TYPE)]),
+                    defaultValue: OPERATIONS_TYPE.CAPTURE,
+                },
+                amount: {
                     type: DataTypes.DECIMAL,
                     allowNull: true,
-                },
-                date: {
-                    type: DataTypes.DATE,
-                    defaultValue: DataTypes.NOW,
                 },
             },
             {
@@ -29,4 +32,4 @@ class Operation extends Model {
     }
 }
 
-module.exports = Operation;
+export default Operation;
