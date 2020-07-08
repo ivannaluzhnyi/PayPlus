@@ -8,6 +8,7 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core';
+import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -51,7 +52,7 @@ const CookiesNotification = () => {
 
   return (
     <Portal>
-      <div className={classes.root}>
+      <div className={clsx(classes.root, 'cookie-section')}>
         <Typography variant="body1" color="inherit">
           Nous utilisons des cookies pour nous assurer que nous vous offrons la
           meilleure expérience possible sur notre site web. Lisez notre{' '}
@@ -70,7 +71,7 @@ const CookiesNotification = () => {
           <Button
             onClick={handleClose}
             variant="contained"
-            className={classes.action}
+            className={clsx(classes.action, 'cookie-btn')}
           >
             Je suis d'accord
           </Button>

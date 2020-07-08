@@ -118,6 +118,14 @@ const Credentials = () => {
     }
   };
 
+  const copieText = text => {
+    copy(text);
+
+    enqueueSnackbar('Copié', {
+      variant: 'success'
+    });
+  };
+
   const enableBulkOperations = selectedCredentials.length > 0;
   const selectedAllCredentials =
     selectedCredentials.length === credentials.length;
@@ -209,7 +217,7 @@ const Credentials = () => {
                       <TableCell>
                         {credential.client_secret} |
                         <Button
-                          onClick={() => copy(credential.client_secret)}
+                          onClick={() => copieText(credential.client_secret)}
                           size="small"
                         >
                           Copier
@@ -221,7 +229,7 @@ const Credentials = () => {
                         })}{' '}
                         |
                         <Button
-                          onClick={() => copy(credential.client_token)}
+                          onClick={() => copieText(credential.client_token)}
                           size="small"
                         >
                           Copier
