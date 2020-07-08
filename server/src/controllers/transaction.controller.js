@@ -1,4 +1,5 @@
 import Transaction from "../models/Transaction";
+import Operation from "../models/Operation";
 import { resCatchError } from "../helpers/error";
 
 function getAll(req, res) {
@@ -27,12 +28,16 @@ function post(req, res) {
 
     transaction
         .save()
-        .then((data) =>
-            res.status(201).json({
-                ...data.toJSON(),
-                payment_url: `${process.env.BASE_URL}/payment`,
-            })
-        )
+        .then((createdTransaction) => {
+            Operation.create({
+                transaction_id: createdTransaction.id,
+            }).then((createdOperation) => {
+                res.status(201).json({
+                    ...createdTransaction.toJSON(),
+                    payment_url: `${process.env.BASE_URL}/payment`,
+                });
+            });
+        })
         .catch((err) => resCatchError(res, err));
 }
 

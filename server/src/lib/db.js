@@ -13,6 +13,6 @@ mongoose
         }
     )
     .then(() => log(chalk.bgGreen("Connected to MongoDB ✅")))
-    .catch((e) => console.log(e));
+    .catch((e) => console.log("MONGO ERRPR => ", e));
 
 module.exports = mongoose.connection;

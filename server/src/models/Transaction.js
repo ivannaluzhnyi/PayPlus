@@ -1,4 +1,6 @@
 import { DataTypes, Model } from "sequelize";
+import makeToken from "../lib/makeToken";
+
 class Transaction extends Model {
     static init(sequelize) {
         super.init(
@@ -35,10 +37,18 @@ class Transaction extends Model {
                     allowNull: false,
                     type: DataTypes.JSON,
                 },
+                order_token: {
+                    type: DataTypes.STRING,
+                },
             },
             {
                 sequelize,
                 modelName: "Transaction",
+                hooks: {
+                    beforeCreate: async (transaction) => {
+                        transaction.order_token = makeToken(172, true);
+                    },
+                },
             }
         );
     }
