@@ -18,16 +18,12 @@ const scrap = Scrapper(
                 currency_symbol: $("strong > span", [element]).text(),
             });
         });
-        console.log(results);
         return results;
     },
-    (data) => {
-        data.forEach((devises) => {
-            Devises.create({ name: devises.name }, devises, {
-                upsert: true,
-                new: true,
-                runValidators: true,
-            }).then((data) => console.log(data));
+    (devises) => {
+        devises.forEach((devise) => {
+            Devises.create(devise)
+                .then((data) => console.log(data));
         });
     }
 );
