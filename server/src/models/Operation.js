@@ -11,9 +11,9 @@ class Operation extends Model {
                     defaultValue: OPERATIONS_STATE.CREATED,
                 },
                 type: {
-                    allowNull: false,
+                    allowNull: true,
                     type: DataTypes.ENUM([...Object.keys(OPERATIONS_TYPE)]),
-                    defaultValue: OPERATIONS_TYPE.CAPTURE,
+                    defaultValue: null,
                 },
                 amount: {
                     type: DataTypes.DECIMAL,

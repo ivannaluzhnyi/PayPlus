@@ -2,9 +2,9 @@ import sequelize from "../lib/sequelize";
 
 import { ROLE } from "../lib/constants";
 
+// import Product from "../models/Product";
+
 import User from "../models/User";
-import Devise from "../models/Devise";
-import Product from "../models/Product";
 import Merchant from "../models/Merchant";
 import Operation from "../models/Operation";
 import Credential from "../models/Credential";
@@ -14,7 +14,6 @@ import Transaction from "../models/Transaction";
 // Product.init(sequelize);
 
 User.init(sequelize);
-Devise.init(sequelize);
 Merchant.init(sequelize);
 Operation.init(sequelize);
 Credential.init(sequelize);
