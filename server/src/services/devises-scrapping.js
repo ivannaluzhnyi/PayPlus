@@ -5,8 +5,6 @@ const url = "https://www.capital.fr/bourse/devises/cours-devises";
 
 const requestOptions = {};
 
-console.log("EXECUTION OF FILE ==============================================");
-
 const scrap = Scrapper(
     url,
     requestOptions,
@@ -22,15 +20,10 @@ const scrap = Scrapper(
         });
         return results;
     },
-    (data) => {
-        data.forEach((devises) => {
-            Devises.create(devises, {
-                upsert: true,
-                new: true,
-                runValidators: true,
-            })
-                .then((data) => console.log("saved devise => ", data))
-                .catch((err) => console.log("DEVISE ERR => ", err));
+    (devises) => {
+        devises.forEach((devise) => {
+            Devises.create(devise)
+                .then((data) => console.log(data));
         });
     }
 );
