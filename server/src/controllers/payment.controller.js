@@ -2,6 +2,8 @@ import Transaction from "../models/Transaction";
 import Merchant from "../models/Merchant";
 import Operation from "../models/Operation";
 
+import Devises from "../models/mongo/Devises";
+
 import { OPERATIONS_STATE } from "../lib/constants";
 
 function get(req, res) {
@@ -13,11 +15,11 @@ function get(req, res) {
     })
         .then((finedTransaction) => {
             if (finedTransaction) {
-                // console.log("finedTransaction => ", finedTransaction);
+                console.log("finedTransaction => ", finedTransaction.toJSON());
 
                 //TODO
                 res.render("payment-form", {
-                    priceToPay: 253,
+                    priceToPay: finedTransaction.order_amount,
                     devise: "€",
                     trnsaction_order_token: req.query.token,
                 });
@@ -55,6 +57,13 @@ function post(req, res) {
                         "createdOpeartion => ",
                         createdOpeartion.toJSON()
                     );
+
+                    fetch("http://localhost:3005/checkout", {
+                        body: { lol: true, js: null === true },
+                        method: "POST",
+                    }).then((response) => {
+                        console.log("response fetch => ", response);
+                    });
                 });
             }
             res.render("payment-cancel");

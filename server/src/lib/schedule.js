@@ -3,7 +3,7 @@ const { exec } = require("child_process");
 
 // console.log("EXEC ==========================================");
 
-// import("../services/devises-scrapping");
+import("../services/devises-scrapping");
 // exec("yarn devise-scrapping", (error, stdout, stderr) => {
 //     if (error) {
 //         console.log(`error: ${error.message}`);

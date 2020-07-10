@@ -4,10 +4,10 @@ const ROLE = {
 };
 
 const DEVISE = {
-    EURO: "EURO",
-    DOLLAR: "DOLLAR",
-    YEN: "YEN",
-    HRYVNIA: "HRYVNIA",
+    EURO: "Euro",
+    DOLLAR: "Dollar américain",
+    YEN: "Yen",
+    STERLING: "Livre Sterling",
 };
 
 const MERCHANT_STATUS = {
