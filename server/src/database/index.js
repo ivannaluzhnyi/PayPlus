@@ -12,7 +12,7 @@ import Transaction from "../models/Transaction";
 
 // Product.associate(sequelize.models);
 // Product.init(sequelize);
-
+    
 User.init(sequelize);
 Merchant.init(sequelize);
 Operation.init(sequelize);

@@ -4,7 +4,9 @@ import Operation from "../models/Operation";
 
 import Devises from "../models/mongo/Devises";
 
-import { OPERATIONS_STATE } from "../lib/constants";
+import fetch from "node-fetch";
+
+import { OPERATIONS_STATE, DEVISE_MAPPING } from "../lib/constants";
 
 function get(req, res) {
     Transaction.findOne({
@@ -20,7 +22,7 @@ function get(req, res) {
                 //TODO
                 res.render("payment-form", {
                     priceToPay: finedTransaction.order_amount,
-                    devise: "€",
+                    devise: DEVISE_MAPPING[finedTransaction.Merchant.devise],
                     trnsaction_order_token: req.query.token,
                 });
                 return;
@@ -52,18 +54,38 @@ function post(req, res) {
                 Operation.create({
                     transaction_id: finedTransaction.id,
                     state: OPERATIONS_STATE.PROCESSING,
-                }).then((createdOpeartion) => {
+                }).then(async (createdOpeartion) => {
                     console.log(
                         "createdOpeartion => ",
                         createdOpeartion.toJSON()
                     );
 
-                    fetch("http://localhost:3005/checkout", {
-                        body: { lol: true, js: null === true },
-                        method: "POST",
-                    }).then((response) => {
+                    try {
+                        const response = await fetch(
+                            "http://localhost:3005/checkout",
+
+                            {
+                                method: "POST",
+                                headers: {
+                                    Accept: "application/json",
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    lol: true,
+                                    js: null === true,
+                                }),
+                            }
+                        );
+
                         console.log("response fetch => ", response);
-                    });
+
+                        const data = await response.json();
+
+                        console.log("======================================");
+                        console.log("data fetch => ", data);
+                    } catch (error) {
+                        console.log(" catch error => ", error);
+                    }
                 });
             }
             res.render("payment-cancel");

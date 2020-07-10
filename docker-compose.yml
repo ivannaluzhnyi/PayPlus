@@ -43,7 +43,7 @@ services:
         environment:
             MONGODB_USER: "root"
             MONGODB_PASS: "password"
-            MONGODB_DBNAME: "SampleCollections"
+            MONGODB_DBNAME: "playPlus"
             DATABASE_URL: "postgres://user:password@postgres:5432/dbpayment"
             JWT_SECRET: "MyBestSecret"
             MAILER_USER: "payplus.info2020@gmail.com"

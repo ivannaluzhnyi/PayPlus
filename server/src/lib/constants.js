@@ -3,13 +3,6 @@ const ROLE = {
     MERCHANT: "MERCHANT",
 };
 
-const DEVISE = {
-    EURO: "Euro",
-    DOLLAR: "Dollar américain",
-    YEN: "Yen",
-    STERLING: "Livre Sterling",
-};
-
 const MERCHANT_STATUS = {
     CONFIRMED: "CONFIRMED",
     PENDING: "PENDING",
@@ -28,4 +21,25 @@ const OPERATIONS_TYPE = {
     REFUNDED: "REFUNDED",
 };
 
-export { ROLE, DEVISE, MERCHANT_STATUS, OPERATIONS_TYPE, OPERATIONS_STATE };
+const DEVISE_MAPPING = {
+    DOLLAR: "Dollar américain",
+    EURO: "Euro",
+    YEN: "Yen",
+    STERLING: "Livre Sterling",
+};
+
+const DEVISE = {
+    DOLLAR: "DOLLAR",
+    EURO: "EURO",
+    YEN: "YEN",
+    STERLING: "STERLING",
+};
+
+export {
+    ROLE,
+    DEVISE_MAPPING,
+    DEVISE,
+    MERCHANT_STATUS,
+    OPERATIONS_TYPE,
+    OPERATIONS_STATE,
+};
