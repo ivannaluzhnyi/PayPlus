@@ -25,12 +25,11 @@ Transaction.addHook("afterDestroy", (transaction) => {
 });
 
 Operations.addHook("afterCreate", (operation) => {
-    denormalize(operation.Trans);
-  });
-  Operations.addHook("afterUpdate", (operation) => {
-    denormalize(operation.Trans);
-  });
-  Operations.addHook("afterDestroy", (operation) => {
-    denormalize(operation.Trans);
-  });
-
+  denormalize(operation.linked_transaction);
+});
+Operations.addHook("afterUpdate", (operation) => {
+  denormalize(operation.linked_transaction);
+});
+Operations.addHook("afterDestroy", (operation) => {
+  denormalize(operation.linked_transaction);
+});
