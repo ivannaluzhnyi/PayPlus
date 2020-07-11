@@ -11,6 +11,8 @@ services:
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: password
             MONGO_INITDB_DATABASE: dbpayment
+        volumes:
+            - mongo-data:/data/db
 
     mongo-express:
         image: mongo-express
@@ -113,5 +115,6 @@ services:
 
 volumes:
     postgres:
+    mongo-data:
     pgadmin:
     db-data:
