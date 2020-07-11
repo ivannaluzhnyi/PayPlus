@@ -1,6 +1,5 @@
 import { DataTypes, Model } from "sequelize";
 import makeToken from "../lib/makeToken";
-import denormalize from "./denormalization/transaction";
 class Transaction extends Model {
     static init(sequelize) {
         super.init(
@@ -46,7 +45,6 @@ class Transaction extends Model {
                 modelName: "Transaction",
                 hooks: {
                     beforeCreate: async (transaction) => {
-                        console.log("beforeCreate =>", transaction);
                         transaction.order_token = makeToken(172, true);
                     },
                 },

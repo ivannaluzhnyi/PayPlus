@@ -9,9 +9,10 @@ services:
         environment:
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: password
+            MONGO_INITDB_DATABASE: dbpayment
         volumes:
-            - ./SampleCollections:/usr/local/sampleCollections
-        working_dir: /usr/local/sampleCollections
+            - ./TransactionsCollections:/usr/local/transactionsCollections
+        working_dir: /usr/local/transactionsCollections
 
     mongo-express:
         image: mongo-express
@@ -58,7 +59,7 @@ services:
         environment:
             MONGODB_USER: "root"
             MONGODB_PASS: "password"
-            MONGODB_DBNAME: "playPlus"
+            MONGODB_DBNAME: "dbpayment"
             DATABASE_URL: "postgres://user:password@postgres:5432/dbpayment"
             JWT_SECRET: "MyBestSecret"
             MAILER_USER: "payplus.info2020@gmail.com"
@@ -67,7 +68,7 @@ services:
         depends_on:
             - postgres
             - pgadmin
-            - mongo
+            - mongo-express
             - server-psp
         command: "npm run dev"
         ports:
