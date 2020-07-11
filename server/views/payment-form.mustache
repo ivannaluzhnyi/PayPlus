@@ -13,7 +13,7 @@
     <body>
         <div class="container">
             <div class="price">
-                <h1>Montant à payer: {{priceToPay}}{{devise}}!</h1>
+                <h1 id="validate-pay-title" >Montant à payer: {{priceToPay}}{{devise}}!</h1>
             </div>
             <form method='POST'>
                 <div class="card__container">
@@ -143,7 +143,7 @@
                     </div>
                 </div>
                 <div class="button">
-                    <button type="submit">
+                    <button id="validate-payment"  type="submit" onClick='validate();'>
                         <i class="ion-locked"></i> Confirmer et payer
                     </button>
                 </div>
@@ -155,11 +155,29 @@
                 <input type="hidden" name="cancel" value="true"/>
                 <input type="hidden" name="token" value={{trnsaction_order_token}} />
                 <div class="button cancel-btn">
-                    <button type="submit">
+                    <button id="cancel-btn" type="submit">
                      Annuler
                     </button>
                 </div>
             </form>
         </div>
     </body>
+
+    <script>
+        function validate(){
+            const cardholdername = document.getElementById("cardholdername");
+            const cardnumber = document.getElementById("cardnumber");
+            
+            if(cardholdername && cardholdername.value && cardnumber && cardnumber.value){
+
+                const validateBtn = document.getElementById("validate-payment");
+                const cancelBtn = document.getElementById("cancel-btn");
+
+                document.getElementById("validate-pay-title").innerHTML = "Paiement en cours ... ";
+                validateBtn.style.background='#dedede';
+                cancelBtn.style.background='#dedede';
+            }
+        }
+    </script>
+
 </html>

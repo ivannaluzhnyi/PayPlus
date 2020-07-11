@@ -1,5 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import makeToken from "../lib/makeToken";
+
+import denormalizeTransaction from "./denormalization/transaction";
 class Transaction extends Model {
     static init(sequelize) {
         super.init(
@@ -47,6 +49,15 @@ class Transaction extends Model {
                     beforeCreate: async (transaction) => {
                         transaction.order_token = makeToken(172, true);
                     },
+                    afterCreate: async (transaction) => {
+                        denormalizeTransaction(transaction, "create");
+                    },
+                    afterUpdate: async (transaction) => {
+                        denormalizeTransaction(transaction, "update");
+                    },
+                    afterDestroy: async (transaction) => {
+                        denormalizeTransaction(transaction, "delete");
+                    },
                 },
             }
         );
@@ -55,9 +66,7 @@ class Transaction extends Model {
     static associate(models) {
         this.belongsTo(models.Merchant, { foreignKey: "merchant_id" });
 
-        this.hasMany(models.Operation, {
-            as: "linked_transaction",
-        });
+        this.hasMany(models.Operation);
 
         // TODO  => https://github.com/sequelize/sequelize/issues/8444   delete cascade not work, delete just transaction_id
         // this.hasMany(models.Operation, {

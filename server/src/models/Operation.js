@@ -1,6 +1,8 @@
 import { DataTypes, Model } from "sequelize";
 import { OPERATIONS_STATE, OPERATIONS_TYPE } from "../lib/constants";
 
+import denormalizeTransaction from "./denormalization/transaction";
+
 class Operation extends Model {
     static init(sequelize) {
         super.init(
@@ -23,6 +25,19 @@ class Operation extends Model {
             {
                 sequelize,
                 modelName: "Operation",
+                hooks: {
+                    afterCreate: async (operation) => {
+                        console.log("operation => ", operation.toJSON());
+                        console.log("Transaction => ", operation.Transaction);
+                        // denormalizeTransaction(transaction, "create");
+                    },
+                    afterUpdate: async (operation) => {
+                        // denormalizeTransaction(transaction, "update");
+                    },
+                    afterDestroy: async (operation) => {
+                        // denormalizeTransaction(transaction, "delete");
+                    },
+                },
             }
         );
     }

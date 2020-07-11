@@ -10,7 +10,7 @@ export const ROLE = {
   MERCHANT: 'MERCHANT'
 };
 
-const DEVISE_MAPPING = {
+export const DEVISE_MAPPING = {
   DOLLAR: 'Dollar américain',
   EURO: 'Euro',
   YEN: 'Yen',

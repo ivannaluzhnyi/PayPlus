@@ -17,12 +17,10 @@ function get(req, res) {
         where: {
             order_token: req.query.token,
         },
-        include: [Merchant],
+        include: [Merchant, Operation],
     })
         .then((finedTransaction) => {
             if (finedTransaction) {
-                console.log("finedTransaction => ", finedTransaction.toJSON());
-
                 //TODO
                 res.render("payment-form", {
                     priceToPay: finedTransaction.order_amount,
@@ -34,6 +32,7 @@ function get(req, res) {
             res.render("404");
         })
         .catch((err) => {
+            console.log("err => ", err);
             res.render("404");
         });
 }
