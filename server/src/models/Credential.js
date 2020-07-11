@@ -21,7 +21,10 @@ class Credential extends Model {
     }
 
     static associate(models) {
-        this.belongsTo(models.Merchant, { foreignKey: "merchant_id" });
+        this.belongsTo(models.Merchant, {
+            foreignKey: "merchant_id",
+            as: "merchant",
+        });
     }
 }
 

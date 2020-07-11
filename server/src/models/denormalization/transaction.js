@@ -10,8 +10,17 @@ const denormalize = async (transaction, operation) => {
 
     if (operation !== "delete") {
         const dTransaction = await Transaction.findByPk(transaction.id, {
-            include: [Operation, Merchant],
+            include: [
+                { model: Operation, as: "operations" },
+                { model: Merchant, as: "merchant" },
+            ],
         });
+
+        console.log(
+            "=========================================================="
+        );
+
+        console.log("dTransaction =+++>", dTransaction.toJSON());
 
         const document = new TransactionMongo(dTransaction.toJSON());
         await document.save();

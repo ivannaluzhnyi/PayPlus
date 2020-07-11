@@ -17,14 +17,25 @@ function get(req, res) {
         where: {
             order_token: req.query.token,
         },
-        include: [Merchant, Operation],
+        include: [
+            { model: Merchant, as: "merchant" },
+            {
+                model: Operation,
+                as: "operations",
+            },
+        ],
     })
         .then((finedTransaction) => {
-            if (finedTransaction) {
+            if (
+                finedTransaction &&
+                !finedTransaction.operations.find(
+                    (op) => op.state === OPERATIONS_STATE.DONE
+                )
+            ) {
                 //TODO
                 res.render("payment-form", {
                     priceToPay: finedTransaction.order_amount,
-                    devise: DEVISE_MAPPING[finedTransaction.Merchant.devise],
+                    devise: DEVISE_MAPPING[finedTransaction.merchant.devise],
                     trnsaction_order_token: req.query.token,
                 });
                 return;
@@ -43,7 +54,7 @@ function post(req, res) {
             where: {
                 order_token: req.body.token,
             },
-            include: [Merchant],
+            include: [{ model: Merchant, as: "merchant" }],
         }).then((finedTransaction) => {
             // TODO => https://github.com/sequelize/sequelize/issues/8444
             Operation.destroy({
@@ -53,7 +64,7 @@ function post(req, res) {
             }).then(() => {
                 finedTransaction.destroy({}).then(() => {
                     res.writeHead(301, {
-                        Location: finedTransaction.Merchant.url_cancel,
+                        Location: finedTransaction.merchant.url_cancel,
                     });
                     res.end();
                 });
@@ -67,7 +78,7 @@ function post(req, res) {
         where: {
             order_token: req.body.token,
         },
-        include: [Merchant],
+        include: [{ model: Merchant, as: "merchant" }],
     })
         .then((finedTransaction) => {
             if (finedTransaction) {
@@ -99,14 +110,14 @@ function post(req, res) {
                             }).then((newOper) => {
                                 res.writeHead(301, {
                                     Location:
-                                        finedTransaction.Merchant
+                                        finedTransaction.merchant
                                             .url_confirmation,
                                 });
                                 res.end();
                             });
                         } else {
                             res.writeHead(301, {
-                                Location: finedTransaction.Merchant.url_cancel,
+                                Location: finedTransaction.merchant.url_cancel,
                             });
                             res.end();
                         }

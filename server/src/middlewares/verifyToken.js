@@ -25,10 +25,10 @@ const verifyToken = (req, res, next) => {
                 client_secret: client_credentials[0],
                 client_token: client_credentials[1],
             },
-            include: [Merchant],
+            include: [{ model: Merchant, as: "merchant" }],
         })
             .then((dbCredentials) => {
-                req.merchant = dbCredentials.Merchant;
+                req.merchant = dbCredentials.merchant;
                 req.user = { role: ROLE.MERCHANT };
                 next();
             })

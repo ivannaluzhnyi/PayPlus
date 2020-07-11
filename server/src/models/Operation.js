@@ -27,6 +27,7 @@ class Operation extends Model {
                 modelName: "Operation",
                 hooks: {
                     afterCreate: async (operation) => {
+                        console.log("operation => ", operation);
                         console.log("operation => ", operation.toJSON());
                         console.log("Transaction => ", operation.Transaction);
                         // denormalizeTransaction(transaction, "create");

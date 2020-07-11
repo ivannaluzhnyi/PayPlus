@@ -64,9 +64,15 @@ class Transaction extends Model {
     }
 
     static associate(models) {
-        this.belongsTo(models.Merchant, { foreignKey: "merchant_id" });
+        this.belongsTo(models.Merchant, {
+            foreignKey: "merchant_id",
+            as: "merchant",
+        });
 
-        this.hasMany(models.Operation);
+        this.hasMany(models.Operation, {
+            as: "operations",
+            foreignKey: "transaction_id",
+        });
 
         // TODO  => https://github.com/sequelize/sequelize/issues/8444   delete cascade not work, delete just transaction_id
         // this.hasMany(models.Operation, {

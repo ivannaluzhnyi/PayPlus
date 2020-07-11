@@ -9,6 +9,7 @@ const Schema = new mongoose.Schema({
     delivery_address: String,
     delivery_zip_code: String,
     order_amount: String,
+    merchant: Object,
     products: Array,
     operarions: Array,
 });
