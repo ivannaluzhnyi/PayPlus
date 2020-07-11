@@ -1,15 +1,17 @@
 const schedule = require("node-schedule");
 
+import { run } from "../services/devises-scrapping";
+
 // run every min
-// schedule.scheduleJob("* * * * *", function () {
-//     console.log(
-//         "====================================================================="
-//     );
-//     console.log("date ==> ", new Date().toTimeString());
-//     import("../services/devises-scrapping");
-// });
+schedule.scheduleJob("* * * * *", function () {
+    console.log(
+        "====================================================================="
+    );
+    console.log("date ==> ", new Date().toTimeString());
+    run();
+});
 
 // run everyday at midnight
 schedule.scheduleJob("0 0 * * *", () => {
-    import("../services/devises-scrapping");
+    run();
 });
