@@ -17,7 +17,7 @@ const DEVISE_MAPPING = {
   STERLING: 'Livre Sterling'
 };
 
-const DEVISE = {
+export const DEVISE = {
   DOLLAR: 'DOLLAR',
   EURO: 'EURO',
   YEN: 'YEN',
