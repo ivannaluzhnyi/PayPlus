@@ -5,8 +5,8 @@ import mustacheExpress from "mustache-express";
 import helmet from "helmet";
 
 import { polyfill } from "es6-promise";
-polyfill();
-import("isomorphic-fetch");
+// polyfill();
+// import("isomorphic-fetch");
 
 import RouterManager from "./routes";
 

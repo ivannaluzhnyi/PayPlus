@@ -5,6 +5,8 @@ const url = "https://www.capital.fr/bourse/devises/cours-devises";
 
 const requestOptions = {};
 
+console.log("RUUUUUUUUUUUUUnnnn");
+
 const scrap = Scrapper(
     url,
     requestOptions,
@@ -18,12 +20,13 @@ const scrap = Scrapper(
                 currency_symbol: $("strong > span", [element]).text(),
             });
         });
+
+        console.log("results => ", results);
         return results;
     },
     (devises) => {
         devises.forEach((devise) => {
-            Devises.create(devise)
-                .then((data) => console.log(data));
+            Devises.create(devise).then((data) => console.log(data));
         });
     }
 );

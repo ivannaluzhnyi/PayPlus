@@ -10,11 +10,18 @@ export const ROLE = {
   MERCHANT: 'MERCHANT'
 };
 
-export const DEVISE = {
-  EURO: 'EURO',
+const DEVISE_MAPPING = {
+  DOLLAR: 'Dollar américain',
+  EURO: 'Euro',
+  YEN: 'Yen',
+  STERLING: 'Livre Sterling'
+};
+
+const DEVISE = {
   DOLLAR: 'DOLLAR',
+  EURO: 'EURO',
   YEN: 'YEN',
-  HRYVNIA: 'HRYVNIA'
+  STERLING: 'STERLING'
 };
 
 export const MERCHANT_STATUS = {
