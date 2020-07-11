@@ -4,7 +4,7 @@ const Operations = require("../Operation");
 
 const denormalize = async (transaction, operation) => {
   await TransactionMongo.deleteOne({ id: transaction.id });
-
+  console.log("ici c'est paris")
   if (operation !== "delete") {
     transaction = await Transaction.findByPk(transaction.id, {
       include: [Operations],
@@ -14,22 +14,24 @@ const denormalize = async (transaction, operation) => {
   }
 };
 
-Transaction.addHook("afterCreate", (transaction) => {
-  denormalize(transaction, "create");
-});
-Transaction.addHook("afterUpdate", (transaction) => {
-  denormalize(transaction, "update");
-});
-Transaction.addHook("afterDestroy", (transaction) => {
-  denormalize(transaction, "delete");
-});
 
-Operations.addHook("afterCreate", (operation) => {
-  denormalize(operation.linked_transaction);
-});
-Operations.addHook("afterUpdate", (operation) => {
-  denormalize(operation.linked_transaction);
-});
-Operations.addHook("afterDestroy", (operation) => {
-  denormalize(operation.linked_transaction);
-});
+module.exports = denormalize;
+// Transaction.addHook("afterCreate", (transaction) => {
+//   denormalize(transaction, "create");
+// });
+// Transaction.addHook("afterUpdate", (transaction) => {
+//   denormalize(transaction, "update");
+// });
+// Transaction.addHook("afterDestroy", (transaction) => {
+//   denormalize(transaction, "delete");
+// });
+
+// Operations.addHook("afterCreate", (operation) => {
+//   denormalize(operation.linked_transaction);
+// });
+// Operations.addHook("afterUpdate", (operation) => {
+//   denormalize(operation.linked_transaction);
+// });
+// Operations.addHook("afterDestroy", (operation) => {
+//   denormalize(operation.linked_transaction);
+// });

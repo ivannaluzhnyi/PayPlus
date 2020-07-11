@@ -4,7 +4,8 @@ services:
     mongo:
         image: mongo
         ports:
-            - 27017:27017
+            - 27018:27018
+        command: mongod --port 27018
         environment:
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: password
@@ -21,6 +22,8 @@ services:
         environment:
             ME_CONFIG_MONGODB_ADMINUSERNAME: root
             ME_CONFIG_MONGODB_ADMINPASSWORD: password
+            ME_CONFIG_MONGODB_PORT: 27018
+
 
     server-only:
         image: node:alpine
