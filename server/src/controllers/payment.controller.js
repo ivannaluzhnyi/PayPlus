@@ -6,7 +6,11 @@ import Devises from "../models/mongo/Devises";
 
 import fetch from "node-fetch";
 
-import { OPERATIONS_STATE, DEVISE_MAPPING } from "../lib/constants";
+import {
+    OPERATIONS_STATE,
+    DEVISE_MAPPING,
+    OPERATIONS_TYPE,
+} from "../lib/constants";
 
 function get(req, res) {
     Transaction.findOne({
@@ -36,10 +40,29 @@ function get(req, res) {
 
 function post(req, res) {
     if (req.body.cancel && Boolean(req.body.cancel)) {
-        res.render("payment-cancel");
+        Transaction.findOne({
+            where: {
+                order_token: req.body.token,
+            },
+            include: [Merchant],
+        }).then((finedTransaction) => {
+            // TODO => https://github.com/sequelize/sequelize/issues/8444
+            Operation.destroy({
+                where: {
+                    transaction_id: finedTransaction.id,
+                },
+            }).then(() => {
+                finedTransaction.destroy({}).then(() => {
+                    res.writeHead(301, {
+                        Location: finedTransaction.Merchant.url_cancel,
+                    });
+                    res.end();
+                });
+            });
+        });
+
         return;
     }
-    console.log("req => ", req.body);
 
     Transaction.findOne({
         where: {
@@ -49,20 +72,13 @@ function post(req, res) {
     })
         .then((finedTransaction) => {
             if (finedTransaction) {
-                console.log("finedTransaction => ", finedTransaction.toJSON());
-
                 Operation.create({
                     transaction_id: finedTransaction.id,
                     state: OPERATIONS_STATE.PROCESSING,
-                }).then(async (createdOpeartion) => {
-                    console.log(
-                        "createdOpeartion => ",
-                        createdOpeartion.toJSON()
-                    );
-
+                }).then(async () => {
                     try {
                         const response = await fetch(
-                            "http://localhost:3005/checkout",
+                            "http://server-psp:3005/checkout",
 
                             {
                                 method: "POST",
@@ -71,32 +87,40 @@ function post(req, res) {
                                     "Content-Type": "application/json",
                                 },
                                 body: JSON.stringify({
-                                    lol: true,
-                                    js: null === true,
+                                    cardToken: "qsfqskjsfbqjh;skdk:jsqndklmq,d",
                                 }),
                             }
                         );
 
-                        console.log("response fetch => ", response);
-
-                        const data = await response.json();
-
-                        console.log("======================================");
-                        console.log("data fetch => ", data);
-                    } catch (error) {
-                        console.log(" catch error => ", error);
-                    }
+                        if (response.status === 204) {
+                            Operation.create({
+                                transaction_id: finedTransaction.id,
+                                state: OPERATIONS_STATE.DONE,
+                                type: OPERATIONS_TYPE.CAPTURE,
+                            }).then((newOper) => {
+                                res.writeHead(301, {
+                                    Location:
+                                        finedTransaction.Merchant
+                                            .url_confirmation,
+                                });
+                                res.end();
+                            });
+                        } else {
+                            res.writeHead(301, {
+                                Location: finedTransaction.Merchant.url_cancel,
+                            });
+                            res.end();
+                        }
+                    } catch (error) {}
                 });
+
+                return;
             }
             res.render("payment-cancel");
         })
         .catch((err) => {
             res.render("payment-cancel");
         });
-
-    // res.json(req.body);
-
-    // res.render("payment-form", { priceToPay: 253, devise: "€" });
 }
 
 export { get, post };

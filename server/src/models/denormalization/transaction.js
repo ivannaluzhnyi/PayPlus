@@ -3,17 +3,15 @@ const Transaction = require("../Transaction");
 const Operations = require("../Operation");
 
 const denormalize = async (transaction, operation) => {
-  await TransactionMongo.deleteOne({ id: transaction.id });
-  console.log("ici c'est paris")
-  if (operation !== "delete") {
-    transaction = await Transaction.findByPk(transaction.id, {
-      include: [Operations],
-    });
-    const document = new TransactionMongo(transaction.toJSON());
-    await document.save();
-  }
+    await TransactionMongo.deleteOne({ id: transaction.id });
+    if (operation !== "delete") {
+        transaction = await Transaction.findByPk(transaction.id, {
+            include: [Operations],
+        });
+        const document = new TransactionMongo(transaction.toJSON());
+        await document.save();
+    }
 };
-
 
 module.exports = denormalize;
 // Transaction.addHook("afterCreate", (transaction) => {

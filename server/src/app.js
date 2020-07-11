@@ -4,7 +4,7 @@ import cors from "cors";
 import mustacheExpress from "mustache-express";
 import helmet from "helmet";
 
-import { polyfill } from "es6-promise";
+// import { polyfill } from "es6-promise";
 // polyfill();
 // import("isomorphic-fetch");
 

@@ -153,6 +153,7 @@
 
             <form action="/payment?cancel" method='POST'>
                 <input type="hidden" name="cancel" value="true"/>
+                <input type="hidden" name="token" value={{trnsaction_order_token}} />
                 <div class="button cancel-btn">
                     <button type="submit">
                      Annuler
