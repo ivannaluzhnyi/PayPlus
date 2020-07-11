@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 const connect = require("../../lib/mongo");
-const { ARRAY } = require("sequelize/types");
 
-const TransactionsSchema = new.mongoose.Schema(
+const Schema = new mongoose.Schema(
   {
     client_first_name: String,
     client_last_name: String,
@@ -13,12 +12,9 @@ const TransactionsSchema = new.mongoose.Schema(
     order_amount: String,
     products: Array,
     operarions: Array,
-  },
-  {
-    collection: "Transactions",
   }
 );
 
-const Transactions = connect.model("Transactions", TransactionsSchema);
+const Transactions = connect.model("Transactions", Schema);
 
 module.exports = Transactions;
