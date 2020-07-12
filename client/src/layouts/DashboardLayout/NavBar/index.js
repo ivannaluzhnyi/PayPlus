@@ -95,42 +95,8 @@ const navConfigByRole = role => {
               href: '/app/management/products',
               items: [
                 {
-                  title: 'List Products',
-                  href: '/app/management/products'
-                },
-                {
-                  title: 'Create Product',
-                  href: '/app/management/products/create'
-                }
-              ]
-            },
-            {
-              title: 'Orders',
-              icon: FolderIcon,
-              href: '/app/management/orders',
-              items: [
-                {
-                  title: 'List Orders',
-                  href: '/app/management/orders'
-                },
-                {
-                  title: 'View Order',
-                  href: '/app/management/orders/1'
-                }
-              ]
-            },
-            {
-              title: 'Invoices',
-              icon: ReceiptIcon,
-              href: '/app/management/invoices',
-              items: [
-                {
-                  title: 'List Invoices',
-                  href: '/app/management/invoices'
-                },
-                {
-                  title: 'View Invoice',
-                  href: '/app/management/invoices/1'
+                  title: 'List Transactions',
+                  href: '/app/management/transactions'
                 }
               ]
             }
