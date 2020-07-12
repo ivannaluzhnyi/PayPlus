@@ -21,6 +21,10 @@ class Operation extends Model {
                     type: DataTypes.DECIMAL,
                     allowNull: true,
                 },
+                products: {
+                    allowNull: true,
+                    type: DataTypes.JSON,
+                },
             },
             {
                 sequelize,

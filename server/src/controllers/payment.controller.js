@@ -2,13 +2,10 @@ import Transaction from "../models/Transaction";
 import Merchant from "../models/Merchant";
 import Operation from "../models/Operation";
 
-import Devises from "../models/mongo/Devises";
-
 import fetch from "node-fetch";
 
 import {
     OPERATIONS_STATE,
-    DEVISE_MAPPING,
     OPERATIONS_TYPE,
 } from "../lib/constants";
 
@@ -36,7 +33,7 @@ function get(req, res) {
                 //TODO
                 res.render("payment-form", {
                     priceToPay: finedTransaction.order_amount,
-                    devise: DEVISE_MAPPING[finedTransaction.merchant.devise],
+                    devise: "€",
                     trnsaction_order_token: req.query.token,
                 });
                 return;
