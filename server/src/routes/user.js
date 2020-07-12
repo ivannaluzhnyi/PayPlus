@@ -10,6 +10,7 @@ import {
     getOneWithMerchants,
     resetPasswordAdmin,
     changePassword,
+    addNewMerchant,
 } from "../controllers/user.controller";
 
 import { ROLE } from "../lib/constants";
@@ -21,6 +22,7 @@ router.get("/", verifyRole(ROLE.ADMIN), getAllUsers);
 router.get("/merchants/:id", getOneWithMerchants);
 router.put("/update/:id", verifyIdRole, update);
 router.put("/change-password/:id", verifyIdRole, changePassword);
+router.post("/:id/new-merchant", addNewMerchant);
 router.get(
     "/reset-password-admin/:id",
     verifyRole(ROLE.ADMIN),

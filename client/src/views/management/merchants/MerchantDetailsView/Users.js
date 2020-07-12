@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -53,7 +52,6 @@ const useStyles = makeStyles(theme => ({
 
 const Users = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const [addUserOpen, serAddUser] = useState(false);
   const [pageUsers, setUsers] = useState([]);
@@ -131,7 +129,7 @@ const Users = () => {
                     });
                     handleClose();
                   } else {
-                    enqueueSnackbar('Une erreur se produir', {
+                    enqueueSnackbar('Une erreur se produite', {
                       variant: 'error'
                     });
                   }
@@ -141,7 +139,7 @@ const Users = () => {
                     setStatus({ success: false });
                     setErrors({ ...convertReponseErrors(err.response.data) });
                     setSubmitting(false);
-                    enqueueSnackbar('Une erreur se produir', {
+                    enqueueSnackbar('Une erreur se produite', {
                       variant: 'error'
                     });
                   }
@@ -151,7 +149,7 @@ const Users = () => {
               setErrors({ submit: error.message });
               setSubmitting(false);
 
-              enqueueSnackbar('Une erreur se produir', {
+              enqueueSnackbar('Une erreur se produite', {
                 variant: 'error'
               });
             }

@@ -101,7 +101,7 @@ const RegisterForm = ({ onSubmitSuccess }) => {
                 onSubmitSuccess();
               } else {
                 dispatch({ type: REGISTER_FAILURE });
-                enqueueSnackbar('Une erreur se produir', {
+                enqueueSnackbar('Une erreur se produite', {
                   variant: 'error'
                 });
               }
@@ -113,7 +113,7 @@ const RegisterForm = ({ onSubmitSuccess }) => {
                 setErrors({ ...convertReponseErrors(err.response.data) });
                 setSubmitting(false);
 
-                enqueueSnackbar('Une erreur se produir', {
+                enqueueSnackbar('Une erreur se produite', {
                   variant: 'error'
                 });
               }
@@ -123,7 +123,7 @@ const RegisterForm = ({ onSubmitSuccess }) => {
           setErrors({ submit: error.message });
           setSubmitting(false);
 
-          enqueueSnackbar('Une erreur se produir', {
+          enqueueSnackbar('Une erreur se produite', {
             variant: 'error'
           });
         }

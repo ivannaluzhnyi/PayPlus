@@ -91,7 +91,7 @@ module.exports = {
 
                                     sendMail({
                                         to: createdUser.email,
-                                        text: `Bonjour ${createdUser.first_name} ${createdUser.last_name}. \n\nMerci pour votre inscription sur la plateforme PayPlus+. Votre marchand est en attente de validation par un Admin. \n\n Cordialement.`,
+                                        text: `Bonjour ${createdUser.first_name} ${createdUser.last_name}. \n\nMerci pour votre inscription sur la plateforme PayPlus+. Votre marchand - ${createdMerchant.name} est en attente de validation par un Admin. \n\n Cordialement.`,
                                         subject:
                                             "Inscription Pay Plus+ | Validation",
                                     });

@@ -28,6 +28,10 @@ const MerchantListView = () => {
     });
   }, [isMountedRef]);
 
+  const handleSetMerchant = merchand => {
+    setMerchants([merchand, ...merchants]);
+  };
+
   useEffect(() => {
     getMerchants();
   }, [getMerchants]);
@@ -39,7 +43,7 @@ const MerchantListView = () => {
   return (
     <Page className={classes.root} title="Liste des clients">
       <Container maxWidth={false}>
-        <Header />
+        <Header handleSetMerchant={handleSetMerchant} />
         {merchants && (
           <Box mt={3}>
             <Results merchants={merchants} />

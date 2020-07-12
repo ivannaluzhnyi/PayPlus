@@ -1,14 +1,83 @@
-const generator = require("generate-password");
+import fs from "fs";
+import generator from "generate-password";
 
 import Merchant from "../models/Merchant";
+import { getFileType } from "../helpers/functions";
 
-const User = require("../models/User");
-const { resCatchError } = require("../helpers/error");
-const { sendMail } = require("../lib/mailer");
-const { isValidPassword } = require("../lib/password");
-const { hashPassword } = require("../lib/password");
+import User from "../models/User";
+
+import { resCatchError } from "../helpers/error";
+import { sendMail } from "../lib/mailer";
+
+import { isValidPassword, hashPassword } from "../lib/password";
 
 module.exports = {
+    addNewMerchant: (req, res) => {
+        try {
+            const KBIS = req.body.KBIS;
+            const base64Image = KBIS.split(";base64,").pop();
+            const type = getFileType(KBIS);
+
+            User.findByPk(req.params.id)
+                .then((currentUser) => {
+                    Merchant.create({
+                        name: req.body.name,
+                        country: req.body.country,
+                        city: req.body.city,
+                        address: req.body.address,
+                        zip_code: req.body.zip_code,
+                    })
+                        .then((createdMerchant) => {
+                            currentUser
+                                .addMerchant(createdMerchant)
+                                .then(() => {
+                                    sendMail({
+                                        to: currentUser.email,
+                                        text: `Bonjour ${currentUser.first_name} ${currentUser.last_name}. \n\n Votre marchand - ${createdMerchant.name} est en attente de validation par un Admin. \n\n Cordialement.`,
+                                        subject:
+                                            "Inscription Pay Plus+ | Validation",
+                                    });
+
+                                    const KBISName = `kbis-merchant-${createdMerchant.id}.${type}`;
+
+                                    createdMerchant
+                                        .update({
+                                            KBIS: KBISName,
+                                        })
+                                        .then((updatedMerchant) => {
+                                            res.status(201).json(
+                                                updatedMerchant
+                                            );
+
+                                            const pathWriteFile =
+                                                "uploads/KBIS/" + `${KBISName}`;
+
+                                            fs.writeFile(
+                                                pathWriteFile,
+                                                base64Image,
+                                                { encoding: "base64" },
+                                                function (err) {
+                                                    console.log(
+                                                        `File KBIS: ${pathWriteFile} created`
+                                                    );
+                                                }
+                                            );
+                                        });
+                                });
+                        })
+                        .catch((err) => {
+                            return resCatchError(res, err);
+                        });
+                })
+                .catch((err) => {
+                    return resCatchError(res, err);
+                });
+        } catch (error) {
+            console.log("error => ", error);
+            res.status(500).send(error);
+        }
+    },
+
     getAllUsers: (req, res) => {
         User.findAll({ attributes: { exclude: ["password"] } })
             .then((users) => {

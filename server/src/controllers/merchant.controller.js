@@ -112,11 +112,16 @@ function all(req, res) {
 }
 
 function notifications(req, res) {
-    Merchant.findAll({ where: { state: MERCHANT_STATUS.PENDING } }).then(
-        (merchants) => {
+    console.log("notifications => ", notifications);
+    Merchant.findAll({ where: { state: MERCHANT_STATUS.PENDING } })
+        .then((merchants) => {
+            console.log("merchants => ", merchants);
             res.json({ merchants });
-        }
-    );
+        })
+        .catch((err) => {
+            console.log("notifications > =", err);
+            res.sendStatus(500);
+        });
 }
 
 function one(req, res) {
