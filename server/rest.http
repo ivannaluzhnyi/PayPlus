@@ -1,0 +1,55 @@
+###
+GET http://localhost:3050
+
+
+###
+GET http://localhost:3050/hello
+
+###
+POST http://localhost:3050/login
+Content-Type: application/json
+
+{
+    "email":"aaaa@test.com",
+    "password": "pass"
+}
+
+###
+// login admin
+POST http://localhost:3050/login
+Content-Type: application/json
+
+{
+    "email":"admin@admin.com",
+    "password": "adminPass"
+}
+
+
+###
+POST http://localhost:3050/register
+Content-Type: application/json
+
+{
+    "email":"aaaa@test.com",
+    "password": "pass",
+    "name": "Test Entr",
+    "country": "France",
+    "adress":"36 rue du lolllll",
+    "zip_code":"7509",
+    "KBIS":"male",
+    "url_cancel":"url_cancel",
+    "url_confirmation":"url_confirmation",
+    "devise":"devise",
+    "client_token":"client_token",
+    "client_secret":"client_secret",
+    "role":"COMPANY",
+    "state":"rolstatee",
+}
+
+
+###
+GET http://localhost:3050/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IkFETUlOIiwiaWF0IjoxNTkxMDQzNjIyLCJleHAiOjE1OTEwNDcyMjJ9.rnodF4_YgdCV2A7LAmYKYn3j6HrsAhXaYzvRbJRO0A8
+
+###
+GET http://localhost:3050/users

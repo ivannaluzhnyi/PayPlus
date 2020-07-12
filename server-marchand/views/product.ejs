@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <%- include('./partials/head') %>
+</head>
+
+<body>
+  <%- include('./partials/menu') %>
+  <div class='container-fluid bg-3 text-center'>
+    <h3><%= page %></h3><br>
+    
+    <!-- Button trigger modal -->
+<button onclick=displayCart() type='button' class='btn btn-primary' data-toggle='modal' data-target='#exampleModal'>
+  Voir mon panier
+</button>
+
+<!-- Modal -->
+<div class='modal fade' id='exampleModal' tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>
+  <div class='modal-dialog modal-lg' role='document'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <h5 class='modal-title' id='exampleModalLabel'>Mon panier</h5>
+        <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+          <span aria-hidden='true'>&times;</span>
+        </button>
+      </div>
+      <div class='modal-body'>
+      </div>
+      <div class='modal-footer'>
+      
+      </div>
+    </div>
+  </div>
+</div>
+    <div class='row'>
+      <% for(key in products) { %>
+      <div class='col-sm-3 d-flex align-items-stretch'>
+        <div class='card  h-100'>
+          <img class='card-img-top' src='<%= products[key]['path_image'] %>' alt='Card image cap'>
+          <div class='card-body'>
+            <h5 class='card-title'><%= products[key]['name'] %></h5>
+            <p class='card-text'><%= products[key]['description'] %></p>
+            <ul class='list-group list-group-flush'></ul>
+            <li class='list-group-item'>Prix :<%= products[key]['price'] %> €</li>
+            <li class='list-group-item'> <%= products[key]['states'] %></li>
+            </ul>
+            <div class='card-body'>
+              <button id='<%= products[key]['id'] %>'  onclick=deleteProduct(this.id) class='btn btn-danger'>-</button>
+              <input class='col-2' id='count-<%= products[key]['id'] %>' type='text' disabled maxlength='5' placeholder='0'>
+              <button id='<%= products[key]['id'] %>' onclick='addProduct(this.id)' class='btn btn-primary'>+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% }; %>
+
+    </div>
+  </div>
+  
+</body>
+<script>
+        var products = <%- JSON.stringify(products) %>  
+        var cart = {}
+        var cart_total ={
+          "price":0,
+          "qte":0,
+          product:[]
+        }
+        function addProduct(id){
+
+          var product = getProduct(id)
+        
+          if(cart[product._id]){
+            cart[product._id].qte += 1
+            cart[product._id].total_price += cart[product._id].price;
+          }else{
+            cart[product._id] = product;
+            cart[product._id].qte = 1;
+            cart[product._id].total_price = cart[product._id].price;
+          }
+
+          $('#count-'+id).val(cart[product._id].qte);
+          console.log(cart[product._id])
+          updateCart()
+        }
+
+      function deleteProduct(id){
+
+      var product = getProduct(id)
+      if(!cart[product._id].qte == 0 ){
+        cart[product._id].qte -= 1
+        cart[product._id].total_price += cart[product._id].price;
+      }
+      $('#count-'+id).val(cart[product._id].qte);
+      updateCart()
+      }
+
+      function updateCart(){
+        cart_total.product = []
+        cart_total.price = 0
+        cart_total.qte = 0
+        Object.keys(cart).forEach(id => {
+          cart_total.price += cart[id].price * cart[id].qte
+          cart_total.qte += cart[id].qte
+          cart_total.product.push({"id":[id], "qte": cart[id].qte})
+        })
+        console.log(cart_total)
+
+      }
+
+      function getProduct(id){
+        return products.find(element => element._id === id)
+      }
+
+      function displayCart(){
+        $('.modal-body, .modal-footer').empty()
+          Object.keys(cart).forEach(id => {
+          
+            $('.modal-body').append(" <div class='row'>" +
+                              "<div class='col-12 col-sm-12 col-md-2 text-center'>"+
+                                      "<img class='img-responsive' src=" +cart[id].path_image +" alt='prewiew' width='120' height='80'>"+
+                              "</div>"+
+                              "<div class='col-12 text-sm-center col-sm-12 text-md-left col-md-6'>"+
+                                " <h4 class='product-name'><strong>" +cart[id].name +"</strong></h4>"+
+                                  "<h4>"+
+                                      "<small maxlength=5'> "+cart[id].name  +"  </small>"+
+                                "  </h4>"+
+                            " </div>"+
+                              "<div class='col-12 col-sm-12 text-sm-center col-md-4 text-md-right row'>"+
+                              "   <div class='col-3 col-sm-3 col-md-6 text-md-right' style='padding-top: 5px'>"+
+                                    " <h6><strong>" +cart[id].price +" € <span class='text-muted'> x </span></strong><strong>" +cart[id].qte +"</strong></h6>"+
+                                    "<strong>Total : " +cart[id].total_price +"€</strong>" +
+                            "     </div>"+
+                                " </div>"+
+                          "   </div>"+"   </div><hr>")
+          });
+          
+        $('.modal-footer').append(  "<strong>Prix total : " +cart_total.price +" € - "+cart_total.qte +" produit(s)</strong>" +
+            " <form action='/cart' method='POST'><input id='cart_product' name='cart_product' value='"+JSON.stringify(cart_total)+"' type='hidden'><button type='submit' class='btn btn-primary'>Confirmer ma commande</button></form>")
+        }
+
+        $('#cart_product').val(cart)
+        $('#cart_product').val("10");
+</script>
+<%- include('./partials/script') %>

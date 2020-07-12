@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("./partials/head") %>
+</head>
+
+<body>
+  <%- include("./partials/menu") %>
+  <div class="container-fluid bg-3 text-center">
+    <h3><%= page %></h3><br>
+    <ul>
+    </ul>
+    <div class="row">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                  <th scope="col">N° commande</th>
+                  <th scope="col">Prénom</th>
+                  <th scope="col">Nom</th>
+                  <th scope="col">Adresse de livraison</th>
+                  <th scope="col">Produits</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+            <tbody>
+                <% if (locals.transactions) { %>
+                    <% for(key in transactions) { %>
+                        <tr>
+                            <th scope="row"><%= key %></th>
+                            <td><%= transactions[key]['client_first_name'] %></td>
+                            <td><%= transactions[key]['client_last_name'] %></td>
+                            <td><%= transactions[key]['delivery_address'] %>, <%= transactions[key]['delivery_city'] %> - <%= transactions[key]['delivery_zip_code'] %> -  <%= transactions[key]['delivery_country'] %></td>
+                            <td>
+                              <button id='<%= key %>' onclick=displayProduct(this.id) type='button' class='btn btn-primary' data-toggle='modal' data-target='#exampleModal'>
+                                Voir les produits
+                              </button>
+                              
+                            </td>
+                            <% if (transactions[key]['state'] == "cancel"){ %>
+                                <td><button type="button" class="btn btn-danger">
+                                    <span class="badge badge-light"> Annulée</span></td>
+                            <% } else if (transactions[key]['state'] == "confirm") {%>
+                                <td><button type="button" class="btn btn-success">
+                                    <span class="badge badge-light"> Confirmée</span></td>
+                            <% } else {%>
+                                <td><button type="button" class="btn btn-warning">
+                                    <span class="badge badge-light"> En attente</span></td>
+                                <% } %>
+
+                            
+                          </tr>
+                    <% } %>
+                <% } %>
+            </tbody>
+          </table>
+    </div>
+  </div>
+</body>
+<div class='modal fade' id='exampleModal' tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>
+  <div class='modal-dialog modal-lg' role='document'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <h5 class='modal-title' id='exampleModalLabel'>Information de la transaction </h5>
+        <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+          <span aria-hidden='true'>&times;</span>
+        </button>
+      </div>
+      <div class='modal-body'>
+      </div>
+      <div class='modal-footer'>
+        <button type="button" class="btn btn-danger">Remboursement total</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var list_transaction = <%- JSON.stringify(transactions) %> ;
+var list_product_to_refund = {}
+function updateTotal(test){
+  console.log(test.id)
+  $("#"+test.id).value = 0;
+}
+
+
+function displayProduct(id){
+  const partial_refund = []
+  console.log("list_transaction => ", list_transaction )
+
+  $('.modal-body, .modal-footer').empty()
+  console.log(list_transaction[id].order_token)
+  list_transaction[id]['products'].forEach(product => {
+    $('.modal-body').append(" <div class='row'>" +
+                              "<div class='col-12 col-sm-12 col-md-2 text-center'>"+
+                                      "<img class='img-responsive' src=" +product['product']['path_image'] +" alt='prewiew' width='120' height='80'>"+
+                              "</div>"+
+                              "<div class='col-12 text-sm-center col-sm-12 text-md-left col-md-4'>"+
+                                " <h4 class='product-name'><strong>" +product['product']['name'] +"</strong></h4>"+
+                                  "<h4>"+
+                                      "<small maxlength=5'> "+product['product']['name']  +"  </small>"+
+                                "  </h4>"+
+                            " </div>"+
+                              "<div class='col-12 col-sm-12 text-sm-center col-md-6 text-md-right row'>"+
+                              "   <div class='col-3 col-sm-3 col-md-6 text-md-right' style='padding-top: 5px'>"+
+                                    " <h6><strong>" +product['product']['price']+" € <span class='text-muted'> x </span></strong><strong>" +product['qte'] +"</strong></h6>"+
+                                    "<strong>Total : " +product['product']['price'] * +product['qte'] +"€</strong>" +
+                            "     </div>"+
+                            "   <div class='col-3 col-sm-3 col-md-6 text-md-right' style='padding-top: 5px'>"+
+                                  "  <label for='quantity'>Qte à remboursé:</label>"+
+                                    " <input class='"+product['product']['_id']+"' id='test-"+product['product']['_id']+"'  onclick=updateTotal(this)  type='number' id='quantity' value name='quantity' min='0' max="+product['qte'] +">"+
+                                    "<button id='"+product['product']['_id']+"'  onclick=deleteProduct(this.id) class='btn btn-danger'>-</button>"+
+"              <input class='col-6' id='count-"+product['product']['_id']+"' type='text'  min='0' max="+product['qte'] +"  disabled placeholder='0'>"+
+"              <button id='"+product['product']['_id']+"' onclick='addProduct(this.id)' class='btn btn-primary'>+</button>"+
+                            "     </div>"+
+                          "   </div>"+
+
+                          "</div><hr>")
+
+   
+  });
+  $("modal-footer").append("<input id='cart_product' name='cart_product' value='"+list_transaction[id]+"' type='hidden'>")
+  $('.modal-footer').append("<form action='/transaction_refund/"+list_transaction[id].order_token+"' method='POST'><input id='refund_product' name='cart_product' value='"+JSON.stringify(list_product_to_refund)+"' type='hidden'><button type='submit' class='btn btn-warning'>Remboursement partiel ("+list_transaction[id]['order_amount']+" €)</button></form>")
+  $('.modal-footer').append("<form action='/transaction_refund/"+id+"' method='POST'><input id='cart_product' name='cart_product' value='"+JSON.stringify(list_transaction[id])+"' type='hidden'><input id='cart_product' name='cart_product' value='"+JSON.stringify(list_transaction[id])+"' type='hidden'><button type='submit' class='btn btn-danger'>Remboursement total ("+list_transaction[id]['order_amount']+" €)</button></form>")
+}
+
+
+function updateProductRefund(){
+
+$("#refund_product").val(JSON.stringify(list_product_to_refund), )
+}
+
+function addProduct(id){
+  var transaction = $('#cart_product').val()
+
+  console.log('transaction ==> ', transaction)
+  transaction = JSON.parse(transaction)
+
+ var product_to_refund =  transaction['products'].find(el => el.product._id === id)
+
+ if(product_to_refund.qte === list_product_to_refund[product_to_refund.product._id]){
+
+ }else{
+  if(list_product_to_refund[product_to_refund.product._id]){
+  list_product_to_refund[product_to_refund.product._id] +=1;
+ }else{ 
+  list_product_to_refund[product_to_refund.product._id]= 1;
+ }
+ }
+
+ console.log(list_product_to_refund)
+
+ $('#count-'+id).val( list_product_to_refund[product_to_refund.product._id]);
+console.log('#count-'+id)
+updateProductRefund()
+}
+
+
+
+function deleteProduct(id){
+  var transaction = $('#cart_product').val()
+
+
+  transaction = JSON.parse(transaction)
+
+  var product_to_refund =  transaction['products'].find(el => el.product._id === id)
+
+  if(list_product_to_refund[product_to_refund.product._id] !== 0){
+    list_product_to_refund[product_to_refund.product._id] -=1;
+    if(list_product_to_refund[product_to_refund.product._id] == 0){
+      delete list_product_to_refund[product_to_refund.product._id]; 
+    }
+    $('#count-'+id).val( list_product_to_refund[product_to_refund.product._id]);
+    console.log(list_product_to_refund)
+}
+updateProductRefund()
+}
+const getProduct =  (id) => {
+  console.log(list_transaction[id]);
+  return list_transaction.find(element => element._id === id)
+}
+
+</script>
+<%- include("./partials/script") %></body>

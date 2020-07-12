@@ -1,0 +1,54 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:mdx/recommended",
+    "airbnb",
+    "airbnb/hooks",
+    "plugin:cypress/recommended"
+  ],
+  "plugins": ["cypress"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".js", ".jsx", ".ts", ".tsx", ".mdx"]
+      }
+    }
+  },
+  "rules": {
+    "cypress/no-assigning-return-values": "error",
+    "cypress/no-unnecessary-waiting": "error",
+    "cypress/assertion-before-screenshot": "warn",
+    "cypress/no-force": "warn",
+    "cypress/no-async-tests": "error",
+    "comma-dangle": "off",
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "no-plusplus": "off",
+    "import/no-unresolved": "off",
+    "linebreak-style": ["error", "windows"],
+    "function-paren-newline": "off",
+    "no-confusing-arrow": "off",
+    "arrow-parens": "off",
+    "react/jsx-wrap-multilines": "off",
+    "operator-linebreak": "off",
+    "import/prefer-default-export": "off",
+    "no-unused-vars": "off",
+    "object-curly-newline": "off",
+    "implicit-arrow-linebreak": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/jsx-filename-extension": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/require-default-props": "off",
+    "react/forbid-prop-types": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "jsx-a11y/anchor-is-valid": "off"
+  }
+}
