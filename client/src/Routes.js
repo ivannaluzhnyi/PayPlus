@@ -116,34 +116,12 @@ const routesConfig = [
       },
       {
         exact: true,
-        path: '/app/management/products',
-        component: lazy(() => import('src/views/management/ProductListView'))
+        path: '/app/management/transactions',
+        component: lazy(() =>
+          import('src/views/management/transactions/TransactionsListView')
+        )
       },
-      {
-        exact: true,
-        path: '/app/management/products/create',
-        component: lazy(() => import('src/views/management/ProductCreateView'))
-      },
-      {
-        exact: true,
-        path: '/app/management/orders',
-        component: lazy(() => import('src/views/management/OrderListView'))
-      },
-      {
-        exact: true,
-        path: '/app/management/orders/:orderId',
-        component: lazy(() => import('src/views/management/OrderDetailsView'))
-      },
-      {
-        exact: true,
-        path: '/app/management/invoices',
-        component: lazy(() => import('src/views/management/InvoiceListView'))
-      },
-      {
-        exact: true,
-        path: '/app/management/invoices/:invoiceId',
-        component: lazy(() => import('src/views/management/InvoiceDetailsView'))
-      },
+
       {
         exact: true,
         path: '/app/management',

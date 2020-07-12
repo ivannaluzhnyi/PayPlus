@@ -182,15 +182,11 @@ const navConfigByRole = role => {
             {
               title: 'Transactions',
               icon: LoopIcon,
-              href: '/app/management/products',
+              href: '/app/management/transactions',
               items: [
                 {
-                  title: 'List Products',
-                  href: '/app/management/products'
-                },
-                {
-                  title: 'Create Product',
-                  href: '/app/management/products/create'
+                  title: 'List Transactions',
+                  href: '/app/management/transactions'
                 }
               ]
             },

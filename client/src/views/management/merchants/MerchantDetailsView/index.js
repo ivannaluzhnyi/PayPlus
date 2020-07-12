@@ -19,6 +19,7 @@ import Header from './Header';
 import Details from './Details';
 import Credentials from './Credentials';
 import Users from './Users';
+import Transactions from './Transactions';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -62,7 +63,8 @@ const MerchantDetailsView = () => {
   const tabs = [
     { value: 'details', label: 'Details' },
     { value: 'credentials', label: 'Credentials' },
-    { value: 'users', label: 'Utilisateurs' }
+    { value: 'users', label: 'Utilisateurs' },
+    { value: 'transactions', label: 'Transactions' }
   ];
 
   const handleTabsChange = (event, value) => {
@@ -110,6 +112,7 @@ const MerchantDetailsView = () => {
             {currentTab === 'details' && <Details user={user} />}
             {currentTab === 'credentials' && <Credentials />}
             {currentTab === 'users' && <Users />}
+            {currentTab === 'transactions' && <Transactions />}
           </Box>
         </Container>
       </Page>

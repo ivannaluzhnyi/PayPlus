@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const connect = require("../../lib/mongo");
 
 const Schema = new mongoose.Schema({
+    id: Number,
     client_first_name: String,
     client_last_name: String,
     delivery_country: String,
@@ -11,7 +12,7 @@ const Schema = new mongoose.Schema({
     order_amount: String,
     merchant: Object,
     products: Array,
-    operarions: Array,
+    operations: Array,
 });
 
 const Transactions = connect.model("Transactions", Schema);

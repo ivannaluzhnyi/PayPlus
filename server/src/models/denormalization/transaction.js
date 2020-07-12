@@ -4,57 +4,27 @@ import Merchant from "../Merchant";
 
 import TransactionMongo from "../mongo/Transaction";
 
-const denormalize = async (transaction, operation) => {
-    console.log("denormalize => ", transaction.toJSON());
-    await TransactionMongo.deleteOne({ id: transaction.id });
+const denormalize = async (transaction_id, operation) => {
+    TransactionMongo.deleteOne({ id: transaction_id }).then(async (res) => {
+        console.log("res =<>  ", res);
 
-    if (operation !== "delete") {
-        const dTransaction = await Transaction.findByPk(transaction.id, {
-            include: [
-                { model: Operation, as: "operations" },
-                { model: Merchant, as: "merchant" },
-            ],
-        });
+        if (operation !== "delete") {
+            const dTransaction = await Transaction.findByPk(transaction_id, {
+                include: [
+                    { model: Operation, as: "operations" },
+                    { model: Merchant, as: "merchant" },
+                ],
+            });
+    
+            const document = new TransactionMongo(dTransaction.toJSON());
+            await document.save();
+        }
+    });
 
-        console.log(
-            "=========================================================="
-        );
+    console.log("=======================================");
+    console.log("operation", operation);
 
-        console.log("dTransaction =+++>", dTransaction.toJSON());
 
-        const document = new TransactionMongo(dTransaction.toJSON());
-        await document.save();
-    }
 };
-
-// Transaction.addHook("afterCreate", (transaction) => {
-//     denormalize(transaction, "create");
-// });
-// Transaction.addHook("afterUpdate", (transaction) => {
-//     denormalize(transaction, "update");
-// });
-// Transaction.addHook("afterDestroy", (transaction) => {
-//     denormalize(transaction, "delete");
-// });
-
-// Operation.addHook("afterCreate", (operation) => {
-//     denormalize(operation.Transaction, "create");
-// });
-// Operation.addHook("afterUpdate", (operation) => {
-//     denormalize(operation.Transaction, "update");
-// });
-// Operation.addHook("afterDestroy", (operation) => {
-//     denormalize(operation.Transaction, "delete");
-// });
-
-// Merchant.addHook("afterCreate", (merchant) => {
-//     denormalize(merchant.linked_merchant, "create");
-// });
-// Merchant.addHook("afterUpdate", (merchant) => {
-//     denormalize(merchant.linked_merchant, "update");
-// });
-// Merchant.addHook("afterDestroy", (merchant) => {
-//     denormalize(merchant.linked_merchant, "delete");
-// });
 
 export default denormalize;

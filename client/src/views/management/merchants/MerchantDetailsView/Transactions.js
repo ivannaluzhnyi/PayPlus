@@ -26,6 +26,8 @@ import Label from 'src/components/Label';
 import GenericMoreButton from 'src/components/GenericMoreButton';
 import useMerchant from 'src/hooks/useMerchant';
 
+import Results from '../../transactions/TransactionsListView/Results';
+
 const statusColors = {
   paid: 'success',
   pending: 'warning',
@@ -41,21 +43,19 @@ const Transactions = () => {
   const isMountedRef = useIsMountedRef();
   const [transactions, setTransactions] = useState(null);
 
-  const { customer } = useMerchant();
+  const { merchant } = useMerchant();
 
-  const getInvoices = useCallback(() => {
+  const getTransactions = useCallback(() => {
     axios
-      .get(`/api/management/customers/${customer.id}/transactions`)
+      .post('/api/transactions/mongo', { merchantsId: [merchant.id] })
       .then(response => {
-        if (isMountedRef.current) {
-          setTransactions(response.data.invoices);
-        }
+        setTransactions(response.data);
       });
   }, [isMountedRef]);
 
   useEffect(() => {
-    getInvoices();
-  }, [getInvoices]);
+    getTransactions();
+  }, [getTransactions]);
 
   if (!setTransactions) {
     return null;
@@ -64,68 +64,27 @@ const Transactions = () => {
   return (
     <div className={clsx(classes.root)}>
       <Card>
-        <CardHeader action={<GenericMoreButton />} title="Customer invoices" />
-        <Divider />
-        <PerfectScrollbar>
-          <Box minWidth={1150}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Payment Method</TableCell>
-                  <TableCell>Total</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell align="right">Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {transactions.map(invoice => (
-                  <TableRow key={invoice.id}>
-                    <TableCell>#{invoice.id.split('-').shift()}</TableCell>
-                    <TableCell>
-                      {moment(invoice.date).format('DD/MM/YYYY | HH:MM')}
-                    </TableCell>
-                    <TableCell>{invoice.description}</TableCell>
-                    <TableCell>{invoice.paymentMethod}</TableCell>
-                    <TableCell>
-                      {invoice.currency}
-                      {invoice.value}
-                    </TableCell>
-                    <TableCell>
-                      <Label color={statusColors[invoice.status]}>
-                        {invoice.status}
-                      </Label>
-                    </TableCell>
-                    <TableCell align="right">
-                      <IconButton
-                        component={RouterLink}
-                        to="/app/management/invoices/1"
-                      >
-                        <SvgIcon fontSize="small">
-                          <ArrowRightIcon />
-                        </SvgIcon>
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+        <CardHeader action={<GenericMoreButton />} title="Les transactions" />
+
+        {transactions && (
+          <Box mt={3}>
+            <Results transactions={transactions} />
           </Box>
-        </PerfectScrollbar>
-        <TablePagination
-          component="div"
-          count={transactions.length}
-          onChangePage={() => {}}
-          onChangeRowsPerPage={() => {}}
-          page={0}
-          rowsPerPage={5}
-          rowsPerPageOptions={[5, 10, 25]}
-        />
+        )}
       </Card>
     </div>
   );
 };
 
 export default Transactions;
+
+// product:
+// description: "Les couvertures de survie sont utilisées en situation d'urgence pour diminuer les pertes de chaleur ainsi que pour ses propriétés imperméables contre l'humidité et le vent"
+// name: "Couverture de survie"
+// path_image: "../images/couverture_survie.jpg"
+// price: 12
+// states: "Disponible"
+// __v: 0
+// _id: "5f04c290958d885358297e9a"
+// __proto__: Object
+// qte: 1

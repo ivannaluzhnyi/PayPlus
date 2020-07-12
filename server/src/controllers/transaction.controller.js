@@ -1,5 +1,6 @@
 import Transaction from "../models/Transaction";
 import Operation from "../models/Operation";
+import TransactionMongo from "../models/mongo/Transaction";
 import { resCatchError } from "../helpers/error";
 
 function getAll(req, res) {
@@ -53,4 +54,12 @@ function update(req, res) {
         .catch((err) => resCatchError(res, err));
 }
 
-export { getAll, getOne, post, deleteTrns, update };
+function getByMerchntsId(req, res) {
+    TransactionMongo.find({ "merchant.id": { $in: req.body.merchantsId } })
+        .then((transactions) => {
+            return transactions ? res.json(transactions) : res.sendStatus(404);
+        })
+        .catch((err) => resCatchError(res, err));
+}
+
+export { getAll, getOne, post, deleteTrns, update, getByMerchntsId };

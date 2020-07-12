@@ -177,6 +177,39 @@ function update(req, res) {
         });
 }
 
+function transactions(req, res) {
+    console.log("req.user => ", req.user);
+    switch (req.user.role) {
+        case ROLE.ADMIN:
+            Merchant.findAll({
+                where: { state: MERCHANT_STATUS.CONFIRMED },
+                attributes: ["name", "id"],
+            }).then((merchants) => {
+                res.json({ merchants });
+            });
+            break;
+
+        case ROLE.MERCHANT:
+            User.findByPk(req.user.id, {
+                include: [
+                    {
+                        model: Merchant,
+                        as: "merchants",
+                        where: { state: MERCHANT_STATUS.CONFIRMED },
+                        attributes: ["name", "id"],
+                    },
+                ],
+            }).then((user) => {
+                const { merchants } = user;
+                res.json({ merchants });
+            });
+            break;
+
+        default:
+            break;
+    }
+}
+
 export {
     getKBIS,
     changeMerchantState,
@@ -185,4 +218,5 @@ export {
     update,
     addNewUser,
     notifications,
+    transactions,
 };

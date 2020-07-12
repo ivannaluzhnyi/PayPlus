@@ -42,3 +42,31 @@ export const labelColorsUserRole = {
   ADMIN: 'success',
   MERCHANT: 'secondary'
 };
+
+export const labelColorsOperationState = {
+  CREATED: 'primary',
+  PROCESSING: 'warning',
+  DONE: 'success',
+  CANCELED: 'error'
+};
+
+export const labelColorsOperationType = {
+  CAPTURE: 'success',
+  REFUNDED: 'success'
+};
+
+export const labelColorsProductState = {
+  Disponible: 'success'
+};
+
+export const OPERATIONS_STATE = {
+  CREATED: 'CREATED',
+  PROCESSING: 'PROCESSING',
+  DONE: 'DONE',
+  CANCELED: 'CANCELED'
+};
+
+export const OPERATIONS_TYPE = {
+  CAPTURE: 'CAPTURE',
+  REFUNDED: 'REFUNDED'
+};

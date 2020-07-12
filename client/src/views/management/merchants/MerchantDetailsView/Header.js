@@ -74,7 +74,7 @@ const Header = () => {
             Gestion
           </Link>
           <Typography variant="body1" color="textPrimary">
-            Marchends
+            Marchands
           </Typography>
         </Breadcrumbs>
         <Typography variant="h3" color="textPrimary">

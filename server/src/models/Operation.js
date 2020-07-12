@@ -27,16 +27,13 @@ class Operation extends Model {
                 modelName: "Operation",
                 hooks: {
                     afterCreate: async (operation) => {
-                        console.log("operation => ", operation);
-                        console.log("operation => ", operation.toJSON());
-                        console.log("Transaction => ", operation.Transaction);
-                        // denormalizeTransaction(transaction, "create");
+                        denormalizeTransaction(operation.transaction_id);
                     },
                     afterUpdate: async (operation) => {
-                        // denormalizeTransaction(transaction, "update");
+                        denormalizeTransaction(operation.transaction_id);
                     },
                     afterDestroy: async (operation) => {
-                        // denormalizeTransaction(transaction, "delete");
+                        denormalizeTransaction(operation.transaction_id);
                     },
                 },
             }
@@ -46,6 +43,7 @@ class Operation extends Model {
     static associate(models) {
         this.belongsTo(models.Transaction, {
             foreignKey: "transaction_id",
+            as: "transaction",
         });
     }
 }

@@ -1,5 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import { DEVISE, MERCHANT_STATUS } from "../lib/constants";
+import denormalizeTransaction from "./denormalization/transaction";
 
 class Merchant extends Model {
     static init(sequelize) {

@@ -19,7 +19,6 @@ import {
   TableCell,
   TableBody,
   Avatar,
-  Typography,
   Link,
   IconButton,
   TablePagination

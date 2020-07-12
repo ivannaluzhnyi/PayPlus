@@ -62,12 +62,16 @@ function post(req, res) {
                     transaction_id: finedTransaction.id,
                 },
             }).then(() => {
-                finedTransaction.destroy({}).then(() => {
-                    res.writeHead(301, {
-                        Location: finedTransaction.merchant.url_cancel,
+                finedTransaction
+                    .destroy({
+                        individualHooks: true,
+                    })
+                    .then(() => {
+                        res.writeHead(301, {
+                            Location: finedTransaction.merchant.url_cancel,
+                        });
+                        res.end();
                     });
-                    res.end();
-                });
             });
         });
 

@@ -1,3 +1,5 @@
+import { DEVISE } from 'src/constants';
+
 const toBase64 = async file =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -16,4 +18,23 @@ const convertReponseErrors = dataErrors => {
   return prepare;
 };
 
-export { toBase64, convertReponseErrors };
+const mappingDevise = devise => {
+  switch (devise) {
+    case DEVISE.EURO:
+      return '€';
+
+    case DEVISE.DOLLAR:
+      return '$';
+
+    case DEVISE.STERLING:
+      return '£';
+
+    case DEVISE.YEN:
+      return '¥';
+
+    default:
+      return '';
+  }
+};
+
+export { toBase64, convertReponseErrors, mappingDevise };

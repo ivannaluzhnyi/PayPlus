@@ -50,13 +50,13 @@ class Transaction extends Model {
                         transaction.order_token = makeToken(172, true);
                     },
                     afterCreate: async (transaction) => {
-                        denormalizeTransaction(transaction, "create");
+                        denormalizeTransaction(transaction.id, "create");
                     },
                     afterUpdate: async (transaction) => {
-                        denormalizeTransaction(transaction, "update");
+                        denormalizeTransaction(transaction.id, "update");
                     },
                     afterDestroy: async (transaction) => {
-                        denormalizeTransaction(transaction, "delete");
+                        denormalizeTransaction(transaction.id, "delete");
                     },
                 },
             }
