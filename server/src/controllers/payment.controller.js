@@ -26,6 +26,7 @@ function get(req, res) {
         ],
     })
         .then((finedTransaction) => {
+            console.log("finedTransaction => ", finedTransaction.toJSON());
             if (
                 finedTransaction &&
                 !finedTransaction.operations.find(
