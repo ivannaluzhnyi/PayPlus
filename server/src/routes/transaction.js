@@ -7,6 +7,7 @@ const {
     post,
     deleteTrns,
     update,
+    refund
 } = require("../controllers/transaction.controller");
 
 router.get("/", getAll);
@@ -14,5 +15,6 @@ router.get("/:id", getOne);
 router.post("/", post);
 router.delete("/:id", deleteTrns);
 router.put("/:id", update);
+router.post("/refund", refund);
 
 module.exports = router;
