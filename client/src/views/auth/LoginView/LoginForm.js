@@ -13,6 +13,8 @@ import {
 } from '@material-ui/core';
 import { login } from 'src/actions/accountActions';
 
+import { getAllDevise } from 'src/actions/deviseActions';
+
 const useStyles = makeStyles(() => ({
   root: {}
 }));
@@ -39,6 +41,9 @@ const LoginForm = ({ onSubmitSuccess }) => {
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
           await dispatch(login(values.email, values.password));
+          {
+            /* await dispatch(getAllDevise()); */
+          }
           onSubmitSuccess();
         } catch (error) {
           const message =
