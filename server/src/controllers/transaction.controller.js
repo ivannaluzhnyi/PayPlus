@@ -3,6 +3,13 @@ import Operation from "../models/Operation";
 import TransactionMongo from "../models/mongo/Transaction";
 import { resCatchError } from "../helpers/error";
 
+
+import {
+    OPERATIONS_STATE,
+    OPERATIONS_TYPE,
+} from "../lib/constants";
+
+
 function getAll(req, res) {
     if (req.merchant) {
         Transaction.findAll({ where: { merchant_id: req.merchant.id } })
@@ -61,5 +68,21 @@ function getByMerchntsId(req, res) {
         })
         .catch((err) => resCatchError(res, err));
 }
+function refund(req, res) {
+    const transaction_to_refund = req.body;
+    Transaction.findOne({order_token: transaction_to_refund})
+        .then((data) => {
+            Operation.create({
+                transaction_id: data.dataValues.id,
+                state: OPERATIONS_STATE.DONE,
+                type: OPERATIONS_TYPE.REFUNDED,
+            }).then((createdOperation) => {
+                res.status(201).json({
+                    ...createdOperation.toJSON(),
+                });
+            });
+        })
+   
+}
 
-export { getAll, getOne, post, deleteTrns, update, getByMerchntsId };
+export { getAll, getOne, post, deleteTrns, update, getByMerchntsId, refund };
