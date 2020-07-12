@@ -108,6 +108,7 @@ const Row = props => {
                               labelColorsOperationState[operationRow.state]
                             }
                           >
+                            {console.log('operationRow => ', operationRow)}
                             {operationRow.state}
                           </Label>
                         </TableCell>

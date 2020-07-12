@@ -1,0 +1,58 @@
+[
+    {
+        "name": "Couverture de survie",
+        "description": "Les couvertures de survie sont utilisées en situation urgence pour diminuer les pertes de chaleur ainsi que pour ses propriétés imperméables contre lhumidité et le vent",
+        "price": 12,
+        "states": "Disponible",
+        "path_image": "../images/couverture_survie.jpg"
+    },
+    {
+        "name": "Pancho",
+        "description": "Le Survival Poncho de SOL est polyvalent : vous pouvez vous en servir comme couverture de survie, tapis de sol lors de bivouacs ou comme simple support pour pique-nique.",
+        "price": 19,
+        "states": "Disponible",
+        "path_image": "../images/pancho.jpg"
+    },
+    {
+        "name": "Lampe frontale",
+        "description": "La lampe frontale est la solution pour vous libérer les mains vous proposer un éclairage orienté sur ce que vous souhaitez voir.",
+        "price": 85,
+        "states": "Disponible",
+        "path_image": "../images/lampe_frontal.jpg"
+    },
+    {
+        "name": "Téléphone résistant - 3310",
+        "description": "Le 3310 est un téléphone compact et ULTRA resistant",
+        "price": 75,
+        "states": "Disponible",
+        "path_image": "../images/nokia-3310.jpg"
+    },
+    {
+        "name": "4 serres-câbles",
+        "description": "Colliers de serrage universels, Un modèle économique mais néanmoins de qualité.",
+        "price": 135,
+        "states": "Disponible",
+        "path_image": "../images/serre_cable.jpg"
+    },
+    {
+        "name": "Bracelet de survie",
+        "description": "Le bracelet de survie est constitué d’une ou plusieurs cordes en Paracord (utilisées à la base pour les parachutes militaires, autant vous dire que c’est du solide !) tressées de manière facile à dérouler",
+        "price": 37,
+        "states": "Disponible",
+        "path_image": "../images/bracelet_survie.jpg"
+    },
+    {
+        "name": "Couteau suisse ",
+        "description": "Une gamme complète de canifs de poche utiles en toute occasion",
+        "price": 23,
+        "states": "Disponible",
+        "path_image": "../images/couteau_suisse.jpg"
+    },
+    {
+        "name": "briquet brûleur",
+        "description": "Hyper torch briquet tempête. Petit brûleur jet-flame à gaz. Pocket torch.",
+        "price": 124,
+        "states": "Disponible",
+        "path_image": "../images/briquet_bruleur.jpg"
+    }
+]

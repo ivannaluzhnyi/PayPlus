@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script type="application/javascript" src="cart.js"></script>
+  <%- include("./partials/head") %>
+</head>
+<body>
+  <%- include("./partials/menu") %>
+  <div class="container-fluid bg-3 text-center">
+    <% if (locals.state) { %>
+      <div class="alert alert-success" role="alert">
+        Votre panier à été envoyé.
+      </div>
+     <% } %>
+    <h3><%= page %></h3><br>
+    <ul>
+    </ul>
+    <div class="row">
+    <div class="col-4"></div>
+    <form method="POST" class="col-4">
+      <h5>Identitée</h5>
+      <div class="form-row">
+        
+        <div class="col">
+          <input name="first_name" type="text" class="form-control" placeholder="Prénom">
+        </div>
+        <div class="col">
+          <input name="last_name" name="adress" type="text" class="form-control" placeholder="Nom">
+        </div>
+        </div>
+        <h5>Adresse de livraison</h5>
+      <div class="form-row">
+        
+        <div class="col">
+          <input name="adress" type="text" class="form-control" placeholder="Adresse">
+        </div>
+        <div class="col">
+          <input name="city" type="text" class="form-control" placeholder="Ville">
+        </div>
+        <div class="col">
+          <input name="zip_code" type="text" class="form-control" maxlength="5" placeholder="Code postal">
+        </div>
+      </div>
+      <small id="emailHelp" class="form-text text-muted">Vos données personnelles ne sont partagées avec aucun tiers.</small><br><br>
+      <button type="submit" class="btn btn-primary">Valider mon panier</button>
+    </form>
+  </div>
+  <hr>
+  <h3>Votre panier </h3>
+  
+  </div>
+  
+</body>
+
+<script>
+  var products = <%- JSON.stringify(products) %>  
+  var cart = {}
+
+  function addProduct(id){
+
+    var product = getProduct(id)
+  
+    if(cart[product._id]){
+      cart[product._id].qte += 1
+      cart[product._id].total_price += cart[product._id].price;
+    }else{
+      cart[product._id] = product;
+      cart[product._id].qte = 1;
+      cart[product._id].total_price = cart[product._id].price;
+    }
+
+    $('#count-'+id).val(cart[product._id].qte);
+    console.log(cart[product._id])
+  }
+
+  function deleteProduct(id){
+
+var product = getProduct(id)
+if(!cart[product._id].qte == 0 ){
+  cart[product._id].qte -= 1
+  cart[product._id].total_price += cart[product._id].price;
+}
+
+$('#count-'+id).val(cart[product._id].qte);
+console.log(cart[product._id])
+}
+
+function getProduct(id){
+  return products.find(element => element._id === id)
+}
+</script>
+<%- include("./partials/script") %></body>

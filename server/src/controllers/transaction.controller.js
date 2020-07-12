@@ -3,11 +3,11 @@ import Operation from "../models/Operation";
 import TransactionMongo from "../models/mongo/Transaction";
 import Devises from "../models/mongo/Devises";
 import { resCatchError } from "../helpers/error";
-import  manageProducts  from "../lib/refund_product"
+import manageProducts from "../lib/refund_product";
 import {
     OPERATIONS_STATE,
     OPERATIONS_TYPE,
-    DEVISE_MAPPING
+    DEVISE_MAPPING,
 } from "../lib/constants";
 
 function getAll(req, res) {
@@ -66,8 +66,6 @@ function getByMerchntsId(req, res) {
         .then(async (transactions) => {
             try {
                 const devises = await Devises.find();
-
-                console.log("transactions ===> ", transactions);
 
                 const transactionsToSend = transactions.map((trn) => {
                     const transaction = trn.toJSON();
@@ -128,31 +126,27 @@ function getByMerchntsId(req, res) {
         .catch((err) => resCatchError(res, err));
 }
 function refund(req, res) {
-    let list_products_to_refund = req.body;
-    Transaction.findOne({order_token: req.params.token})
-    .then((data) => {
-        console.log("data => ", data.dataValues)
-        let list_product = manageProducts( data.dataValues.products, list_products_to_refund)
-        Transaction
-        .update({ products: list_product['newAllProducts'] }, {
-            where: {
-                order_token: req.params.token
-            },
-          }).then(() => {
-            
-            Operation.create({
-                transaction_id: data.dataValues.id,
-                state: OPERATIONS_STATE.DONE,
-                type: OPERATIONS_TYPE.REFUNDED,
-                products: list_product['refundedProducts'],
-            }).then((createdOperation) => {
-                res.status(201).json({
-                    ...createdOperation.toJSON(),
+    const list_products_to_refund = req.body;
+    Transaction.findOne({ order_token: req.params.token }).then(
+        (currentTransaction) => {
+            const { newAllProducts, refundedProducts } = manageProducts(
+                currentTransaction.products,
+                list_products_to_refund
+            );
+            currentTransaction.update({ products: newAllProducts }).then(() => {
+                Operation.create({
+                    transaction_id: currentTransaction.id,
+                    state: OPERATIONS_STATE.DONE,
+                    type: OPERATIONS_TYPE.REFUNDED,
+                    products: refundedProducts,
+                }).then((createdOperation) => {
+                    res.status(201).json({
+                        ...createdOperation.toJSON(),
+                    });
                 });
             });
-          });
-        })
-   
+        }
+    );
 }
 
 export { getAll, getOne, post, deleteTrns, update, getByMerchntsId, refund };

@@ -15,16 +15,13 @@ const denormalize = async (transaction_id, operation) => {
                     { model: Merchant, as: "merchant" },
                 ],
             });
-    
+
             const document = new TransactionMongo(dTransaction.toJSON());
             await document.save();
         }
     });
 
     console.log("=======================================");
-    console.log("operation", operation);
-
-
 };
 
 export default denormalize;

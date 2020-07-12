@@ -1,0 +1,54 @@
+POST http://localhost:3001/products
+Content-Type: application/json
+
+{
+     "name": "YOLo",
+    "description": "Hyper torch briquet tempête. Petit brûleur jet-flame à gaz. Pocket torch.",
+    "price": 124,
+    "states": "Disponible",
+    "path_image": "../images/briquet_bruleur.jpg"
+}
+###
+DELETE  http://localhost:3001/products/5efdf19aa0fa8f05bc6dab05
+Content-Type: application/json
+###
+GET http://localhost:3001/products
+Content-Type: application/json
+
+{
+     "name": "YOLo",
+    "description": "Hyper torch briquet tempête. Petit brûleur jet-flame à gaz. Pocket torch.",
+    "price": 124,
+    "states": "Disponible",
+    "path_image": "../images/briquet_bruleur.jpg"
+}
+
+
+###
+
+
+POST http://localhost:3001/products
+Content-Type: application/json
+
+       {
+          "name": "4 serres-câbles",
+            "description": "Colliers de serrage universels, Un modèle économique mais néanmoins de qualité.",
+            "price": 135,
+            "states": "Disponible",
+            "path_image": "../images/serre_cable.jpg"
+          
+        }
+
+###
+{
+    "id": 1,
+    "name": "Couverture de survie",
+    "description": "Les couvertures de survie sont utilisées en situation d'urgence pour diminuer les pertes de chaleur ainsi que pour ses propriétés imperméables contre l'humidité et le vent",
+    "price": 12,
+    "states": "Disponible",
+    "path_image": "../images/couverture_survie.jpg"
+  },
+  
+
+
+    </div>

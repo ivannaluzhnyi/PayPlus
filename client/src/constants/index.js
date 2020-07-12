@@ -52,7 +52,7 @@ export const labelColorsOperationState = {
 
 export const labelColorsOperationType = {
   CAPTURE: 'success',
-  REFUNDED: 'success'
+  REFUNDED: 'warning'
 };
 
 export const labelColorsProductState = {

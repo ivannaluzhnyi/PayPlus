@@ -25,19 +25,6 @@ services:
             ME_CONFIG_MONGODB_ADMINPASSWORD: password
             ME_CONFIG_MONGODB_PORT: 27018
 
-    server-only:
-        image: node:alpine
-        volumes:
-            - "./server:/home/node/app:rw,consistent"
-        working_dir: "/home/node/app"
-        environment:
-            JWT_SECRET: "MyBestSecret"
-            MAILER_USER: "payplus.info2020@gmail.com"
-            MAILER_PASS: "paypluas2020"
-        command: "npm run dev"
-        ports:
-            - 127.0.0.1:3050:3050
-
     server-psp:
         image: node:alpine
         volumes:
@@ -70,9 +57,26 @@ services:
             - pgadmin
             - mongo-express
             - server-psp
+            - server-merchant
         command: "npm run dev"
         ports:
             - 127.0.0.1:3050:3050
+
+    server-merchant:
+        image: node:alpine
+        volumes:
+            - "./server-marchand:/home/node/app:rw,consistent"
+        working_dir: "/home/node/app"
+        environment:
+            MONGODB_USER: "root"
+            MONGODB_PASS: "password"
+            MONGODB_DBNAME: "dbmerchant"
+            BASE_URL: "http://localhost:3050"
+        depends_on:
+            - mongo-express
+        command: "npm run start"
+        ports:
+            - 127.0.0.1:3001:3001
 
     client:
         build: "./docker"
