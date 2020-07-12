@@ -1,8 +1,8 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
@@ -24,6 +24,13 @@ import {
   OPERATIONS_STATE
 } from 'src/constants';
 import Label from 'src/components/Label';
+import {
+  DialogTitle,
+  DialogContent,
+  Button,
+  Dialog,
+  useMediaQuery
+} from '@material-ui/core';
 
 const useRowStyles = makeStyles({
   root: {
@@ -44,7 +51,7 @@ function compareOpeartion(a, b) {
 }
 
 const Row = props => {
-  const { row } = props;
+  const { row, handleSetRefundProducts } = props;
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
 
@@ -108,7 +115,6 @@ const Row = props => {
                               labelColorsOperationState[operationRow.state]
                             }
                           >
-                            {console.log('operationRow => ', operationRow)}
                             {operationRow.state}
                           </Label>
                         </TableCell>
@@ -122,6 +128,20 @@ const Row = props => {
                             >
                               {operationRow.type}
                             </Label>
+                          )}
+
+                          {console.log('operationRow => ', operationRow)}
+
+                          {operationRow.products !== null && (
+                            <Button
+                              color="primary"
+                              onClick={() =>
+                                handleSetRefundProducts(operationRow.products)
+                              }
+                              size="small"
+                            >
+                              Produits remboursés
+                            </Button>
                           )}
                         </TableCell>
 
@@ -184,29 +204,89 @@ const Row = props => {
   );
 };
 
-const Results = ({ transactions }) => (
-  <TableContainer component={Paper}>
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell />
-          <TableCell>ID</TableCell>
-          <TableCell>Montant de la commande</TableCell>
-          <TableCell>Nom du client</TableCell>
-          <TableCell>Adresse de livraison</TableCell>
-          <TableCell>Ville</TableCell>
-          <TableCell>Pays</TableCell>
-          <TableCell align="right">Creation</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {transactions.reverse().map((row, idx) => (
-          <Row key={idx} row={row} />
-        ))}
-      </TableBody>
-    </Table>
-  </TableContainer>
-);
+const Results = ({ transactions }) => {
+  const [refundProducts, setRefundProducts] = useState(null);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const handleSetRefundProducts = products => {
+    setRefundProducts(products);
+  };
+
+  const RefundDialog = (
+    <Dialog
+      open={refundProducts !== null}
+      onClose={() => setRefundProducts(null)}
+      fullScreen={fullScreen}
+      maxWidth="lg"
+    >
+      <DialogTitle id="responsive-dialog-title">
+        Produits remboursés
+      </DialogTitle>
+      <DialogContent>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Quantité</TableCell>
+              <TableCell>Nom</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Statut</TableCell>
+              <TableCell>Montant</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {refundProducts &&
+              refundProducts.map((productRow, productIdx) => (
+                <TableRow key={productIdx}>
+                  <TableCell>{productRow.qte}</TableCell>
+                  <TableCell>{productRow.product.name}</TableCell>
+                  <TableCell>{productRow.product.description}</TableCell>
+
+                  <TableCell>
+                    <Label
+                      color={labelColorsProductState[productRow.product.states]}
+                    >
+                      {productRow.product.states}
+                    </Label>
+                  </TableCell>
+                  <TableCell>{productRow.product.price}</TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </DialogContent>
+    </Dialog>
+  );
+  return (
+    <>
+      {RefundDialog}
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell>ID</TableCell>
+              <TableCell>Montant de la commande</TableCell>
+              <TableCell>Nom du client</TableCell>
+              <TableCell>Adresse de livraison</TableCell>
+              <TableCell>Ville</TableCell>
+              <TableCell>Pays</TableCell>
+              <TableCell align="right">Creation</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {transactions.reverse().map((row, idx) => (
+              <Row
+                handleSetRefundProducts={handleSetRefundProducts}
+                key={idx}
+                row={row}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
+};
 
 Results.propTypes = {
   transactions: PropTypes.array
