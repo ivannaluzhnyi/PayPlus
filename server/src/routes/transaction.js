@@ -17,6 +17,6 @@ router.post("/", post);
 router.delete("/:id", deleteTrns);
 router.put("/:id", update);
 router.post("/mongo", getByMerchntsId);
-router.post("/refund", refund);
+router.post("/refund/:token", refund);
 
 module.exports = router;
