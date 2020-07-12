@@ -16,7 +16,6 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import { mappingDevise } from 'src/utils/helpers';
 import moment from 'moment';
 import {
   labelColorsOperationState,
@@ -49,10 +48,6 @@ const Row = props => {
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
 
-  console.log('row => ', row);
-
-  const mappedDevise = mappingDevise(row.merchant.devise);
-
   return (
     <>
       <TableRow className={classes.root}>
@@ -68,10 +63,7 @@ const Row = props => {
         <TableCell component="th" scope="row">
           {row.id}
         </TableCell>
-        <TableCell>
-          {row.order_amount}
-          {mappedDevise}
-        </TableCell>
+        <TableCell>{row.order_amount}</TableCell>
         <TableCell>
           {row.client_first_name} {row.client_last_name}
         </TableCell>
@@ -88,7 +80,10 @@ const Row = props => {
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell
+          style={{ paddingBottom: 0, paddingTop: 0, paddingLeft: 15 }}
+          colSpan={9}
+        >
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom component="div">
@@ -103,33 +98,39 @@ const Row = props => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.operations.sort(compareOpeartion).map(operationRow => (
-                    <TableRow key={operationRow.id}>
-                      <TableCell>
-                        <Label
-                          color={labelColorsOperationState[operationRow.state]}
-                        >
-                          {operationRow.state}
-                        </Label>
-                      </TableCell>
-
-                      <TableCell>
-                        {operationRow.type && (
+                  {row.operations
+                    .sort(compareOpeartion)
+                    .map((operationRow, index) => (
+                      <TableRow key={index}>
+                        <TableCell>
                           <Label
-                            color={labelColorsOperationType[operationRow.type]}
+                            color={
+                              labelColorsOperationState[operationRow.state]
+                            }
                           >
-                            {operationRow.type}
+                            {operationRow.state}
                           </Label>
-                        )}
-                      </TableCell>
+                        </TableCell>
 
-                      <TableCell align="right">
-                        {moment(operationRow.createdAt).format(
-                          'DD/MM/YYYY HH:mm:ss'
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                        <TableCell>
+                          {operationRow.type && (
+                            <Label
+                              color={
+                                labelColorsOperationType[operationRow.type]
+                              }
+                            >
+                              {operationRow.type}
+                            </Label>
+                          )}
+                        </TableCell>
+
+                        <TableCell align="right">
+                          {moment(operationRow.createdAt).format(
+                            'DD/MM/YYYY HH:mm:ss'
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </Box>
@@ -138,7 +139,7 @@ const Row = props => {
               <Typography variant="h6" gutterBottom component="div">
                 Produits
               </Typography>
-              <Table size="small" aria-label="purchases">
+              <Table>
                 <TableHead>
                   <TableRow>
                     <TableCell>Quantité</TableCell>
@@ -150,14 +151,13 @@ const Row = props => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.products
-                    .sort(compareOpeartion)
-                    .map((productRow, idx) => (
-                      <TableRow key={idx}>
-                        <TableCell>{productRow.qte}</TableCell>
-                        <TableCell>{productRow.product.name}</TableCell>
-                        <TableCell>{productRow.product.description}</TableCell>
+                  {row.products.map((productRow, productIdx) => (
+                    <TableRow key={productIdx}>
+                      <TableCell>{productRow.qte}</TableCell>
+                      <TableCell>{productRow.product.name}</TableCell>
+                      <TableCell>{productRow.product.description}</TableCell>
 
+                      <TableCell>
                         <Label
                           color={
                             labelColorsProductState[productRow.product.states]
@@ -165,17 +165,14 @@ const Row = props => {
                         >
                           {productRow.product.states}
                         </Label>
-                        <TableCell>
-                          {productRow.product.price}
-                          {mappedDevise}
-                        </TableCell>
-                        <TableCell>
-                          {parseFloat(productRow.product.price) *
-                            Number(productRow.qte)}
-                          {mappedDevise}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                      </TableCell>
+                      <TableCell>{productRow.product.price_symbol}</TableCell>
+                      <TableCell>
+                        {parseFloat(productRow.product.price) *
+                          Number(productRow.qte)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </Box>

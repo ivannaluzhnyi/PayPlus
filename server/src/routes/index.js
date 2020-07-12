@@ -9,6 +9,8 @@ import merchantRoutes from "./merchant";
 import credentialRoutes from "./credentials";
 import paymentRoutes from "./payment";
 
+import deviseRoutes from "./devise";
+
 const routerManager = (app) => {
     app.get("/", (req, res, next) => {
         res.json({ message: "🏦 Hello Pay Plus+!!! 💰💰💰" });
@@ -18,6 +20,7 @@ const routerManager = (app) => {
     app.use("/api/", securityRoutes);
 
     app.use(verifyToken);
+    app.use("/api/devises", deviseRoutes);
     app.use("/api/transactions/", transactionRoutes);
     app.use("/api/operations/", operationRoutes);
 

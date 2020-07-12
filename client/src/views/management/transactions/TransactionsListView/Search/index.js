@@ -6,10 +6,8 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
   Box,
-  Checkbox,
   Chip,
   Divider,
-  FormControlLabel,
   Card,
   Input,
   makeStyles,
@@ -30,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Search = ({ getTransactions }) => {
+const Search = ({ getTransactions, setMerchant }) => {
   const isMountedRef = useIsMountedRef();
   const [merchants, setMerchants] = useState(null);
 
@@ -93,9 +91,6 @@ const Search = ({ getTransactions }) => {
 
     getTransactions(IDs);
   };
-
-  console.log('merchant => ', merchants);
-  console.log('selectOptions => ', selectOptions);
 
   return (
     <Card className={clsx(classes.root)}>

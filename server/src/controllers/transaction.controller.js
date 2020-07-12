@@ -1,13 +1,14 @@
 import Transaction from "../models/Transaction";
 import Operation from "../models/Operation";
 import TransactionMongo from "../models/mongo/Transaction";
+import Devises from "../models/mongo/Devises";
 import { resCatchError } from "../helpers/error";
 import  manageProducts  from "../lib/refund_product"
 import {
     OPERATIONS_STATE,
     OPERATIONS_TYPE,
+    DEVISE_MAPPING
 } from "../lib/constants";
-
 
 function getAll(req, res) {
     if (req.merchant) {
@@ -62,8 +63,67 @@ function update(req, res) {
 
 function getByMerchntsId(req, res) {
     TransactionMongo.find({ "merchant.id": { $in: req.body.merchantsId } })
-        .then((transactions) => {
-            return transactions ? res.json(transactions) : res.sendStatus(404);
+        .then(async (transactions) => {
+            try {
+                const devises = await Devises.find();
+
+                console.log("transactions ===> ", transactions);
+
+                const transactionsToSend = transactions.map((trn) => {
+                    const transaction = trn.toJSON();
+
+                    const finedDevise = devises.find(({ name, createdAt }) => {
+                        const deviseDate = new Date(createdAt);
+                        deviseDate.setHours(0, 0, 0, 0);
+
+                        const transactionDate = new Date(transaction.createdAt);
+                        transactionDate.setHours(0, 0, 0, 0);
+
+                        return (
+                            name ===
+                                DEVISE_MAPPING[transaction.merchant.devise] &&
+                            deviseDate.getTime() === transactionDate.getTime()
+                        );
+                    });
+
+                    const deviseRate = parseFloat(
+                        finedDevise.rate.replace(",", ".")
+                    );
+
+                    const newAmount =
+                        parseFloat(transaction.order_amount) * deviseRate;
+
+                    const productsToSend = trn.products.map((prd) => {
+                        const newPrice = (
+                            parseFloat(prd.product.price) * deviseRate
+                        ).toFixed(2);
+                        return {
+                            ...prd,
+                            product: {
+                                ...prd.product,
+                                price_symbol: String(
+                                    `${newPrice}${finedDevise.currency_symbol}`
+                                ),
+                                price: newPrice,
+                            },
+                        };
+                    });
+
+                    return {
+                        ...transaction,
+                        order_amount: String(
+                            `${newAmount.toFixed(2)}${
+                                finedDevise.currency_symbol
+                            }`
+                        ),
+                        products: productsToSend,
+                    };
+                });
+
+                return transactions
+                    ? res.json(transactionsToSend)
+                    : res.sendStatus(404);
+            } catch (error) {}
         })
         .catch((err) => resCatchError(res, err));
 }

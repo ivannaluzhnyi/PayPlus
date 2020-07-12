@@ -183,7 +183,6 @@ function update(req, res) {
 }
 
 function transactions(req, res) {
-    console.log("req.user => ", req.user);
     switch (req.user.role) {
         case ROLE.ADMIN:
             Merchant.findAll({
