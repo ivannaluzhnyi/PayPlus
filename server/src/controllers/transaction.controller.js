@@ -9,6 +9,7 @@ import {
     OPERATIONS_TYPE,
     DEVISE_MAPPING,
 } from "../lib/constants";
+import { calculNewOrderAmount } from "../helpers/functions";
 
 function getAll(req, res) {
     if (req.merchant) {
@@ -121,30 +122,39 @@ function getByMerchntsId(req, res) {
                 return transactions
                     ? res.json(transactionsToSend)
                     : res.sendStatus(404);
-            } catch (error) {}
+            } catch (error) {
+                console.log("error => ", error);
+            }
         })
         .catch((err) => resCatchError(res, err));
 }
 function refund(req, res) {
     const list_products_to_refund = req.body;
-    Transaction.findOne({ order_token: req.params.token }).then(
+
+    Transaction.findOne({ where: { order_token: req.params.token } }).then(
         (currentTransaction) => {
             const { newAllProducts, refundedProducts } = manageProducts(
                 currentTransaction.products,
                 list_products_to_refund
             );
-            currentTransaction.update({ products: newAllProducts }).then(() => {
-                Operation.create({
-                    transaction_id: currentTransaction.id,
-                    state: OPERATIONS_STATE.DONE,
-                    type: OPERATIONS_TYPE.REFUNDED,
-                    products: refundedProducts,
-                }).then((createdOperation) => {
-                    res.status(201).json({
-                        ...createdOperation.toJSON(),
+
+            currentTransaction
+                .update({
+                    products: newAllProducts,
+                    order_amount: calculNewOrderAmount(newAllProducts),
+                })
+                .then(() => {
+                    Operation.create({
+                        transaction_id: currentTransaction.id,
+                        state: OPERATIONS_STATE.DONE,
+                        type: OPERATIONS_TYPE.REFUNDED,
+                        products: refundedProducts,
+                    }).then((createdOperation) => {
+                        res.status(201).json({
+                            ...createdOperation.toJSON(),
+                        });
                     });
                 });
-            });
         }
     );
 }

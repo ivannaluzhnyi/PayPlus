@@ -31,13 +31,19 @@ class Operation extends Model {
                 modelName: "Operation",
                 hooks: {
                     afterCreate: async (operation) => {
-                        denormalizeTransaction(operation.transaction_id);
+                        setTimeout(() => {
+                            denormalizeTransaction(operation.transaction_id);
+                        }, 500);
                     },
                     afterUpdate: async (operation) => {
-                        denormalizeTransaction(operation.transaction_id);
+                        setTimeout(() => {
+                            denormalizeTransaction(operation.transaction_id);
+                        }, 500);
                     },
                     afterDestroy: async (operation) => {
-                        denormalizeTransaction(operation.transaction_id);
+                        setTimeout(() => {
+                            denormalizeTransaction(operation.transaction_id);
+                        }, 500);
                     },
                 },
             }

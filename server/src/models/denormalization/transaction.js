@@ -3,25 +3,45 @@ import Transaction from "../Transaction";
 import Merchant from "../Merchant";
 
 import TransactionMongo from "../mongo/Transaction";
+import { OPERATIONS_TYPE } from "../../lib/constants";
 
 const denormalize = async (transaction_id, operation) => {
-    TransactionMongo.deleteOne({ id: transaction_id }).then(async (res) => {
-        console.log("res =<>  ", res);
-
-        if (operation !== "delete") {
-            const dTransaction = await Transaction.findByPk(transaction_id, {
-                include: [
-                    { model: Operation, as: "operations" },
-                    { model: Merchant, as: "merchant" },
-                ],
-            });
-
-            const document = new TransactionMongo(dTransaction.toJSON());
-            await document.save();
-        }
+    await TransactionMongo.deleteMany({
+        id: transaction_id,
     });
 
-    console.log("=======================================");
+    if (operation !== "delete") {
+        const dTransaction = await Transaction.findByPk(transaction_id, {
+            include: [
+                { model: Operation, as: "operations" },
+                { model: Merchant, as: "merchant" },
+            ],
+        });
+
+        const dTransactionJSON = dTransaction.toJSON();
+
+        const document = new TransactionMongo({
+            ...dTransactionJSON,
+            operations: dTransactionJSON.operations.map((opr) => {
+                if (opr.type === OPERATIONS_TYPE.REFUNDED) {
+                    const refund_amount = opr.products.reduce(
+                        (acc, curr) =>
+                            acc +
+                            parseFloat(curr.product.price) * Number(curr.qte),
+                        0
+                    );
+
+                    return {
+                        ...opr,
+                        refund_amount,
+                    };
+                }
+
+                return opr;
+            }),
+        });
+        await document.save();
+    }
 };
 
 export default denormalize;

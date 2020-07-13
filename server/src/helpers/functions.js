@@ -18,8 +18,16 @@ const getFileType = (string) => {
 
     return "";
 };
+
+const calculNewOrderAmount = (products) =>
+    products.reduce(
+        (acc, curr) => acc + parseFloat(curr.product.price) * Number(curr.qte),
+        0
+    );
+
 module.exports = {
     toCamelCase,
     getFileType,
+    calculNewOrderAmount,
 };
 4;

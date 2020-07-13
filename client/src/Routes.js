@@ -129,51 +129,6 @@ const routesConfig = [
       },
 
       {
-        exact: true,
-        path: '/app/projects/overview',
-        component: lazy(() => import('src/views/projects/OverviewView'))
-      },
-      {
-        exact: true,
-        path: '/app/projects/browse',
-        component: lazy(() => import('src/views/projects/ProjectBrowseView'))
-      },
-      {
-        exact: true,
-        path: '/app/projects/create',
-        component: lazy(() => import('src/views/projects/ProjectCreateView'))
-      },
-      {
-        exact: true,
-        path: '/app/projects/:id',
-        component: lazy(() => import('src/views/projects/ProjectDetailsView'))
-      },
-      {
-        exact: true,
-        path: '/app/projects',
-        component: () => <Redirect to="/app/projects/browse" />
-      },
-      {
-        exact: true,
-        path: '/app/social',
-        component: () => <Redirect to="/app/social/profile" />
-      },
-      {
-        exact: true,
-        path: '/app/extra/charts/apex',
-        component: lazy(() => import('src/views/extra/charts/ApexChartsView'))
-      },
-      {
-        exact: true,
-        path: '/app/extra/editors/draft-js',
-        component: lazy(() => import('src/views/extra/editors/DraftEditorView'))
-      },
-      {
-        exact: true,
-        path: '/app/extra/editors/quill',
-        component: lazy(() => import('src/views/extra/editors/QuillEditorView'))
-      },
-      {
         component: () => <Redirect to="/404" />
       }
     ]
