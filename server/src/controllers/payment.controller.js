@@ -1,8 +1,10 @@
+import fetch from "node-fetch";
+
+import CryptoJS from "crypto-js";
+
 import Transaction from "../models/Transaction";
 import Merchant from "../models/Merchant";
 import Operation from "../models/Operation";
-
-import fetch from "node-fetch";
 
 import { OPERATIONS_STATE, OPERATIONS_TYPE } from "../lib/constants";
 
@@ -97,6 +99,11 @@ function post(req, res) {
                     state: OPERATIONS_STATE.PROCESSING,
                 }).then(async () => {
                     try {
+                        const crypted = CryptoJS.AES.encrypt(
+                            JSON.stringify({ ...req.body }),
+                            process.env.PSP_SECRET
+                        ).toString();
+
                         const response = await fetch(
                             "http://server-psp:3005/checkout",
 
@@ -107,7 +114,7 @@ function post(req, res) {
                                     "Content-Type": "application/json",
                                 },
                                 body: JSON.stringify({
-                                    cardToken: "qsfqskjsfbqjh;skdk:jsqndklmq,d",
+                                    cardToken: crypted,
                                 }),
                             }
                         );
