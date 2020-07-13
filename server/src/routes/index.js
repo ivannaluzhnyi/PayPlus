@@ -8,7 +8,7 @@ import operationRoutes from "./operation";
 import merchantRoutes from "./merchant";
 import credentialRoutes from "./credentials";
 import paymentRoutes from "./payment";
-
+import dashboardRoutes from "./dashboard"
 import deviseRoutes from "./devise";
 
 const routerManager = (app) => {
@@ -21,6 +21,7 @@ const routerManager = (app) => {
 
     app.use(verifyToken);
     app.use("/api/devises", deviseRoutes);
+    app.use("/api/dashboard/", dashboardRoutes)
     app.use("/api/transactions/", transactionRoutes);
     app.use("/api/operations/", operationRoutes);
 
