@@ -44,7 +44,7 @@ export const labelColorsUserRole = {
 };
 
 export const labelColorsOperationState = {
-  CREATED: 'primary',
+  CREATED: 'secondary',
   PROCESSING: 'warning',
   DONE: 'success',
   CANCELED: 'error'

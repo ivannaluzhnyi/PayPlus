@@ -1,13 +1,10 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import Chart from 'react-apexcharts';
-import {
-  Card,
-  CardContent,
-  Typography,
-  useTheme
-} from '@material-ui/core';
+import moment from 'moment';
+import { Card, CardContent, Typography, useTheme } from '@material-ui/core';
 
-function LineChart() {
+const LineChart = ({ lineStat }) => {
   const theme = useTheme();
   const chart = {
     options: {
@@ -19,9 +16,9 @@ function LineChart() {
         },
         zoom: false
       },
-      colors: ['#1f87e6', '#ff5c7c'],
+      colors: ['#1f87e6', '#ff5c7c', '#FEB019'],
       dataLabels: {
-        enabled: false
+        enabled: true
       },
       grid: {
         borderColor: theme.palette.divider,
@@ -41,7 +38,7 @@ function LineChart() {
       },
       markers: {
         size: 4,
-        strokeColors: ['#1f87e6', '#27c6db'],
+        strokeColors: ['#1f87e6', '#27c6db', '#FEB019'],
         strokeWidth: 0,
         shape: 'circle',
         radius: 2,
@@ -70,7 +67,9 @@ function LineChart() {
           show: true,
           color: theme.palette.divider
         },
-        categories: ['01 Jan', '02 Jan', '03 Jan', '04 Jan', '05 Jan', '06 Jan', '07 Jan', '08 Jan', '09 Jan', '10 Jan', '11 Jan', '12 Jan'],
+        categories: lineStat.dates.map(dtStr =>
+          moment(dtStr).format('DD/MM/YYYY')
+        ),
         labels: {
           style: {
             colors: theme.palette.text.secondary
@@ -92,33 +91,21 @@ function LineChart() {
               colors: theme.palette.text.secondary
             }
           }
-        },
-        {
-          axisTicks: {
-            show: true,
-            color: theme.palette.divider
-          },
-          axisBorder: {
-            show: true,
-            color: theme.palette.divider
-          },
-          labels: {
-            style: {
-              colors: theme.palette.text.secondary
-            }
-          },
-          opposite: true
         }
       ]
     },
     series: [
       {
-        name: 'Page Views',
-        data: [3350, 1840, 2254, 5780, 9349, 5241, 2770, 2051, 3764, 2385, 5912, 8323]
+        name: 'Montant de transaction',
+        data: lineStat.transactionAmounts
       },
       {
-        name: 'Session Duration',
-        data: [35, 41, 62, 42, 13, 18, 29, 37, 36, 51, 32, 35]
+        name: 'Montant de remboursement',
+        data: lineStat.refundAmounts
+      },
+      {
+        name: 'Nombre de produits',
+        data: lineStat.nbrProducts
       }
     ]
   };
@@ -126,20 +113,13 @@ function LineChart() {
   return (
     <Card>
       <CardContent>
-        <Typography
-          variant="h4"
-          color="textPrimary"
-        >
-          Web Traffic
+        <Typography variant="h4" color="textPrimary">
+          Montants
         </Typography>
-        <Chart
-          type="line"
-          height="300"
-          {...chart}
-        />
+        <Chart type="line" height="300" {...chart} />
       </CardContent>
     </Card>
   );
-}
+};
 
 export default LineChart;

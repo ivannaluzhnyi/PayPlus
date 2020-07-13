@@ -1,13 +1,9 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import Chart from 'react-apexcharts';
-import {
-  Card,
-  CardContent,
-  Typography,
-  useTheme
-} from '@material-ui/core';
+import { Card, CardContent, useTheme } from '@material-ui/core';
 
-function RadialChart() {
+const RadialChart = ({ radialStat }) => {
   const theme = useTheme();
 
   const data = {
@@ -21,11 +17,11 @@ function RadialChart() {
         zoom: false
       },
       colors: ['#27c6db'],
-      labels: ['System Health'],
+      labels: ['Transations validés'],
       plotOptions: {
         radialBar: {
           hollow: {
-            size: '60%',
+            size: '60%'
           },
           dataLabels: {
             name: {
@@ -45,7 +41,7 @@ function RadialChart() {
         mode: theme.palette.type
       }
     },
-    series: [83]
+    series: [radialStat.value]
   };
 
   return (
@@ -57,17 +53,9 @@ function RadialChart() {
           type="radialBar"
           height="300"
         />
-        <Typography
-          align="center"
-          color="textSecondary"
-          variant="caption"
-          component="p"
-        >
-          This shouldn&apos;t be bellow 80%
-        </Typography>
       </CardContent>
     </Card>
   );
-}
+};
 
 export default RadialChart;

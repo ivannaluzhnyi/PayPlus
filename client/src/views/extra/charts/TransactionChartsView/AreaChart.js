@@ -1,13 +1,10 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import Chart from 'react-apexcharts';
-import {
-  Card,
-  CardContent,
-  Typography,
-  useTheme
-} from '@material-ui/core';
+import moment from 'moment';
+import { Card, CardContent, Typography, useTheme } from '@material-ui/core';
 
-function AreaChart() {
+const AreaChart = ({ areaSats }) => {
   const theme = useTheme();
 
   const data = {
@@ -61,7 +58,9 @@ function AreaChart() {
           show: true,
           color: theme.palette.divider
         },
-        categories: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        categories: areaSats.dates.map(dtStr =>
+          moment(dtStr).format('DD/MM/YYYY')
+        ),
         labels: {
           style: {
             colors: theme.palette.text.secondary
@@ -86,12 +85,12 @@ function AreaChart() {
     },
     series: [
       {
-        name: 'This week',
-        data: [30, 40, 25, 50, 49, 21, 70, 51]
+        name: 'Transaction effectué',
+        data: areaSats.transactionPerformed
       },
       {
-        name: 'Last week',
-        data: [23, 12, 54, 61, 32, 56, 81, 19]
+        name: 'Remoursement',
+        data: areaSats.refunds
       }
     ]
   };
@@ -99,11 +98,8 @@ function AreaChart() {
   return (
     <Card>
       <CardContent>
-        <Typography
-          variant="h4"
-          color="textPrimary"
-        >
-          Sales
+        <Typography variant="h4" color="textPrimary">
+          Transactions
         </Typography>
         <Chart
           options={data.options}
@@ -114,6 +110,6 @@ function AreaChart() {
       </CardContent>
     </Card>
   );
-}
+};
 
 export default AreaChart;

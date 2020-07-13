@@ -4,6 +4,8 @@ const Credential = require("../models/credencial");
 
 const fetch = require("node-fetch");
 
+const faker = require("faker");
+
 const Product = require("../models/product");
 const Transaction = require("../models/transaction");
 const cartRoutes = (app) => {
@@ -23,12 +25,12 @@ const cartRoutes = (app) => {
         const transaction_information = {
             products: [],
             client: {
-                client_first_name: "John",
-                client_last_name: "Deckard",
-                delivery_address: "242 Rue du Faubourg Saint-Antoine",
-                delivery_zip_code: "75012",
-                delivery_city: "Paris",
-                delivery_country: "France",
+                client_first_name: faker.name.findName(),
+                client_last_name: faker.name.lastName(),
+                delivery_address: faker.address.streetAddress(),
+                delivery_zip_code: faker.address.zipCode(),
+                delivery_city: faker.address.city(),
+                delivery_country: faker.address.country(),
                 order_amount: cart.price,
             },
             credential: [],
