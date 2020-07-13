@@ -31,9 +31,8 @@ services:
             - "./server-psp:/home/node/app:rw,consistent"
         working_dir: "/home/node/app"
         environment:
-            JWT_SECRET: "MyBestSecret"
-            MAILER_USER: "payplus.info2020@gmail.com"
-            MAILER_PASS: "paypluas2020"
+            PSP_SECRET: "MonSuperPspSecretLol"
+
         command: "npm run start"
         ports:
             - 127.0.0.1:3005:3005
@@ -52,6 +51,7 @@ services:
             MAILER_USER: "payplus.info2020@gmail.com"
             MAILER_PASS: "paypluas2020"
             BASE_URL: "http://localhost:3050"
+            PSP_SECRET: "MonSuperPspSecretLol"
         depends_on:
             - postgres
             - pgadmin
