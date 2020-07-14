@@ -67,7 +67,7 @@ const MerchantDetailsView = () => {
     { value: 'credentials', label: 'Credentials' },
     { value: 'users', label: 'Utilisateurs' },
     { value: 'transactions', label: 'Transactions' },
-    { value: 'chart', label: 'Statistisues' }
+    { value: 'chart', label: 'Statistiques' }
   ];
 
   const handleTabsChange = (event, value) => {
