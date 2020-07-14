@@ -44,7 +44,7 @@ export const labelColorsUserRole = {
 };
 
 export const labelColorsOperationState = {
-  CREATED: 'primary',
+  CREATED: 'secondary',
   PROCESSING: 'warning',
   DONE: 'success',
   CANCELED: 'error'
@@ -69,4 +69,11 @@ export const OPERATIONS_STATE = {
 export const OPERATIONS_TYPE = {
   CAPTURE: 'CAPTURE',
   REFUNDED: 'REFUNDED'
+};
+
+export const MERCURE_TOPICS = {
+  STATS: {
+    BY_MERCHANT: '/stats/by-merchant',
+    DASHBOARD: '/stats/dashboard'
+  }
 };

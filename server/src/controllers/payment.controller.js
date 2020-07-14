@@ -1,13 +1,14 @@
+import fetch from "node-fetch";
+
+import CryptoJS from "crypto-js";
+
+import { pushStatsByMerchant } from "../services/mercure-push";
+
 import Transaction from "../models/Transaction";
 import Merchant from "../models/Merchant";
 import Operation from "../models/Operation";
 
-import fetch from "node-fetch";
-
-import {
-    OPERATIONS_STATE,
-    OPERATIONS_TYPE,
-} from "../lib/constants";
+import { OPERATIONS_STATE, OPERATIONS_TYPE } from "../lib/constants";
 
 function get(req, res) {
     Transaction.findOne({
@@ -23,7 +24,6 @@ function get(req, res) {
         ],
     })
         .then((finedTransaction) => {
-            console.log("finedTransaction => ", finedTransaction.toJSON());
             if (
                 finedTransaction &&
                 !finedTransaction.operations.find(
@@ -53,24 +53,38 @@ function post(req, res) {
                 order_token: req.body.token,
             },
             include: [{ model: Merchant, as: "merchant" }],
-        }).then((finedTransaction) => {
+        }).then(async (finedTransaction) => {
             // TODO => https://github.com/sequelize/sequelize/issues/8444
-            Operation.destroy({
-                where: {
-                    transaction_id: finedTransaction.id,
-                },
-            }).then(() => {
-                finedTransaction
-                    .destroy({
-                        individualHooks: true,
-                    })
-                    .then(() => {
-                        res.writeHead(301, {
-                            Location: finedTransaction.merchant.url_cancel,
-                        });
-                        res.end();
-                    });
+            // REMOVE TRANSACTIONS + OPERATIONS
+            // Operation.destroy({
+            //     individualHooks: true,
+            //     where: {
+            //         transaction_id: finedTransaction.id,
+            //     },
+            // }).then(() => {
+            //     finedTransaction
+            //         .destroy({
+            //             individualHooks: true,
+            //         })
+            //         .then(() => {
+            //             res.writeHead(301, {
+            //                 Location: finedTransaction.merchant.url_cancel,
+            //             });
+            //             res.end();
+            //         });
+            // });
+
+            await Operation.create({
+                transaction_id: finedTransaction.id,
+                state: OPERATIONS_STATE.CANCELED,
             });
+
+            res.writeHead(301, {
+                Location: finedTransaction.merchant.url_cancel,
+            });
+            res.end();
+
+            await pushStatsByMerchant(finedTransaction.merchant.id);
         });
 
         return;
@@ -89,6 +103,11 @@ function post(req, res) {
                     state: OPERATIONS_STATE.PROCESSING,
                 }).then(async () => {
                     try {
+                        const crypted = CryptoJS.AES.encrypt(
+                            JSON.stringify({ ...req.body }),
+                            process.env.PSP_SECRET
+                        ).toString();
+
                         const response = await fetch(
                             "http://server-psp:3005/checkout",
 
@@ -99,7 +118,7 @@ function post(req, res) {
                                     "Content-Type": "application/json",
                                 },
                                 body: JSON.stringify({
-                                    cardToken: "qsfqskjsfbqjh;skdk:jsqndklmq,d",
+                                    cardToken: crypted,
                                 }),
                             }
                         );
@@ -117,6 +136,10 @@ function post(req, res) {
                                 });
                                 res.end();
                             });
+
+                            await pushStatsByMerchant(
+                                finedTransaction.merchant.id
+                            );
                         } else {
                             res.writeHead(301, {
                                 Location: finedTransaction.merchant.url_cancel,

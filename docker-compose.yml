@@ -1,6 +1,21 @@
 version: "3.1"
 
 services:
+    mercure:
+        image: dunglas/mercure
+        environment:
+            - JWT_KEY=!ChangeMe!
+            - DEMO=1
+            - ALLOW_ANONYMOUS=1
+            - HEARTBEAT_INTERVAL=30s
+            - ADDR=:3003
+            - CORS_ALLOWED_ORIGINS=*
+            - PUBLISH_ALLOWED_ORIGINS=http://mercure:3003,http://localhost:3000,http://localhost:3050
+        ports:
+            - "3003:3003"
+        volumes:
+            - dev-certs:/certs:ro,nocopy
+
     mongo:
         image: mongo
         ports:
@@ -31,9 +46,8 @@ services:
             - "./server-psp:/home/node/app:rw,consistent"
         working_dir: "/home/node/app"
         environment:
-            JWT_SECRET: "MyBestSecret"
-            MAILER_USER: "payplus.info2020@gmail.com"
-            MAILER_PASS: "paypluas2020"
+            PSP_SECRET: "MonSuperPspSecretLol"
+
         command: "npm run start"
         ports:
             - 127.0.0.1:3005:3005
@@ -52,12 +66,17 @@ services:
             MAILER_USER: "payplus.info2020@gmail.com"
             MAILER_PASS: "paypluas2020"
             BASE_URL: "http://localhost:3050"
+            PSP_SECRET: "MonSuperPspSecretLol"
+            MERCURE_PUBLISH_URL: http://127.0.0.1:3003/hub
+            MERCURE_JWT_SECRET: "!ChangeMe!"
+
         depends_on:
             - postgres
             - pgadmin
             - mongo-express
             - server-psp
             - server-merchant
+            - mercure
         command: "npm run dev"
         ports:
             - 127.0.0.1:3050:3050
@@ -90,6 +109,8 @@ services:
             - 127.0.0.1:3000:3000
         environment:
             REACT_APP_BACK_OFFICE_URL: http://localhost:3050/
+            REACT_APP_MERCURE_HUB: http://localhost:3003/.well-known/mercure
+            REACT_APP_MERCURE_JWT_SECRET: "!ChangeMe!"
 
     postgres:
         container_name: postgres
@@ -122,3 +143,4 @@ volumes:
     mongo-data:
     pgadmin:
     db-data:
+    dev-certs: {}

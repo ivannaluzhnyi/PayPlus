@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import {
   Avatar,
   Box,
-  Chip,
   Divider,
   Drawer,
   Hidden,
@@ -21,28 +20,15 @@ import {
 } from '@material-ui/core';
 import ReceiptIcon from '@material-ui/icons/ReceiptOutlined';
 import {
-  Briefcase as BriefcaseIcon,
-  Calendar as CalendarIcon,
-  ShoppingCart as ShoppingCartIcon,
-  Folder as FolderIcon,
-  BarChart as BarChartIcon,
-  AlertCircle as AlertCircleIcon,
-  Trello as TrelloIcon,
   User as UserIcon,
-  Layout as LayoutIcon,
-  Edit as EditIcon,
-  DollarSign as DollarSignIcon,
   Mail as MailIcon,
-  MessageCircle as MessageCircleIcon,
   PieChart as PieChartIcon,
-  Share2 as ShareIcon,
   Users as UsersIcon
 } from 'react-feather';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import LoopIcon from '@material-ui/icons/Loop';
 import Logo from 'src/components/Logo';
 import { ROLE } from 'src/constants';
-import Label from 'src/components/Label';
 import NavItem from './NavItem';
 
 const navConfigByRole = role => {
@@ -56,11 +42,6 @@ const navConfigByRole = role => {
               title: 'Dashboard',
               icon: PieChartIcon,
               href: '/app/reports/dashboard'
-            },
-            {
-              title: 'Dashboard Alternative',
-              icon: BarChartIcon,
-              href: '/app/reports/dashboard-alternative'
             }
           ]
         },
@@ -95,42 +76,8 @@ const navConfigByRole = role => {
               href: '/app/management/products',
               items: [
                 {
-                  title: 'List Products',
-                  href: '/app/management/products'
-                },
-                {
-                  title: 'Create Product',
-                  href: '/app/management/products/create'
-                }
-              ]
-            },
-            {
-              title: 'Orders',
-              icon: FolderIcon,
-              href: '/app/management/orders',
-              items: [
-                {
-                  title: 'List Orders',
-                  href: '/app/management/orders'
-                },
-                {
-                  title: 'View Order',
-                  href: '/app/management/orders/1'
-                }
-              ]
-            },
-            {
-              title: 'Invoices',
-              icon: ReceiptIcon,
-              href: '/app/management/invoices',
-              items: [
-                {
-                  title: 'List Invoices',
-                  href: '/app/management/invoices'
-                },
-                {
-                  title: 'View Invoice',
-                  href: '/app/management/invoices/1'
+                  title: 'List Transactions',
+                  href: '/app/management/transactions'
                 }
               ]
             }
@@ -157,11 +104,6 @@ const navConfigByRole = role => {
               title: 'Dashboard',
               icon: PieChartIcon,
               href: '/app/reports/dashboard'
-            },
-            {
-              title: 'Dashboard Alternative',
-              icon: BarChartIcon,
-              href: '/app/reports/dashboard-alternative'
             }
           ]
         },
@@ -189,21 +131,6 @@ const navConfigByRole = role => {
                   href: '/app/management/transactions'
                 }
               ]
-            },
-            {
-              title: 'Invoices',
-              icon: ReceiptIcon,
-              href: '/app/management/invoices',
-              items: [
-                {
-                  title: 'List Invoices',
-                  href: '/app/management/invoices'
-                },
-                {
-                  title: 'View Invoice',
-                  href: '/app/management/invoices/1'
-                }
-              ]
             }
           ]
         },
@@ -224,225 +151,6 @@ const navConfigByRole = role => {
       return [];
   }
 };
-
-const navConfig = [
-  {
-    subheader: 'Reports',
-    items: [
-      {
-        title: 'Dashboard',
-        icon: PieChartIcon,
-        href: '/app/reports/dashboard'
-      },
-      {
-        title: 'Dashboard Alternative',
-        icon: BarChartIcon,
-        href: '/app/reports/dashboard-alternative'
-      }
-    ]
-  },
-  {
-    subheader: 'Management',
-    items: [
-      {
-        title: 'Customers',
-        icon: UsersIcon,
-        href: '/app/management/merchants',
-        items: [
-          {
-            title: 'List Customers',
-            href: '/app/management/merchants'
-          },
-          {
-            title: 'View Customer',
-            href: '/app/management/merchants/1'
-          },
-          {
-            title: 'Edit Customer',
-            href: '/app/management/merchants/1/edit'
-          }
-        ]
-      },
-      {
-        title: 'Products',
-        icon: ShoppingCartIcon,
-        href: '/app/management/products',
-        items: [
-          {
-            title: 'List Products',
-            href: '/app/management/products'
-          },
-          {
-            title: 'Create Product',
-            href: '/app/management/products/create'
-          }
-        ]
-      },
-      {
-        title: 'Orders',
-        icon: FolderIcon,
-        href: '/app/management/orders',
-        items: [
-          {
-            title: 'List Orders',
-            href: '/app/management/orders'
-          },
-          {
-            title: 'View Order',
-            href: '/app/management/orders/1'
-          }
-        ]
-      },
-      {
-        title: 'Invoices',
-        icon: ReceiptIcon,
-        href: '/app/management/invoices',
-        items: [
-          {
-            title: 'List Invoices',
-            href: '/app/management/invoices'
-          },
-          {
-            title: 'View Invoice',
-            href: '/app/management/invoices/1'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    subheader: 'Applications',
-    items: [
-      {
-        title: 'Projects Platform',
-        href: '/app/projects',
-        icon: BriefcaseIcon,
-        items: [
-          {
-            title: 'Overview',
-            href: '/app/projects/overview'
-          },
-          {
-            title: 'Browse Projects',
-            href: '/app/projects/browse'
-          },
-          {
-            title: 'Create Project',
-            href: '/app/projects/create'
-          },
-          {
-            title: 'View Project',
-            href: '/app/projects/1'
-          }
-        ]
-      },
-      {
-        title: 'Social Platform',
-        href: '/app/social',
-        icon: ShareIcon,
-        items: [
-          {
-            title: 'Profile',
-            href: '/app/social/profile'
-          },
-          {
-            title: 'Feed',
-            href: '/app/social/feed'
-          }
-        ]
-      },
-      {
-        title: 'Kanban',
-        href: '/app/kanban',
-        icon: TrelloIcon
-      },
-      {
-        title: 'Mail',
-        href: '/app/mail',
-        icon: MailIcon,
-        info: () => <Chip color="secondary" size="small" label="Updated" />
-      },
-      {
-        title: 'Chat',
-        href: '/app/chat',
-        icon: MessageCircleIcon,
-        info: () => <Chip color="secondary" size="small" label="Updated" />
-      },
-      {
-        title: 'Calendar',
-        href: '/app/calendar',
-        icon: CalendarIcon
-      }
-    ]
-  },
-  {
-    subheader: 'Pages',
-    href: '/app/pages',
-    items: [
-      {
-        title: 'Account',
-        href: '/app/account',
-        icon: UserIcon
-      },
-      {
-        title: 'Error',
-        href: '/404',
-        icon: AlertCircleIcon
-      },
-      {
-        title: 'Pricing',
-        href: '/pricing',
-        icon: DollarSignIcon
-      }
-    ]
-  },
-  {
-    subheader: 'Extra',
-    items: [
-      {
-        title: 'Charts',
-        href: '/app/extra/charts',
-        icon: BarChartIcon,
-        items: [
-          {
-            title: 'Apex Charts',
-            href: '/app/extra/charts/apex'
-          }
-        ]
-      },
-      {
-        title: 'Forms',
-        href: '/app/extra/forms',
-        icon: EditIcon,
-        items: [
-          {
-            title: 'Formik',
-            href: '/app/extra/forms/formik'
-          },
-          {
-            title: 'Redux Forms',
-            href: '/app/extra/forms/redux'
-          }
-        ]
-      },
-      {
-        title: 'Editors',
-        href: '/app/extra/editors',
-        icon: LayoutIcon,
-        items: [
-          {
-            title: 'DraftJS Editor',
-            href: '/app/extra/editors/draft-js'
-          },
-          {
-            title: 'Quill Editor',
-            href: '/app/extra/editors/quill'
-          }
-        ]
-      }
-    ]
-  }
-];
 
 function renderNavItems({ items, ...rest }) {
   return (

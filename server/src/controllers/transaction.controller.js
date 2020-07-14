@@ -1,14 +1,20 @@
 import Transaction from "../models/Transaction";
 import Operation from "../models/Operation";
+import Merchant from "../models/Merchant";
 import TransactionMongo from "../models/mongo/Transaction";
 import Devises from "../models/mongo/Devises";
 import { resCatchError } from "../helpers/error";
 import manageProducts from "../lib/refund_product";
+
+import { pushStatsDashboard } from "../services/mercure-push";
+
 import {
     OPERATIONS_STATE,
     OPERATIONS_TYPE,
     DEVISE_MAPPING,
 } from "../lib/constants";
+import { calculNewOrderAmount } from "../helpers/functions";
+import { pushStatsByMerchant } from "../services/mercure-push";
 
 function getAll(req, res) {
     if (req.merchant) {
@@ -28,7 +34,7 @@ function getOne(req, res) {
         .catch((err) => resCatchError(res, err));
 }
 
-function post(req, res) {
+async function post(req, res) {
     const transaction = new Transaction({
         ...req.body,
         merchant_id: req.merchant.id,
@@ -47,6 +53,8 @@ function post(req, res) {
             });
         })
         .catch((err) => resCatchError(res, err));
+
+    await pushStatsDashboard(req.user);
 }
 
 function deleteTrns(req, res) {
@@ -121,19 +129,30 @@ function getByMerchntsId(req, res) {
                 return transactions
                     ? res.json(transactionsToSend)
                     : res.sendStatus(404);
-            } catch (error) {}
+            } catch (error) {
+                console.log("error => ", error);
+            }
         })
         .catch((err) => resCatchError(res, err));
 }
 function refund(req, res) {
     const list_products_to_refund = req.body;
-    Transaction.findOne({ order_token: req.params.token }).then(
-        (currentTransaction) => {
-            const { newAllProducts, refundedProducts } = manageProducts(
-                currentTransaction.products,
-                list_products_to_refund
-            );
-            currentTransaction.update({ products: newAllProducts }).then(() => {
+
+    Transaction.findOne({
+        where: { order_token: req.params.token },
+        include: [{ model: Merchant, as: "merchant" }],
+    }).then((currentTransaction) => {
+        const { newAllProducts, refundedProducts } = manageProducts(
+            currentTransaction.products,
+            list_products_to_refund
+        );
+
+        currentTransaction
+            .update({
+                products: newAllProducts,
+                order_amount: calculNewOrderAmount(newAllProducts),
+            })
+            .then(async () => {
                 Operation.create({
                     transaction_id: currentTransaction.id,
                     state: OPERATIONS_STATE.DONE,
@@ -144,9 +163,10 @@ function refund(req, res) {
                         ...createdOperation.toJSON(),
                     });
                 });
+                await pushStatsByMerchant(currentTransaction.merchant.id);
+                await pushStatsDashboard(req.user);
             });
-        }
-    );
+    });
 }
 
 export { getAll, getOne, post, deleteTrns, update, getByMerchntsId, refund };

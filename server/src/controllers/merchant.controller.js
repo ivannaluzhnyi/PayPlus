@@ -5,6 +5,8 @@ import Merchant from "../models/Merchant";
 import User from "../models/User";
 import Credential from "../models/Credential";
 
+import { pushStatsDashboard } from "../services/mercure-push";
+
 import { ROLE, MERCHANT_STATUS } from "../lib/constants";
 import { generateCredentials } from "../lib/credentials";
 import { resCatchError } from "../helpers/error";
@@ -23,7 +25,7 @@ function getKBIS(req, res) {
     }
 }
 
-function changeMerchantState(req, res) {
+async function changeMerchantState(req, res) {
     if (req.body.state === MERCHANT_STATUS.CONFIRMED) {
         Merchant.findByPk(req.params.id)
             .then((currentMerchant) => {
@@ -87,6 +89,8 @@ function changeMerchantState(req, res) {
                 resCatchError(res, err);
             });
     }
+
+    await pushStatsDashboard(req.user);
 }
 
 function all(req, res) {
@@ -112,14 +116,11 @@ function all(req, res) {
 }
 
 function notifications(req, res) {
-    console.log("notifications => ", notifications);
     Merchant.findAll({ where: { state: MERCHANT_STATUS.PENDING } })
         .then((merchants) => {
-            console.log("merchants => ", merchants);
             res.json({ merchants });
         })
         .catch((err) => {
-            console.log("notifications > =", err);
             res.sendStatus(500);
         });
 }
@@ -136,7 +137,7 @@ function one(req, res) {
         });
 }
 
-function addNewUser(req, res) {
+async function addNewUser(req, res) {
     Merchant.findByPk(req.params.id)
         .then((currentMerchant) => {
             const password = generator.generate({
@@ -167,6 +168,8 @@ function addNewUser(req, res) {
         .catch((err) => {
             res.sendStatus(500);
         });
+
+    await pushStatsDashboard(req.user);
 }
 
 function update(req, res) {

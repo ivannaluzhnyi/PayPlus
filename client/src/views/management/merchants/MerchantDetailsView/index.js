@@ -15,6 +15,8 @@ import { useSelector } from 'react-redux';
 import { MerchantContextProvider } from 'src/context/MerchantContext';
 import { ROLE, MERCHANT_STATUS } from 'src/constants';
 import { Alert } from '@material-ui/lab';
+
+import TransactionChartsView from 'src/views/extra/charts/TransactionChartsView';
 import Header from './Header';
 import Details from './Details';
 import Credentials from './Credentials';
@@ -64,7 +66,8 @@ const MerchantDetailsView = () => {
     { value: 'details', label: 'Details' },
     { value: 'credentials', label: 'Credentials' },
     { value: 'users', label: 'Utilisateurs' },
-    { value: 'transactions', label: 'Transactions' }
+    { value: 'transactions', label: 'Transactions' },
+    { value: 'chart', label: 'Statistiques' }
   ];
 
   const handleTabsChange = (event, value) => {
@@ -113,6 +116,7 @@ const MerchantDetailsView = () => {
             {currentTab === 'credentials' && <Credentials />}
             {currentTab === 'users' && <Users />}
             {currentTab === 'transactions' && <Transactions />}
+            {currentTab === 'chart' && <TransactionChartsView />}
           </Box>
         </Container>
       </Page>

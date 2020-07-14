@@ -18,8 +18,29 @@ const getFileType = (string) => {
 
     return "";
 };
+
+const calculNewOrderAmount = (products) =>
+    products.reduce(
+        (acc, curr) => acc + parseFloat(curr.product.price) * Number(curr.qte),
+        0
+    );
+
+const getRandomColor = () => {
+    const colors = [
+        "#3d72eb",
+        "#4b9e86",
+        "#b658f5",
+        "#FF5C7C",
+        "#13affe",
+        "#FEB019",
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+};
+
 module.exports = {
     toCamelCase,
     getFileType,
+    calculNewOrderAmount,
+    getRandomColor,
 };
 4;

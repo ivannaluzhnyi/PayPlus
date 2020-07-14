@@ -2,7 +2,6 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import axios from 'src/utils/axios';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
   Box,
@@ -11,9 +10,14 @@ import {
   Card,
   Input,
   makeStyles,
-  Button
+  Button,
+  MenuItem,
+  FormControl
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import Select from '@material-ui/core/Select';
+import { OPERATIONS_STATE, OPERATIONS_TYPE } from 'src/constants';
+import InputLabel from '@material-ui/core/InputLabel';
 import MultiSelect from './MultiSelect';
 
 const useStyles = makeStyles(theme => ({
@@ -25,6 +29,11 @@ const useStyles = makeStyles(theme => ({
   },
   chip: {
     margin: theme.spacing(1)
+  },
+
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 200
   }
 }));
 
@@ -32,11 +41,20 @@ const Search = ({ getTransactions, setMerchant }) => {
   const isMountedRef = useIsMountedRef();
   const [merchants, setMerchants] = useState(null);
 
+  const [optionsFilter, setOptionsFilter] = useState({});
+
   const classes = useStyles();
   const [inputValue, setInputValue] = useState('');
   const [chips, setChips] = useState([]);
 
   const [selectOptions, setOptions] = useState([]);
+
+  const handleSetOptions = opt => {
+    setOptionsFilter({
+      ...optionsFilter,
+      [opt.name]: opt.value
+    });
+  };
 
   const handleInputChange = event => {
     event.persist();
@@ -89,7 +107,7 @@ const Search = ({ getTransactions, setMerchant }) => {
       return merchant ? [...acc, merchant.id] : acc;
     }, []);
 
-    getTransactions(IDs);
+    getTransactions({ merchantsId: IDs });
   };
 
   return (
@@ -98,13 +116,56 @@ const Search = ({ getTransactions, setMerchant }) => {
         <SearchIcon />
         <Input
           disableUnderline
-          fullWidth
           className={classes.searchInput}
           onChange={handleInputChange}
           onKeyUp={handleInputKeyup}
           placeholder="Enter a keyword"
-          value={inputValue}
+          value={inputValue || ''}
+          disabled
         />
+        <FormControl className={classes.formControl}>
+          <InputLabel id="status-operation-select-label">
+            Status d'opération
+          </InputLabel>
+          <Select
+            labelId="status-operation-select-label"
+            id="status-operation-select"
+            value={optionsFilter.operation_status || ''}
+            autoWidth
+            name="operation_status"
+            onChange={e => {
+              handleSetOptions(e.target);
+            }}
+          >
+            {Object.keys(OPERATIONS_STATE).map(k => (
+              <MenuItem key={k} value={k}>
+                {k}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <FormControl className={classes.formControl}>
+          <InputLabel id="type-operation-select-label">
+            Type d'opération
+          </InputLabel>
+          <Select
+            labelId="type-operation-select-label"
+            id="type-operation-select"
+            value={optionsFilter.operation_type || ''}
+            autoWidth
+            name="operation_type"
+            onChange={e => {
+              handleSetOptions(e.target);
+            }}
+          >
+            {Object.keys(OPERATIONS_TYPE).map(k => (
+              <MenuItem key={k} value={k}>
+                {k}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
       <Divider />
       <Box p={2} display="flex" alignItems="center" flexWrap="wrap">
@@ -132,7 +193,9 @@ const Search = ({ getTransactions, setMerchant }) => {
         <Button
           color="secondary"
           variant="contained"
-          disabled={chips.length === 0}
+          disabled={
+            chips.length === 0 && Object.keys(optionsFilter).length === 0
+          }
           className={classes.action}
           onClick={handleCall}
         >

@@ -130,8 +130,6 @@ const Row = props => {
                             </Label>
                           )}
 
-                          {console.log('operationRow => ', operationRow)}
-
                           {operationRow.products !== null && (
                             <Button
                               color="primary"

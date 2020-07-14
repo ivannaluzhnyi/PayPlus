@@ -8,8 +8,8 @@ import operationRoutes from "./operation";
 import merchantRoutes from "./merchant";
 import credentialRoutes from "./credentials";
 import paymentRoutes from "./payment";
-
 import deviseRoutes from "./devise";
+import statisticRoutes from "./statistic";
 
 const routerManager = (app) => {
     app.get("/", (req, res, next) => {
@@ -20,6 +20,7 @@ const routerManager = (app) => {
     app.use("/api/", securityRoutes);
 
     app.use(verifyToken);
+    app.use("/api/statistics/", statisticRoutes);
     app.use("/api/devises", deviseRoutes);
     app.use("/api/transactions/", transactionRoutes);
     app.use("/api/operations/", operationRoutes);

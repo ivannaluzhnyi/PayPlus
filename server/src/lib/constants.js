@@ -36,9 +36,17 @@ const DEVISE = {
     STERLING: "STERLING",
 };
 
+const MERCURE_TOPICS = {
+    STATS: {
+        BY_MERCHANT: "/stats/by-merchant",
+        DASHBOARD: "/stats/dashboard",
+    },
+};
+
 export {
     ROLE,
     DEVISE_MAPPING,
+    MERCURE_TOPICS,
     DEVISE,
     MERCHANT_STATUS,
     OPERATIONS_TYPE,
