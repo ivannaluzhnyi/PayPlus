@@ -2,10 +2,7 @@ import expressApp from "./src/app";
 
 import requestMercure from "./src/lib/request-mercure";
 
-// exmple request Mercure
-
-console.log("request => ");
-requestMercure("/stats/by-merchant", { lol: true });
+// requestMercure("/stats/by-merchant", { lol: true });
 
 const PORT = 3050;
 

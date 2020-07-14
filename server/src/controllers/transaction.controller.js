@@ -6,6 +6,8 @@ import Devises from "../models/mongo/Devises";
 import { resCatchError } from "../helpers/error";
 import manageProducts from "../lib/refund_product";
 
+import { pushStatsDashboard } from "../services/mercure-push";
+
 import {
     OPERATIONS_STATE,
     OPERATIONS_TYPE,
@@ -32,7 +34,7 @@ function getOne(req, res) {
         .catch((err) => resCatchError(res, err));
 }
 
-function post(req, res) {
+async function post(req, res) {
     const transaction = new Transaction({
         ...req.body,
         merchant_id: req.merchant.id,
@@ -51,6 +53,8 @@ function post(req, res) {
             });
         })
         .catch((err) => resCatchError(res, err));
+
+    await pushStatsDashboard(req.user);
 }
 
 function deleteTrns(req, res) {
@@ -160,6 +164,7 @@ function refund(req, res) {
                     });
                 });
                 await pushStatsByMerchant(currentTransaction.merchant.id);
+                await pushStatsDashboard(req.user);
             });
     });
 }

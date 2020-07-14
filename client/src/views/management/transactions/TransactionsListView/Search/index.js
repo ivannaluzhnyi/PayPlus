@@ -94,7 +94,7 @@ const Search = ({ getTransactions, setMerchant }) => {
         ]);
       }
     });
-  }, [isMountedRef, selectOptions]);
+  }, [isMountedRef]);
 
   useEffect(() => {
     getMerchant();
@@ -120,8 +120,8 @@ const Search = ({ getTransactions, setMerchant }) => {
           onChange={handleInputChange}
           onKeyUp={handleInputKeyup}
           placeholder="Enter a keyword"
-          value={inputValue}
-          dis
+          value={inputValue || ''}
+          disabled
         />
         <FormControl className={classes.formControl}>
           <InputLabel id="status-operation-select-label">

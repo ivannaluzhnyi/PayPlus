@@ -15,11 +15,11 @@ import Page from 'src/components/Page';
 import useMerchant from 'src/hooks/useMerchant';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
 import { MERCURE_TOPICS } from 'src/constants';
+import useMercureSubscriber from 'src/hooks/useMercureSubscriber';
 
 import AreaChart from './AreaChart';
 import LineChart from './LineChart';
 import RadialChart from './RadialChart';
-import useMercureSubscriber from 'src/hooks/useMercureSubscriber';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -55,6 +55,10 @@ const TransactionChartsView = () => {
 
   if (!stats) {
     return null;
+  }
+
+  if (stats.areaSats.dates.length === 0) {
+    return <p>Données indisponible</p>;
   }
 
   return (

@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Container, Grid, makeStyles } from '@material-ui/core';
+import axios from 'src/utils/axios';
 import Page from 'src/components/Page';
-import Header from './Header';
+import useIsMountedRef from 'src/hooks/useIsMountedRef';
 import CountTransactions from './CountTransactions';
-import PerformanceOverTime from './PerformanceOverTime';
 import CountCustomerUser from './CountCustomerUser';
 import CountProducts from './CountProducts';
 import TodaysMoney from './TodaysMoney';
+import Header from './Header';
 
 import FinancialStats from './FinancialStats';
 import Percentages from './Percentages';
+import { MERCURE_TOPICS } from 'src/constants';
+import useMercureSubscriber from 'src/hooks/useMercureSubscriber';
+import { Alert } from '@material-ui/lab';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,32 +33,29 @@ const useStyles = makeStyles(theme => ({
 const DashboardView = () => {
   const classes = useStyles();
 
-  const response = {
-    total_transactions_amount: 3054.25,
-    number_transactions: 143,
-    number_products: 52,
-    userMerchant: {
-      users: 25,
-      merchants: 12
-    },
-    percentages: {
-      datasets: [
-        {
-          data: [56, 24, 20],
-          backgroundColor: ['#3d72eb', '#4b9e86', '#b658f5']
-        }
-      ],
-      labels: ['Subscriptions', 'Affiliate', 'Sales'],
-      title: 'Title passe'
-    },
+  const isMountedRef = useIsMountedRef();
+  const [stats, setStats] = useState(null);
 
-    financial: {
-      transactionAmounts: [23.55],
-      refundAmounts: [10],
-      avaragePriceByTransaction: [28],
-      dates: ['14/07/2020']
-    }
-  };
+  const getStatsMerchant = useCallback(() => {
+    axios.get('/api/statistics/dashboard').then(response => {
+      if (isMountedRef.current) {
+        setStats(response.data);
+      }
+    });
+  }, [isMountedRef]);
+
+  useEffect(() => {
+    getStatsMerchant();
+  }, [getStatsMerchant]);
+
+  useMercureSubscriber({
+    topic: MERCURE_TOPICS.STATS.DASHBOARD,
+    callback: passedData => setStats(passedData)
+  });
+
+  if (!stats) {
+    return null;
+  }
 
   return (
     <Page className={classes.root} title="Dashboard">
@@ -62,24 +63,33 @@ const DashboardView = () => {
         <Header />
         <Grid container spacing={3}>
           <Grid item lg={3} sm={6} xs={12}>
-            <TodaysMoney amount={response.total_transactions_amount} />
+            <TodaysMoney amount={stats.total_transactions_amount} />
           </Grid>
           <Grid item lg={3} sm={6} xs={12}>
-            <CountTransactions number={response.number_transactions} />
+            <CountTransactions number={stats.number_transactions} />
           </Grid>
           <Grid item lg={3} sm={6} xs={12}>
-            <CountProducts number={response.number_products} />
+            <CountProducts number={stats.number_products} />
           </Grid>
           <Grid item lg={3} sm={6} xs={12}>
-            <CountCustomerUser userMerchant={response.userMerchant} />
+            <CountCustomerUser userMerchant={stats.userMerchant} />
           </Grid>
 
-          <Grid item lg={8} xl={9} xs={12}>
-            <FinancialStats data={response.financial} />
-          </Grid>
-          <Grid item lg={4} xl={3} xs={12}>
-            <Percentages percentages={response.percentages} />
-          </Grid>
+          {stats.number_transactions !== 0 ? (
+            <>
+              <Grid item lg={8} xl={9} xs={12}>
+                <FinancialStats data={stats.financial} />
+              </Grid>
+              <Grid item lg={4} xl={3} xs={12}>
+                <Percentages percentages={stats.percentages} />
+              </Grid>{' '}
+            </>
+          ) : (
+            <Alert severity="warning">
+              Votre dashboard restera inactif tant que votre compte n'a pas été
+              validé par un admin.
+            </Alert>
+          )}
         </Grid>
       </Container>
     </Page>

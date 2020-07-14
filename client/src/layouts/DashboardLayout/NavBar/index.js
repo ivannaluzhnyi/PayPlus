@@ -131,21 +131,6 @@ const navConfigByRole = role => {
                   href: '/app/management/transactions'
                 }
               ]
-            },
-            {
-              title: 'Invoices',
-              icon: ReceiptIcon,
-              href: '/app/management/invoices',
-              items: [
-                {
-                  title: 'List Invoices',
-                  href: '/app/management/invoices'
-                },
-                {
-                  title: 'View Invoice',
-                  href: '/app/management/invoices/1'
-                }
-              ]
             }
           ]
         },

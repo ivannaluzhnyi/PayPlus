@@ -53,7 +53,6 @@ const Chart = ({
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false,
     animation: false,
     cornerRadius: 20,
     legend: {

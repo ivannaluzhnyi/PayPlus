@@ -26,15 +26,6 @@ const TransactionsListView = () => {
     });
   }, []);
 
-  const creDevise = '2020-07-12T16:57:06.127Z';
-  const creaTrans = '2020-07-12T16:58:21.120Z';
-
-  const deviseDate = new Date(creDevise);
-  deviseDate.setHours(0, 0, 0, 0);
-
-  const transactionDate = new Date(creaTrans);
-  transactionDate.setHours(0, 0, 0, 0);
-
   return (
     <Page className={classes.root} title="Liste des transactions">
       <Container maxWidth={false}>

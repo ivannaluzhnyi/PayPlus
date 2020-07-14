@@ -1,5 +1,8 @@
 import requestMercure from "../lib/request-mercure";
-import { getStatsByMerchantService } from "./statisctics";
+import {
+    getStatsByMerchantService,
+    getStatsDashboardService,
+} from "./statisctics";
 import { MERCURE_TOPICS } from "../lib/constants";
 
 async function pushStatsByMerchant(id) {
@@ -9,4 +12,11 @@ async function pushStatsByMerchant(id) {
     }, 1000);
 }
 
-export { pushStatsByMerchant };
+async function pushStatsDashboard(user) {
+    setTimeout(async () => {
+        const stats = await getStatsDashboardService(user);
+        requestMercure(MERCURE_TOPICS.STATS.BY_MERCHANT, stats);
+    }, 1000);
+}
+
+export { pushStatsByMerchant, pushStatsDashboard };

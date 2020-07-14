@@ -10,7 +10,6 @@ export function changeStateCustomer(customerId, state) {
       state
     });
 
-    console.log('request => ', request);
     request.then(response => {});
   };
 }

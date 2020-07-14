@@ -73,6 +73,7 @@ export const OPERATIONS_TYPE = {
 
 export const MERCURE_TOPICS = {
   STATS: {
-    BY_MERCHANT: '/stats/by-merchant'
+    BY_MERCHANT: '/stats/by-merchant',
+    DASHBOARD: '/stats/dashboard'
   }
 };

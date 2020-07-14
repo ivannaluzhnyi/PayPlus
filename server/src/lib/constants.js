@@ -39,6 +39,7 @@ const DEVISE = {
 const MERCURE_TOPICS = {
     STATS: {
         BY_MERCHANT: "/stats/by-merchant",
+        DASHBOARD: "/stats/dashboard",
     },
 };
 

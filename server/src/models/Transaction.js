@@ -11,7 +11,7 @@ class Transaction extends Model {
                     allowNull: false,
                 },
                 client_last_name: {
-                    type: DataTypes.STRING, 
+                    type: DataTypes.STRING,
                     allowNull: false,
                 },
                 delivery_country: {
