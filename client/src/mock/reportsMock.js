@@ -194,7 +194,7 @@ mock.onGet('/api/reports/earnings').reply(200, {
         backgroundColor: ['#3d72eb', '#4b9e86', '#b658f5']
       }
     ],
-    labels: ['Subscriptions', 'Affiliate', 'Sales'],
+    labels: ['Subscriptions', 'Affiliate', 'Sales']
   }
 });
 
@@ -417,7 +417,7 @@ mock.onGet('/api/reports/tasks').reply(200, {
         .getTime(),
       members: [
         '/static/images/avatars/avatar_2.png',
-        '/static/images/avatars/avatar_3.png',
+        '/static/images/avatars/avatar_3.png'
       ]
     },
     {
@@ -448,7 +448,8 @@ mock.onGet('/api/reports/tasks').reply(200, {
       deadline: null,
       members: [
         '/static/images/avatars/avatar_2.png',
-        '/static/images/avatars/avatar_10.png']
+        '/static/images/avatars/avatar_10.png'
+      ]
     },
     {
       id: uuidv4(),

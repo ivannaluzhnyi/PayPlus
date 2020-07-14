@@ -1,19 +1,20 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Doughnut } from 'react-chartjs-2';
 import { useTheme } from '@material-ui/core';
 
-function Chart({ data: dataProp, ...rest }) {
+const Chart = ({ data: { datasets, labels } }) => {
   const theme = useTheme();
 
   const data = {
-    datasets: dataProp.datasets.map(((dataset) => ({
+    datasets: datasets.map(dataset => ({
       ...dataset,
       borderWidth: 8,
       borderColor: theme.palette.background.default,
       hoverBorderColor: theme.palette.background.default
-    }))),
-    labels: dataProp.labels
+    })),
+    labels
   };
 
   const options = {
@@ -51,17 +52,10 @@ function Chart({ data: dataProp, ...rest }) {
     }
   };
 
-  return (
-    <Doughnut
-      data={data}
-      options={options}
-      {...rest}
-    />
-  );
-}
+  return <Doughnut data={data} options={options} />;
+};
 
 Chart.propTypes = {
-  className: PropTypes.string,
   data: PropTypes.object.isRequired
 };
 

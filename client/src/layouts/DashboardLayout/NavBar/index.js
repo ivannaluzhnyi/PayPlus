@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import {
   Avatar,
   Box,
-  Chip,
   Divider,
   Drawer,
   Hidden,
@@ -21,28 +20,15 @@ import {
 } from '@material-ui/core';
 import ReceiptIcon from '@material-ui/icons/ReceiptOutlined';
 import {
-  Briefcase as BriefcaseIcon,
-  Calendar as CalendarIcon,
-  ShoppingCart as ShoppingCartIcon,
-  Folder as FolderIcon,
-  BarChart as BarChartIcon,
-  AlertCircle as AlertCircleIcon,
-  Trello as TrelloIcon,
   User as UserIcon,
-  Layout as LayoutIcon,
-  Edit as EditIcon,
-  DollarSign as DollarSignIcon,
   Mail as MailIcon,
-  MessageCircle as MessageCircleIcon,
   PieChart as PieChartIcon,
-  Share2 as ShareIcon,
   Users as UsersIcon
 } from 'react-feather';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import LoopIcon from '@material-ui/icons/Loop';
 import Logo from 'src/components/Logo';
 import { ROLE } from 'src/constants';
-import Label from 'src/components/Label';
 import NavItem from './NavItem';
 
 const navConfigByRole = role => {
@@ -56,11 +42,6 @@ const navConfigByRole = role => {
               title: 'Dashboard',
               icon: PieChartIcon,
               href: '/app/reports/dashboard'
-            },
-            {
-              title: 'Dashboard Alternative',
-              icon: BarChartIcon,
-              href: '/app/reports/dashboard-alternative'
             }
           ]
         },
@@ -123,11 +104,6 @@ const navConfigByRole = role => {
               title: 'Dashboard',
               icon: PieChartIcon,
               href: '/app/reports/dashboard'
-            },
-            {
-              title: 'Dashboard Alternative',
-              icon: BarChartIcon,
-              href: '/app/reports/dashboard-alternative'
             }
           ]
         },

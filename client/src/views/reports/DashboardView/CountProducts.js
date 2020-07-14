@@ -1,9 +1,7 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import { Avatar, Box, Card, Typography, makeStyles } from '@material-ui/core';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import StorefrontIcon from '@material-ui/icons/Storefront';
 import Label from 'src/components/Label';
 
 const useStyles = makeStyles(theme => ({
@@ -24,12 +22,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const TodaysMoney = ({ amount }) => {
+const CountProducts = ({ number }) => {
   const classes = useStyles();
   const data = {
-    value: '24,000',
-    currency: '$',
-    difference: 4
+    value: 12,
+    difference: -10
   };
 
   return (
@@ -41,30 +38,19 @@ const TodaysMoney = ({ amount }) => {
           variant="overline"
           color="textSecondary"
         >
-          TOTAL ARGENT
+          Nombre de produits
         </Typography>
         <Box display="flex" alignItems="center" flexWrap="wrap">
           <Typography variant="h3" color="textPrimary">
-            {amount}€
+            {number}
           </Typography>
-          <Label
-            className={classes.label}
-            color={data.difference > 0 ? 'success' : 'error'}
-          >
-            {data.difference > 0 ? '+' : ''}
-            {data.difference}%
-          </Label>
         </Box>
       </Box>
       <Avatar className={classes.avatar}>
-        <AttachMoneyIcon />
+        <StorefrontIcon />
       </Avatar>
     </Card>
   );
 };
 
-TodaysMoney.propTypes = {
-  className: PropTypes.string
-};
-
-export default TodaysMoney;
+export default CountProducts;

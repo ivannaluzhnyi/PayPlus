@@ -64,13 +64,6 @@ const routesConfig = [
       },
       {
         exact: true,
-        path: '/app/reports/dashboard-alternative',
-        component: lazy(() =>
-          import('src/views/reports/DashboardAlternativeView')
-        )
-      },
-      {
-        exact: true,
         path: '/app/reports',
         component: () => <Redirect to="/app/reports/dashboard" />
       },

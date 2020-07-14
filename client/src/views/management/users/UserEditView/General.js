@@ -15,9 +15,7 @@ import {
   Divider,
   FormHelperText,
   Grid,
-  Switch,
   TextField,
-  Typography,
   makeStyles
 } from '@material-ui/core';
 
@@ -27,7 +25,6 @@ const useStyles = makeStyles(() => ({
 
 const GeneralSettings = ({ user }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
   return (

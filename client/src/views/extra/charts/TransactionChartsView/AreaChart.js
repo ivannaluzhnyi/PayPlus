@@ -14,7 +14,7 @@ const AreaChart = ({ areaSats }) => {
           show: false
         }
       },
-      colors: ['#13affe', '#fbab49', '#FEB019'],
+      colors: ['#FEB019', '#13affe', '#FF5C7C'],
       dataLabels: {
         enabled: false
       },
@@ -82,16 +82,16 @@ const AreaChart = ({ areaSats }) => {
     },
     series: [
       {
+        name: 'Nombre de produis',
+        data: areaSats.nbrProducts || []
+      },
+      {
         name: 'Transaction effectué',
         data: areaSats.transactions || []
       },
       {
         name: 'Remoursement',
         data: areaSats.refunds || []
-      },
-      {
-        name: 'Nombre de produis',
-        data: areaSats.nbrProducts || []
       }
     ]
   };
