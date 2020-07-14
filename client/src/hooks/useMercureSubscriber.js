@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import jwt from 'jsonwebtoken';
 
 // ex topic = /demo/test
 
-function useMercureSubscriber({
+const useMercureSubscriber = ({
   topic,
   callback,
   conditions = {
@@ -13,8 +13,8 @@ function useMercureSubscriber({
       publish: ['*']
     }
   }
-}) {
-  let eventSource;
+}) => {
+  const [eventSource, setEvent] = useState(undefined);
   const url = new URL(process.env.REACT_APP_MERCURE_HUB);
   url.searchParams.append('topic', `http://localhost:3003${topic}`);
 
@@ -23,6 +23,7 @@ function useMercureSubscriber({
       const data = JSON.parse(e.data);
       callback(data);
     };
+
     eventSource.onerror = err => {
       callback(null);
     };
@@ -38,19 +39,20 @@ function useMercureSubscriber({
       token = jwt.sign(conditions, process.env.REACT_APP_MERCURE_JWT_SECRET);
       localStorage.setItem('mercure_hub_token', token);
     }
+    console.log(`Connect to topic: ${topic}`);
 
-    eventSource = new EventSourcePolyfill(url, {
+    const newEvent = new EventSourcePolyfill(url, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
-    console.log(`Connected to topic: ${topic}`);
+
+    setEvent(newEvent);
 
     return () => {
-      console.log(`Disconnect of topic: ${topic}`);
-      eventSource.close();
+      newEvent.close();
     };
   }, []);
-}
+};
 
 export default useMercureSubscriber;

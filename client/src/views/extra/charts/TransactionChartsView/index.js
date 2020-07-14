@@ -14,12 +14,12 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Page from 'src/components/Page';
 import useMerchant from 'src/hooks/useMerchant';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import useMercureSubscriber from 'src/utils/mercure-subscriber';
 import { MERCURE_TOPICS } from 'src/constants';
 
 import AreaChart from './AreaChart';
 import LineChart from './LineChart';
 import RadialChart from './RadialChart';
+import useMercureSubscriber from 'src/hooks/useMercureSubscriber';
 
 const useStyles = makeStyles(theme => ({
   root: {

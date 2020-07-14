@@ -35,6 +35,7 @@
     "no-confusing-arrow": "off",
     "arrow-parens": "off",
     "react/jsx-wrap-multilines": "off",
+    "react/prop-types": "off",
     "operator-linebreak": "off",
     "import/prefer-default-export": "off",
     "no-unused-vars": "off",

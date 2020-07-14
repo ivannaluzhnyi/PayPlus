@@ -7,54 +7,31 @@ import {
   Button,
   Grid,
   Link,
-  Menu,
-  MenuItem,
   SvgIcon,
   Typography,
   makeStyles
 } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import { Calendar as CalendarIcon } from 'react-feather';
+import { Search as SearchIcon } from 'react-feather';
 
-const timeRanges = [
-  {
-    value: 'today',
-    text: 'Today'
-  },
-  {
-    value: 'yesterday',
-    text: 'Yesterday'
-  },
-  {
-    value: 'last_30_days',
-    text: 'Last 30 days'
-  },
-  {
-    value: 'last_year',
-    text: 'Last year'
-  }
-];
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {},
   actionIcon: {
     marginRight: theme.spacing(1)
   }
 }));
 
-function Header({ className, ...rest }) {
+const Header = () => {
   const classes = useStyles();
   const actionRef = useRef(null);
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const [timeRange, setTimeRange] = useState(timeRanges[2].text);
 
   return (
     <Grid
       container
       spacing={3}
       justify="space-between"
-      className={clsx(classes.root, className)}
-      {...rest}
+      className={clsx(classes.root)}
     >
       <Grid item>
         <Breadcrumbs
@@ -69,64 +46,24 @@ function Header({ className, ...rest }) {
           >
             Dashboard
           </Link>
-          <Typography
-            variant="body1"
-            color="textPrimary"
-          >
+          <Typography variant="body1" color="textPrimary">
             Reports
           </Typography>
         </Breadcrumbs>
-        <Typography
-          variant="h3"
-          color="textPrimary"
-        >
-          Here&apos;s what&apos;s happening
+        <Typography variant="h3" color="textPrimary">
+          Dashboard
         </Typography>
       </Grid>
       <Grid item>
-        <Button
-          ref={actionRef}
-          onClick={() => setMenuOpen(true)}
-        >
-          <SvgIcon
-            fontSize="small"
-            className={classes.actionIcon}
-          >
-            <CalendarIcon />
+        <Button ref={actionRef} onClick={() => {}}>
+          <SvgIcon fontSize="small" className={classes.actionIcon}>
+            <SearchIcon />
           </SvgIcon>
-          {timeRange}
+          Actualiser
         </Button>
-        <Menu
-          anchorEl={actionRef.current}
-          onClose={() => setMenuOpen(false)}
-          open={isMenuOpen}
-          PaperProps={{ className: classes.menu }}
-          getContentAnchorEl={null}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center'
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center'
-          }}
-        >
-          {timeRanges.map((t) => (
-            <MenuItem
-              key={t.value}
-              onClick={() => setTimeRange(t.text)}
-            >
-              {t.text}
-            </MenuItem>
-          ))}
-        </Menu>
       </Grid>
     </Grid>
   );
-}
-
-Header.propTypes = {
-  className: PropTypes.string
 };
 
 export default Header;
