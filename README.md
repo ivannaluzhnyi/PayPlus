@@ -7,4 +7,4 @@
 - docker-compose run --rm server-merchant yarn install
 
 # Pour lancer le Projet
-- docker-compose up server
+- docker-compose up server (Attendre un peu pour le client, c'est long)
