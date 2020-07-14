@@ -21,6 +21,8 @@ import useSettings from 'src/hooks/useSettings';
 import { createTheme } from 'src/theme';
 import Routes from 'src/Routes';
 
+import mercureSubsciber from 'src/utils/mercure-subscriber';
+
 const history = createBrowserHistory();
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
 
@@ -52,6 +54,10 @@ const useStyles = makeStyles(() =>
 
 const App = () => {
   useStyles();
+
+  mercureSubsciber('/demo/test', passedData => {
+    console.log('passedData => ', passedData);
+  });
 
   const { settings } = useSettings();
 
