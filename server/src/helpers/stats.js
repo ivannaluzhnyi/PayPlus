@@ -18,6 +18,7 @@ const prepareStatsToTransactions = (statsArray) => {
         prepare.areaSats.dates.push(element._id);
         prepare.areaSats.transactions.push(element.number_transaction);
         prepare.areaSats.nbrProducts.push(element.total_product);
+        prepare.areaSats.refunds.push(element.number_product_transaction_refund || 0);
 
         prepare.lineStat.dates.push(element._id);
         prepare.lineStat.avaragePriceByTransaction.push(
@@ -35,10 +36,3 @@ const prepareStatsToTransactions = (statsArray) => {
 };
 
 export { prepareStatsToTransactions };
-
-// _id: '14/07/2020',
-//  total_price_transaction: 74,
-//  total_product: 2,
-//  total_price_transaction_refund: 0,
-//  average_price_by_transaction: 74,
-//  number_transaction: 1

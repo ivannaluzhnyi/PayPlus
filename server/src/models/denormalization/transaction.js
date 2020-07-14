@@ -31,9 +31,16 @@ const denormalize = async (transaction_id, operation) => {
                         0
                     );
 
+                    const refund_product_qte = opr.products.reduce(
+                        (acc, curr) =>
+                            acc +  Number(curr.qte),
+                        0
+                    );
+
                     return {
                         ...opr,
                         refund_amount,
+                        refund_product_qte,
                     };
                 }
 
