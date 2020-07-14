@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import Chart from 'react-apexcharts';
-import moment from 'moment';
 import { Card, CardContent, Typography, useTheme } from '@material-ui/core';
 
 const LineChart = ({ lineStat }) => {
@@ -67,9 +66,7 @@ const LineChart = ({ lineStat }) => {
           show: true,
           color: theme.palette.divider
         },
-        categories: lineStat.dates.map(dtStr =>
-          moment(dtStr).format('DD/MM/YYYY')
-        ),
+        categories: lineStat.dates || [],
         labels: {
           style: {
             colors: theme.palette.text.secondary
@@ -97,15 +94,15 @@ const LineChart = ({ lineStat }) => {
     series: [
       {
         name: 'Montant de transaction',
-        data: lineStat.transactionAmounts
+        data: lineStat.transactionAmounts || []
       },
       {
         name: 'Montant de remboursement',
-        data: lineStat.refundAmounts
+        data: lineStat.refundAmounts || []
       },
       {
         name: 'Nombre de produits',
-        data: lineStat.nbrProducts
+        data: lineStat.nbrProducts || []
       }
     ]
   };

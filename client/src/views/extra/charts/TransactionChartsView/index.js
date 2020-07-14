@@ -35,7 +35,7 @@ const TransactionChartsView = () => {
   const { merchant } = useMerchant();
 
   const getStatsMerchant = useCallback(() => {
-    axios.get(`/api/stats/merchant/${merchant.id}`).then(response => {
+    axios.get(`/api/statistics/merchant/${merchant.id}`).then(response => {
       if (isMountedRef.current) {
         setStats(response.data);
       }
@@ -46,30 +46,9 @@ const TransactionChartsView = () => {
     getStatsMerchant();
   }, [getStatsMerchant]);
 
-  // if (!stats) {
-  //   return null;
-  // }
-
-  const response = {
-    areaSats: {
-      transactionPerformed: [4, 2],
-      refunds: [3, 1],
-      dates: ['2020-07-11T19:59:24.796+00:00', '2020-07-12T19:59:24.796+00:00']
-    },
-    lineStat: {
-      transactionAmounts: [36.25, 256, 29.21],
-      refundAmounts: [12.6, 123, 0],
-      nbrProducts: [9, 5, 0],
-      dates: [
-        '2020-07-10T19:59:24.796+00:00',
-        '2020-07-11T19:59:24.796+00:00',
-        '2020-07-12T19:59:24.796+00:00'
-      ]
-    },
-    radialStat: {
-      value: 68
-    }
-  };
+  if (!stats) {
+    return null;
+  }
 
   return (
     <Page className={classes.root} title="Transaction Stats">
@@ -104,13 +83,13 @@ const TransactionChartsView = () => {
         <Box mt={3}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <LineChart lineStat={response.lineStat} />
+              <LineChart lineStat={stats.lineStat} />
             </Grid>
             <Grid item xs={12} md={8}>
-              <AreaChart areaSats={response.areaSats} />
+              <AreaChart areaSats={stats.areaSats} />
             </Grid>
             <Grid item xs={12} md={4}>
-              <RadialChart radialStat={response.radialStat} />
+              <RadialChart radialStat={stats.radialStat} />
             </Grid>
           </Grid>
         </Box>

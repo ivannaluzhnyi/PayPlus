@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import Chart from 'react-apexcharts';
-import moment from 'moment';
 import { Card, CardContent, Typography, useTheme } from '@material-ui/core';
 
 const AreaChart = ({ areaSats }) => {
@@ -58,9 +57,7 @@ const AreaChart = ({ areaSats }) => {
           show: true,
           color: theme.palette.divider
         },
-        categories: areaSats.dates.map(dtStr =>
-          moment(dtStr).format('DD/MM/YYYY')
-        ),
+        categories: areaSats.dates || [],
         labels: {
           style: {
             colors: theme.palette.text.secondary
@@ -86,11 +83,11 @@ const AreaChart = ({ areaSats }) => {
     series: [
       {
         name: 'Transaction effectué',
-        data: areaSats.transactionPerformed
+        data: areaSats.transactions || []
       },
       {
         name: 'Remoursement',
-        data: areaSats.refunds
+        data: areaSats.refunds || []
       }
     ]
   };
