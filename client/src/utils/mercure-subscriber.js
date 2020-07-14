@@ -44,10 +44,10 @@ function useMercureSubscriber({
         Authorization: `Bearer ${token}`
       }
     });
-    console.log(`Connected to ${eventSource.url}`);
+    console.log(`Connected to topic: ${topic}`);
 
     return () => {
-      console.log(`Disconnect ${eventSource.url}`);
+      console.log(`Disconnect of topic: ${topic}`);
       eventSource.close();
     };
   }, []);
