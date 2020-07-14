@@ -1,12 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Bar } from 'react-chartjs-2';
-import {
-  fade,
-  makeStyles,
-  useTheme
-} from '@material-ui/core';
+import { fade, makeStyles, useTheme } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -14,37 +9,46 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-function Chart({
-  data: dataProp,
-  labels,
-  className,
-  ...rest
-}) {
+const Chart = ({
+  transactionAmounts,
+  dates,
+  refundAmounts,
+  avaragePriceByTransaction
+}) => {
   const classes = useStyles();
   const theme = useTheme();
 
   const data = {
     datasets: [
       {
-        label: 'This year',
-        backgroundColor: theme.palette.secondary.main,
-        data: dataProp.thisYear,
+        label: 'Moyenne cout par panier',
+        backgroundColor: theme.palette.primary.main,
+        data: avaragePriceByTransaction,
         barThickness: 12,
         maxBarThickness: 10,
         barPercentage: 0.5,
         categoryPercentage: 0.5
       },
       {
-        label: 'Last year',
-        backgroundColor: fade(theme.palette.secondary.main, 0.25),
-        data: dataProp.lastYear,
+        label: 'Montant de transaction',
+        backgroundColor: theme.palette.secondary.main,
+        data: transactionAmounts,
+        barThickness: 12,
+        maxBarThickness: 10,
+        barPercentage: 0.5,
+        categoryPercentage: 0.5
+      },
+      {
+        label: 'Montant de remboursement',
+        backgroundColor: fade(theme.palette.secondary.main, 0.5),
+        data: refundAmounts,
         barThickness: 12,
         maxBarThickness: 10,
         barPercentage: 0.5,
         categoryPercentage: 0.5
       }
     ],
-    labels
+    labels: dates
   };
 
   const options = {
@@ -87,8 +91,8 @@ function Chart({
             fontColor: theme.palette.text.secondary,
             beginAtZero: true,
             min: 0,
-            maxTicksLimit: 5,
-            callback: (value) => (value > 0 ? `${value}K` : value)
+            maxTicksLimit: 5
+            // callback: value => (value > 0 ? `${value}K` : value)
           }
         }
       ]
@@ -105,39 +109,27 @@ function Chart({
       backgroundColor: theme.palette.background.dark,
       titleFontColor: theme.palette.text.primary,
       bodyFontColor: theme.palette.text.secondary,
-      footerFontColor: theme.palette.text.secondary,
-      callbacks: {
-        title: () => {},
-        label: (tooltipItem) => {
-          let label = `Sales: ${tooltipItem.yLabel}`;
+      footerFontColor: theme.palette.text.secondary
+      // callbacks: {
+      //   title: () => {},
+      //   label: tooltipItem => {
+      //     let label = `Sales: ${tooltipItem.yLabel}`;
 
-          if (tooltipItem.yLabel > 0) {
-            label += 'K';
-          }
+      //     if (tooltipItem.yLabel > 0) {
+      //       label += 'K';
+      //     }
 
-          return label;
-        }
-      }
+      //     return label;
+      //   }
+      // }
     }
   };
 
   return (
-    <div
-      className={clsx(classes.root, className)}
-      {...rest}
-    >
-      <Bar
-        data={data}
-        options={options}
-      />
+    <div className={clsx(classes.root)}>
+      <Bar data={data} options={options} />
     </div>
   );
-}
-
-Chart.propTypes = {
-  className: PropTypes.string,
-  data: PropTypes.object.isRequired,
-  labels: PropTypes.array.isRequired
 };
 
 export default Chart;

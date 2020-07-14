@@ -1,18 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
   Breadcrumbs,
-  Button,
   Grid,
   Link,
-  SvgIcon,
   Typography,
   makeStyles
 } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import { Search as SearchIcon } from 'react-feather';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -23,8 +19,6 @@ const useStyles = makeStyles(theme => ({
 
 const Header = () => {
   const classes = useStyles();
-  const actionRef = useRef(null);
-  const [isMenuOpen, setMenuOpen] = useState(false);
 
   return (
     <Grid
@@ -53,14 +47,6 @@ const Header = () => {
         <Typography variant="h3" color="textPrimary">
           Dashboard
         </Typography>
-      </Grid>
-      <Grid item>
-        <Button ref={actionRef} onClick={() => {}}>
-          <SvgIcon fontSize="small" className={classes.actionIcon}>
-            <SearchIcon />
-          </SvgIcon>
-          Actualiser
-        </Button>
       </Grid>
     </Grid>
   );

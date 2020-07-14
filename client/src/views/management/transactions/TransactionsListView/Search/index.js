@@ -94,7 +94,7 @@ const Search = ({ getTransactions, setMerchant }) => {
         ]);
       }
     });
-  }, [isMountedRef]);
+  }, [isMountedRef, selectOptions]);
 
   useEffect(() => {
     getMerchant();

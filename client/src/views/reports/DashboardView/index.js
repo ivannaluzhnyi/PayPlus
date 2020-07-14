@@ -4,10 +4,8 @@ import Page from 'src/components/Page';
 import Header from './Header';
 import CountTransactions from './CountTransactions';
 import PerformanceOverTime from './PerformanceOverTime';
-import RealTime from './RealTime';
 import CountCustomerUser from './CountCustomerUser';
 import CountProducts from './CountProducts';
-import TeamTasks from './TeamTasks';
 import TodaysMoney from './TodaysMoney';
 
 import FinancialStats from './FinancialStats';
@@ -48,6 +46,13 @@ const DashboardView = () => {
       ],
       labels: ['Subscriptions', 'Affiliate', 'Sales'],
       title: 'Title passe'
+    },
+
+    financial: {
+      transactionAmounts: [23.55],
+      refundAmounts: [10],
+      avaragePriceByTransaction: [28],
+      dates: ['14/07/2020']
     }
   };
 
@@ -70,20 +75,10 @@ const DashboardView = () => {
           </Grid>
 
           <Grid item lg={8} xl={9} xs={12}>
-            <FinancialStats />
+            <FinancialStats data={response.financial} />
           </Grid>
           <Grid item lg={4} xl={3} xs={12}>
             <Percentages percentages={response.percentages} />
-          </Grid>
-
-          <Grid item lg={3} xs={12}>
-            <RealTime />
-          </Grid>
-          <Grid item lg={9} xs={12}>
-            <PerformanceOverTime />
-          </Grid>
-          <Grid item lg={5} xl={4} xs={12}>
-            <TeamTasks />
           </Grid>
         </Grid>
       </Container>
