@@ -20,7 +20,7 @@ const TransactionsListView = () => {
   const classes = useStyles();
   const [transactions, setTransactions] = useState(null);
 
-  const getTransactions = useCallback(merchantsId => {
+  const getTransactions = useCallback(({ merchantsId }) => {
     axios.post('/api/transactions/mongo', { merchantsId }).then(response => {
       setTransactions(response.data);
     });
@@ -34,8 +34,6 @@ const TransactionsListView = () => {
 
   const transactionDate = new Date(creaTrans);
   transactionDate.setHours(0, 0, 0, 0);
-
-  console.log('TEST  => ', deviseDate.getTime() === transactionDate.getTime());
 
   return (
     <Page className={classes.root} title="Liste des transactions">
