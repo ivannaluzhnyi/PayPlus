@@ -35,7 +35,7 @@ const getStatsByMerchantService = async (id) => {
             { $sort: { total: -1 } },
         ]);
 
-        const averages_capture = await TransactionMongo.aggregate([
+        const dataAvarage = await TransactionMongo.aggregate([
             {
                 $project: {
                     count_canceled: {
@@ -58,22 +58,25 @@ const getStatsByMerchantService = async (id) => {
                     },
                 },
             },
-        ]).then((data) => {
-            const list_type = {
-                count_canceled: 0,
-                count_captured: 0,
-            };
+        ]);
 
-            Object.keys(data).forEach((element) => {
-                list_type.count_canceled += data[element].count_canceled;
-                list_type.count_captured += data[element].count_captured;
-            });
+        const list_type = {
+            count_canceled: 0,
+            count_captured: 0,
+        };
 
-            const total_operation =
-                list_type.count_canceled + list_type.count_captured;
-
-            return (list_type.count_captured / total_operation) * 100;
+        Object.keys(dataAvarage).forEach((element) => {
+            list_type.count_canceled += dataAvarage[element].count_canceled;
+            list_type.count_captured += dataAvarage[element].count_captured;
         });
+
+        const total_operation =
+            list_type.count_canceled + list_type.count_captured;
+
+        const averages_capture = (
+            (list_type.count_captured / total_operation) *
+            100
+        ).toFixed(2);
 
         return {
             radialStat: {

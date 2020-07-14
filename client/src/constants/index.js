@@ -70,3 +70,9 @@ export const OPERATIONS_TYPE = {
   CAPTURE: 'CAPTURE',
   REFUNDED: 'REFUNDED'
 };
+
+export const MERCURE_TOPICS = {
+  STATS: {
+    BY_MERCHANT: '/stats/by-merchant'
+  }
+};

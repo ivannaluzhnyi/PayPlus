@@ -1,31 +1,33 @@
 const prepareStatsToTransactions = (statsArray) => {
-    console.log("payload => ", statsArray);
-
     const prepare = {
         areaSats: {
             transactions: [],
             refunds: [],
+            nbrProducts: [],
             dates: [],
         },
         lineStat: {
             transactionAmounts: [],
             refundAmounts: [],
-            nbrProducts: [],
+            avaragePriceByTransaction: [],
             dates: [],
         },
     };
 
     statsArray.forEach((element) => {
         prepare.areaSats.dates.push(element._id);
-        prepare.lineStat.dates.push(element._id);
-
         prepare.areaSats.transactions.push(element.number_transaction);
-        prepare.lineStat.transactionAmounts.push(
-            element.total_price_transaction
+        prepare.areaSats.nbrProducts.push(element.total_product);
+
+        prepare.lineStat.dates.push(element._id);
+        prepare.lineStat.avaragePriceByTransaction.push(
+            element.average_price_by_transaction.toFixed(2)
         );
-        prepare.lineStat.nbrProducts.push(element.total_product);
+        prepare.lineStat.transactionAmounts.push(
+            element.total_price_transaction.toFixed(2)
+        );
         prepare.lineStat.refundAmounts.push(
-            element.total_price_transaction_refund
+            element.total_price_transaction_refund.toFixed(2)
         );
     });
 

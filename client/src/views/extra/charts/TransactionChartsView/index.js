@@ -14,6 +14,8 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Page from 'src/components/Page';
 import useMerchant from 'src/hooks/useMerchant';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
+import useMercureSubscriber from 'src/utils/mercure-subscriber';
+import { MERCURE_TOPICS } from 'src/constants';
 
 import AreaChart from './AreaChart';
 import LineChart from './LineChart';
@@ -45,6 +47,11 @@ const TransactionChartsView = () => {
   useEffect(() => {
     getStatsMerchant();
   }, [getStatsMerchant]);
+
+  useMercureSubscriber({
+    topic: MERCURE_TOPICS.STATS.BY_MERCHANT,
+    callback: passedData => setStats(passedData)
+  });
 
   if (!stats) {
     return null;

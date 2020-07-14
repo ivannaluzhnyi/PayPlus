@@ -14,7 +14,7 @@ const AreaChart = ({ areaSats }) => {
           show: false
         }
       },
-      colors: ['#13affe', '#fbab49'],
+      colors: ['#13affe', '#fbab49', '#FEB019'],
       dataLabels: {
         enabled: false
       },
@@ -88,6 +88,10 @@ const AreaChart = ({ areaSats }) => {
       {
         name: 'Remoursement',
         data: areaSats.refunds || []
+      },
+      {
+        name: 'Nombre de produis',
+        data: areaSats.nbrProducts || []
       }
     ]
   };

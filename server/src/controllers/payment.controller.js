@@ -2,6 +2,8 @@ import fetch from "node-fetch";
 
 import CryptoJS from "crypto-js";
 
+import { pushStatsByMerchant } from "../services/mercure-push";
+
 import Transaction from "../models/Transaction";
 import Merchant from "../models/Merchant";
 import Operation from "../models/Operation";
@@ -81,6 +83,8 @@ function post(req, res) {
                 Location: finedTransaction.merchant.url_cancel,
             });
             res.end();
+
+            await pushStatsByMerchant(finedTransaction.merchant.id);
         });
 
         return;
@@ -132,6 +136,10 @@ function post(req, res) {
                                 });
                                 res.end();
                             });
+
+                            await pushStatsByMerchant(
+                                finedTransaction.merchant.id
+                            );
                         } else {
                             res.writeHead(301, {
                                 Location: finedTransaction.merchant.url_cancel,

@@ -1,8 +1,10 @@
+import { useEffect } from 'react';
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import jwt from 'jsonwebtoken';
 
 // ex topic = /demo/test
-export default function (
+
+function useMercureSubscriber({
   topic,
   callback,
   conditions = {
@@ -11,31 +13,44 @@ export default function (
       publish: ['*']
     }
   }
-) {
+}) {
+  let eventSource;
   const url = new URL(process.env.REACT_APP_MERCURE_HUB);
   url.searchParams.append('topic', `http://localhost:3003${topic}`);
 
-  let token = '';
-
-  const localToken = localStorage.getItem('mercure_hub_token');
-  if (localToken !== null) {
-    token = localToken;
-  } else {
-    token = jwt.sign(conditions, process.env.REACT_APP_MERCURE_JWT_SECRET);
-    localStorage.setItem('mercure_hub_token', token);
+  if (eventSource) {
+    eventSource.onmessage = e => {
+      const data = JSON.parse(e.data);
+      callback(data);
+    };
+    eventSource.onerror = err => {
+      callback(null);
+    };
   }
-  const eventSource = new EventSourcePolyfill(url, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
-  console.log(`Connected to ${eventSource.url}`);
 
-  eventSource.onmessage = e => {
-    const data = JSON.parse(e.data);
-    callback(data);
-  };
-  eventSource.onerror = err => {
-    callback(null);
-  };
+  useEffect(() => {
+    let token = '';
+
+    const localToken = localStorage.getItem('mercure_hub_token');
+    if (localToken !== null) {
+      token = localToken;
+    } else {
+      token = jwt.sign(conditions, process.env.REACT_APP_MERCURE_JWT_SECRET);
+      localStorage.setItem('mercure_hub_token', token);
+    }
+
+    eventSource = new EventSourcePolyfill(url, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    console.log(`Connected to ${eventSource.url}`);
+
+    return () => {
+      console.log(`Disconnect ${eventSource.url}`);
+      eventSource.close();
+    };
+  }, []);
 }
+
+export default useMercureSubscriber;

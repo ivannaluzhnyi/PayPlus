@@ -101,8 +101,8 @@ const LineChart = ({ lineStat }) => {
         data: lineStat.refundAmounts || []
       },
       {
-        name: 'Nombre de produits',
-        data: lineStat.nbrProducts || []
+        name: 'Moyenne cout par panier',
+        data: lineStat.avaragePriceByTransaction || []
       }
     ]
   };
