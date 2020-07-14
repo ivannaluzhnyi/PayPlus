@@ -1,5 +1,8 @@
 import TransactionMongo from "../models/mongo/Transaction";
 import { prepareStatsToTransactions } from "../helpers/stats";
+import { ROLE } from "../lib/constants";
+import User from "../models/User";
+import Merchant from "../models/Merchant";
 
 const getStatsByMerchantService = async (id) => {
   try {
@@ -92,4 +95,191 @@ const getStatsByMerchantService = async (id) => {
   }
 };
 
-export { getStatsByMerchantService };
+// const getStatsDashboardService = async ({ id, role }) => {
+const getStatsDashboardService = async () => {
+  const role = ROLE.MERCHANT;
+  const id = 3;
+  try {
+    switch (role) {
+      case ROLE.ADMIN:
+        break;
+
+      case ROLE.MERCHANT:
+        const finedUser = await User.findByPk(id, {
+          include: [
+            { model: Merchant, as: "merchants" }
+          ],
+        });
+
+  
+       const finedIds = finedUser.merchants.map(({id}) => id);
+        
+       const AllmarchandByUser = await TransactionMongo.aggregate([
+        {
+          $match: { "merchant.id": {$in:finedIds} },
+        },
+        {
+          $group: {
+            _id: {
+              id:null,
+            },
+            total_price_transaction: {
+              $sum: { $toDouble: "$order_amount" },
+            },
+            total_product: {
+              $sum: { $sum: "$products.qte" },
+            },
+            total_price_transaction_refund: {
+              $sum: { $sum: "$operations.refund_amount" },
+            },
+            average_price_by_transaction: {
+              $avg: { $toDouble: "$order_amount" },
+            },
+            number_product_transaction_refund: {
+              $sum: { $sum: "$operations.refund_product_qte" },
+            },
+            number_transaction: { $sum: 1 },
+            "total_merchant": { "$addToSet": "$merchant.id" }
+          },
+        },
+        {
+          "$project": {
+            total_price_transaction:1,
+            total_product:1,
+            total_price_transaction_refund:1,
+            average_price_by_transaction:1,
+            number_product_transaction_refund:1,
+            total_price_transaction:1,
+            number_transaction:1,
+            total_merchant: { "$size": "$total_merchant" }
+          }
+      },
+        { $sort: { total: -1 } },
+      ]);
+
+      
+
+      const AllMarchandByDay = await TransactionMongo.aggregate([
+        {
+          $match: { "merchant.id": {$in:finedIds} },
+        },
+        {
+          $group: {
+            _id: {
+              $dateToString: {
+                format: "%d/%m/%Y",
+                date: "$createdAt",
+              },
+            },
+            total_price_transaction: {
+              $sum: { $toDouble: "$order_amount" },
+            },
+            total_product: {
+              $sum: { $sum: "$products.qte" },
+            },
+            total_price_transaction_refund: {
+              $sum: { $sum: "$operations.refund_amount" },
+            },
+            average_price_by_transaction: {
+              $avg: { $toDouble: "$order_amount" },
+            },
+            number_product_transaction_refund: {
+              $sum: { $sum: "$operations.refund_product_qte" },
+            },
+            number_transaction: { $sum: 1 },
+            "total_merchant": { "$addToSet": "$merchant.id" }
+          },
+        },
+        {
+          "$project": {
+            total_price_transaction:1,
+            total_product:1,
+            total_price_transaction_refund:1,
+            average_price_by_transaction:1,
+            number_product_transaction_refund:1,
+            total_price_transaction:1,
+            number_transaction:1,
+            total_merchant: { "$size": "$total_merchant" }
+          }
+      },
+        { $sort: { total: -1 } },
+      ]);
+
+      const pourcentByMarchand = await TransactionMongo.aggregate([
+        {
+          $match: { "merchant.id": {$in:finedIds} },
+        },
+        {
+          $group: {
+            _id: {
+              id:"$merchant.id",
+            },
+            total_price_transaction: {
+              $sum: { $toDouble: "$order_amount" },
+            },
+            total_product: {
+              $sum: { $sum: "$products.qte" },
+            },
+            total_price_transaction_refund: {
+              $sum: { $sum: "$operations.refund_amount" },
+            },
+            average_price_by_transaction: {
+              $avg: { $toDouble: "$order_amount" },
+            },
+            number_product_transaction_refund: {
+              $sum: { $sum: "$operations.refund_product_qte" },
+            },
+            "total_merchant": { "$addToSet": "$operations.refund_amount" },
+            name: { $last: "$merchant.name" },
+          },
+        },
+        {
+          "$project": {
+            total_price_transaction:1,
+            total_product:1,
+            total_price_transaction_refund:1,
+            average_price_by_transaction:1,
+            number_product_transaction_refund:1,
+            total_price_transaction:1,
+            name :1,
+            total_merchant: { "$size": "$total_merchant" }
+          }
+      },
+        { $sort: { total: -1 } },
+      ]);
+
+      const list_pourcent = {
+        count_total: 0,
+        pourcent: [],
+        label:[]
+
+      };
+  
+      Object.keys(pourcentByMarchand).forEach((element) => {
+        list_pourcent.count_total += pourcentByMarchand[element].total_price_transaction;
+        list_pourcent.label.push(pourcentByMarchand[element].name)
+      });
+
+      Object.keys(pourcentByMarchand).forEach((element) => {
+        list_pourcent.pourcent.push(
+          (
+            pourcentByMarchand[element].total_price_transaction
+            / list_pourcent.count_total
+          )
+          *100)
+      });
+
+      console.log("pourcentByMarchand =>",  pourcentByMarchand)
+      console.log(list_pourcent)
+      console.log("AllmarchandByUser =>",  AllmarchandByUser)
+      console.log("AllMarchandByDay =>",  AllMarchandByDay)
+        break;
+
+      default:
+        break;
+    }
+  } catch (error) {
+    console.log("error catch ==> ", error);
+  }
+};
+export { getStatsByMerchantService, getStatsDashboardService };
