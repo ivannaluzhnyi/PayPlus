@@ -27,7 +27,9 @@ function get(req, res) {
             if (
                 finedTransaction &&
                 !finedTransaction.operations.find(
-                    (op) => op.state === OPERATIONS_STATE.DONE
+                    (op) =>
+                        op.state === OPERATIONS_STATE.DONE ||
+                        op.state === OPERATIONS_STATE.CANCELED
                 )
             ) {
                 //TODO
