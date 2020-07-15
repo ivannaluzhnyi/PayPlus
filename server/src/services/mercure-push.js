@@ -19,4 +19,15 @@ async function pushStatsDashboard(user) {
     }, 1000);
 }
 
-export { pushStatsByMerchant, pushStatsDashboard };
+async function pushPendingMerchantToValidate(merchant) {
+    setTimeout(async () => {
+        console.log("merchant => ", merchant);
+        requestMercure(MERCURE_TOPICS.NOTIFICATIONS.PENDING_MERCHANT, merchant);
+    }, 1000);
+}
+
+export {
+    pushStatsByMerchant,
+    pushStatsDashboard,
+    pushPendingMerchantToValidate,
+};

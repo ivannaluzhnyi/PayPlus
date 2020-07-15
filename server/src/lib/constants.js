@@ -40,6 +40,10 @@ const MERCURE_TOPICS = {
     STATS: {
         BY_MERCHANT: "/stats/by-merchant",
         DASHBOARD: "/stats/dashboard",
+        DASHBOARD_COUNT_MERCHANT: "/stats/dashboard-count-merchant",
+    },
+    NOTIFICATIONS: {
+        PENDING_MERCHANT: "/notifications/panding-merchant",
     },
 };
 

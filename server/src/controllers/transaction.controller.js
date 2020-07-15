@@ -90,7 +90,7 @@ function getByMerchntsId(req, res) {
                                 DEVISE_MAPPING[transaction.merchant.devise] &&
                             deviseDate.getTime() === transactionDate.getTime()
                         );
-                    });
+                    }) || { rate: "1", currency_symbol: "€" };
 
                     const deviseRate = parseFloat(
                         finedDevise.rate.replace(",", ".")

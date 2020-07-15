@@ -11,6 +11,8 @@ import { getFileType } from "../helpers/functions";
 import { resCatchError } from "../helpers/error";
 import { ROLE } from "../lib/constants";
 
+import { pushPendingMerchantToValidate } from "../services/mercure-push";
+
 module.exports = {
     login: (req, res) => {
         User.findOne({
@@ -86,7 +88,7 @@ module.exports = {
                         .then((createdMerchant) => {
                             createdUser
                                 .addMerchant(createdMerchant)
-                                .then(() => {
+                                .then(async () => {
                                     res.status(201).json(createdUser);
 
                                     sendMail({
@@ -95,6 +97,10 @@ module.exports = {
                                         subject:
                                             "Inscription Pay Plus+ | Validation",
                                     });
+
+                                    await pushPendingMerchantToValidate(
+                                        createdMerchant
+                                    );
 
                                     const KBISName = `kbis-merchant-${createdMerchant.id}.${type}`;
 
