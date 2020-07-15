@@ -14,6 +14,7 @@ import Percentages from './Percentages';
 import { MERCURE_TOPICS } from 'src/constants';
 import useMercureSubscriber from 'src/hooks/useMercureSubscriber';
 import { Alert } from '@material-ui/lab';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,6 +37,7 @@ const DashboardView = () => {
   const isMountedRef = useIsMountedRef();
   const [stats, setStats] = useState(null);
 
+  const { user } = useSelector(state => state.account);
   const getStatsMerchant = useCallback(() => {
     axios.get('/api/statistics/dashboard').then(response => {
       if (isMountedRef.current) {
@@ -56,6 +58,8 @@ const DashboardView = () => {
   if (!stats) {
     return null;
   }
+
+  const isAdmin = user.role === 'ADMIN';
 
   return (
     <Page className={classes.root} title="Dashboard">
@@ -84,6 +88,8 @@ const DashboardView = () => {
                 <Percentages percentages={stats.percentages} />
               </Grid>{' '}
             </>
+          ) : isAdmin ? (
+            <Alert severity="info">Données indisponible</Alert>
           ) : (
             <Alert severity="warning">
               Votre dashboard restera inactif tant que votre compte n'a pas été

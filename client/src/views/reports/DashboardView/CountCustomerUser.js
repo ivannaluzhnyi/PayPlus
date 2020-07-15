@@ -20,14 +20,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CountCustomerUser = ({ userMerchant: { users, merchants } }) => {
+const CountCustomerUser = ({ userMerchant: { merchants } }) => {
   const classes = useStyles();
-
-  const {
-    user: { role }
-  } = useSelector(state => state.account);
-
-  const isAdmin = role === 'ADMIN';
 
   return (
     <Card className={clsx(classes.root)}>
@@ -38,13 +32,11 @@ const CountCustomerUser = ({ userMerchant: { users, merchants } }) => {
           gutterBottom
           variant="overline"
         >
-          {isAdmin
-            ? "Nombre total d'utilisaturs & marchands"
-            : 'Nombre total de marchands'}
+          Nombre total de marchands
         </Typography>
         <Box display="flex" alignItems="center" flexWrap="wrap">
           <Typography color="inherit" variant="h3">
-            {isAdmin ? `${users} & ${merchants}` : merchants}
+            {merchants}
           </Typography>
         </Box>
       </Box>

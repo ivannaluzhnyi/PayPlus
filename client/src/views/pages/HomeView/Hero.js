@@ -70,26 +70,26 @@ const Hero = () => {
                 <Grid container spacing={3}>
                   <Grid item>
                     <Typography variant="h1" color="secondary">
-                      20+
+                      Skrzypczyk
                     </Typography>
                     <Typography variant="overline" color="textSecondary">
-                      EMPLOYÉS
+                      Aproved
                     </Typography>
                   </Grid>
                   <Grid item>
                     <Typography variant="h1" color="secondary">
-                      €5m
+                      Projet Annuel
                     </Typography>
                     <Typography variant="overline" color="textSecondary">
-                      LEVÉE DE FONDS RÉALISÉE
+                      2 weeks
                     </Typography>
                   </Grid>
                   <Grid item>
                     <Typography variant="h1" color="secondary">
-                      2020
+                      20/20
                     </Typography>
                     <Typography variant="overline" color="textSecondary">
-                      FONDÉE EN
+                      Lygge & ESGI certifié
                     </Typography>
                   </Grid>
                 </Grid>

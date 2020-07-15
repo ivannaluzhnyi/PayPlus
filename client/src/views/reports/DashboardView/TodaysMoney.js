@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Avatar, Box, Card, Typography, makeStyles } from '@material-ui/core';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import Label from 'src/components/Label';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,11 +25,6 @@ const useStyles = makeStyles(theme => ({
 
 const TodaysMoney = ({ amount }) => {
   const classes = useStyles();
-  const data = {
-    value: '24,000',
-    currency: '$',
-    difference: 4
-  };
 
   return (
     <Card className={clsx(classes.root)}>
@@ -47,13 +41,6 @@ const TodaysMoney = ({ amount }) => {
           <Typography variant="h3" color="textPrimary">
             {amount}€
           </Typography>
-          <Label
-            className={classes.label}
-            color={data.difference > 0 ? 'success' : 'error'}
-          >
-            {data.difference > 0 ? '+' : ''}
-            {data.difference}%
-          </Label>
         </Box>
       </Box>
       <Avatar className={classes.avatar}>
