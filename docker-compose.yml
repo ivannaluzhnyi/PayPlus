@@ -77,7 +77,7 @@ services:
             - server-psp
             - server-merchant
             - mercure
-            - client
+            # - client
         command: "npm run dev"
         ports:
             - 127.0.0.1:3050:3050

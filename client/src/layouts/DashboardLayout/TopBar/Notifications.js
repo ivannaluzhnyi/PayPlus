@@ -23,7 +23,8 @@ import {
 } from 'react-feather';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
 import Label from 'src/components/Label';
-import { labelColorsUserStatus } from 'src/constants';
+import { labelColorsUserStatus, MERCURE_TOPICS } from 'src/constants';
+import useMercureSubscriber from 'src/hooks/useMercureSubscriber';
 
 const iconsMap = {
   order_placed: PackageIcon,
@@ -43,11 +44,19 @@ const useStyles = makeStyles(theme => ({
 
 const Notifications = () => {
   const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
   const ref = useRef(null);
-  const dispatch = useDispatch();
   const [isOpen, setOpen] = useState(false);
   const [merchants, setMerchants] = useState([]);
+
+  useMercureSubscriber({
+    topic: MERCURE_TOPICS.NOTIFICATIONS.PENDING_MERCHANT,
+    callback: passedData => {
+
+      if (passedData !== null) {
+        setMerchants([passedData]);
+      }
+    }
+  });
 
   const handleOpen = () => {
     setOpen(true);
@@ -56,18 +65,6 @@ const Notifications = () => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  const getMerchantsNotif = useCallback(() => {
-    axios.get('/api/merchants/notifications').then(response => {
-      if (isMountedRef.current) {
-        setMerchants(response.data.merchants);
-      }
-    });
-  }, [isMountedRef]);
-
-  useEffect(() => {
-    getMerchantsNotif();
-  }, [dispatch]);
 
   return (
     <>
@@ -111,8 +108,11 @@ const Notifications = () => {
                     className={classes.listItem}
                     component={RouterLink}
                     divider
-                    key={merchant.id}
+                    key={merchant.id || 1}
                     to={`/app/management/merchants/${merchant.id}`}
+                    onClick={() => {
+                      setMerchants([]);
+                    }}
                   >
                     <ListItemText
                       primary={merchant.name}
